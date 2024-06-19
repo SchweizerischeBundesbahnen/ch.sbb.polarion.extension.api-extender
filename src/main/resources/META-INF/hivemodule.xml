@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module id="ch.sbb.polarion.extension.api.extender" version="1.0.0">
+    <contribution configuration-id="com.polarion.xray.webui.administrationPageExtenders">
+        <extender name="About"
+                  parentNodeName="API Extender"
+                  parentNodeIconUrl="/polarion/icons/default/topicIcons/documentsAndWiki.svg"
+                  iconUrl="/polarion/icons/default/topicIconsSmall/documentsAndWiki.svg"
+                  pageUrl="/polarion/api-extender-admin/pages/about.jsp"
+                  projectScope="true"
+                  repositoryScope="true"/>
+
+        <extender name="REST API"
+                  parentNodeName="API Extender"
+                  parentNodeIconUrl="/polarion/icons/default/topicIcons/documentsAndWiki.svg"
+                  iconUrl="/polarion/icons/default/topicIconsSmall/documentsAndWiki.svg"
+                  pageUrl="/polarion/api-extender/rest/swagger"
+                  projectScope="true"
+                  repositoryScope="true"/>
+
+        <extender name="Project Custom Fields"
+                  parentNodeName="API Extender"
+                  parentNodeIconUrl="/polarion/icons/default/topicIcons/documentsAndWiki.svg"
+                  iconUrl="/polarion/icons/default/topicIconsSmall/documentsAndWiki.svg"
+                  pageUrl="/polarion/api-extender-admin/pages/settings.jsp?settings_name=project_custom_fields&amp;scope=$scope$"
+                  projectScope="true"
+                  repositoryScope="true"/>
+
+        <extender name="Global Records"
+                  parentNodeName="API Extender"
+                  parentNodeIconUrl="/polarion/icons/default/topicIcons/documentsAndWiki.svg"
+                  iconUrl="/polarion/icons/default/topicIconsSmall/documentsAndWiki.svg"
+                  pageUrl="/polarion/api-extender-admin/pages/settings.jsp?settings_name=global_records&amp;scope=$scope$"
+                  projectScope="false"
+                  repositoryScope="true"/>
+    </contribution>
+
+    <!-- Classic Wiki Page -->
+    <contribution configuration-id="com.polarion.alm.wiki.renderingContext">
+        <item key="customFieldsProject" value="instance:ch.sbb.polarion.extension.api.extender.velocity.VelocityCustomFieldsProject"/>
+        <item key="globalRecords" value="instance:ch.sbb.polarion.extension.api.extender.velocity.VelocityGlobalRecords"/>
+    </contribution>
+
+    <!-- LiveReport Page -->
+    <contribution configuration-id="com.polarion.alm.richpages.velocityContext">
+        <item key="customFieldsProject" value="instance:ch.sbb.polarion.extension.api.extender.velocity.VelocityReadOnlyCustomFieldsProject"/>
+        <item key="globalRecords" value="instance:ch.sbb.polarion.extension.api.extender.velocity.VelocityReadOnlyGlobalRecords"/>
+    </contribution>
+</module>

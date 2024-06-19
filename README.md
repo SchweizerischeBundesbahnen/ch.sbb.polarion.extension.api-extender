@@ -1,36 +1,225 @@
-# Polarion ALM extension to <...>
+# API extension for Polarion ALM
 
-This Polarion extension provides possibility to <...>
-## Build
+This Polarion extension provides additional functionality which is not implemented in standard Polarion API for some reason.
 
-This extension can be produced using maven:
+## Custom field for project
+
+Polarion project does not support setting custom fields out of the box.
+This API extension can be used to solve this problem.
+
+This API can be called using REST API and in Velocity Context.
+
+### REST API
+
+Get version:
+```bash
+curl --location 'https://<HOST>:<PORT>/polarion/api-extender/rest/api/version' \
+    --header 'Authorization: Bearer <TOKEN_GOES_HERE>'
 ```
-mvn clean package
+Response example:
+```json
+{
+  "bundleName":"API Extension for Polarion ALM",
+  "bundleVendor":"SBB AG",
+  "automaticModuleName":"ch.sbb.polarion.extension.api_extender",
+  "bundleVersion":"1.0.0",
+  "bundleBuildTimestamp":"2023-06-27 12:43",
+  "bundleBuildTimestampDigitsOnly":"202306271243"
+}
 ```
 
-## Installation to Polarion
-
-To install the extension to Polarion `ch.sbb.polarion.extension.<extension_name>-<version>.jar`
-should be copied to `<polarion_home>/polarion/extensions/ch.sbb.polarion.extension.<extension_name>/eclipse/plugins`
-It can be done manually or automated using maven build:
+Get custom field value:
+```bash
+curl --location 'https://<HOST>:<PORT>/polarion/api-extender/rest/api/projects/<PROJECT_ID>/keys/<CUSTOM_FIELD>' \
+    --header 'Authorization: Bearer <TOKEN_GOES_HERE>'
 ```
-mvn clean install -P polarion2304,install-to-local-polarion
+
+Get global record value:
+```bash
+curl --location 'https://<HOST>:<PORT>/polarion/api-extender/rest/api/records/<RECORD>' \
+    --header 'Authorization: Bearer <TOKEN_GOES_HERE>'
 ```
-For automated installation with maven env variable `POLARION_HOME` should be defined and point to folder where Polarion is installed.
 
-Changes only take effect after restart of Polarion.
+Response example:
+```json
+{
+  "value": "custom_value"
+}
+```
 
-## Polarion configuration
+Set custom field value:
+```bash
+curl --location 'https://<HOST>:<PORT>/polarion/api-extender/rest/api/projects/<PROJECT_ID>/keys/<CUSTOM_FIELD>' \
+    --header 'Content-Type: application/json' \
+    --header 'Authorization: Bearer <TOKEN_GOES_HERE>' \
+    --data '{
+      "value": "<VALUE>"
+    }'
+```
 
-<...>
+Set global record value:
+```bash
+curl --location 'https://<HOST>:<PORT>/polarion/api-extender/rest/api/records/<RECORD>' \
+    --header 'Content-Type: application/json' \
+    --header 'Authorization: Bearer <TOKEN_GOES_HERE>' \
+    --data '{
+      "value": "<VALUE>"
+    }'
+```
 
+### Live Report Page
 
-## Extension Configuration
+Get version:
+```velocity
+#set ($version = $customFieldsProject.getVersion())
+#if ($version)
+    API Extender version = $version
+#end
+```
 
-<...>
+or
 
+```velocity
+#set ($version = $globalRecords.getVersion())
+#if ($version)
+    API Extender version = $version
+#end
+```
 
-## Usage
+Get custom field value:
+```velocity
+#set ($field = $customFieldsProject.getCustomField('elibrary', 'custom_field'))
+#if ($field)
+    $field.getValue()
+    <br>
+#end
+```
 
-<...>
+Get global record value:
+```velocity
+#set ($field = $globalRecords.getRecord('record_name'))
+#if ($field)
+    $field.getValue()
+    <br>
+#end
+```
 
+Due to Polarion limitations we are not able to save custom fields in Live Report Page using Velocity, but we can use JavaScript for this.
+
+Set custom field value:
+```html
+<input id='cfp_project' type='text' value='elibrary' name='project'/>
+<input id='cfp_key' type='text' value='custom_field' name='key'/>
+<input id='cfp_value' type='text' value='custom_value' name='value'/>
+<script>
+    function save_project_custom_field() {
+        const project = document.getElementById('cfp_project').value;
+        const key = document.getElementById('cfp_key').value;
+        const value = document.getElementById('cfp_value').value;
+        const requestBody = (value === null || value === "") ? "" : JSON.stringify({'value': value});
+
+        fetch('/polarion/api-extender/rest/internal/projects/' + project + '/keys/' + key, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: requestBody
+        })
+        .then(response => {
+            if (response.ok) {
+                return "Saved!"
+            } else {
+                return response.text()
+            }
+        })
+        .then(text => {
+             alert(text)
+        });
+    }
+</script>
+<button onclick='save_project_custom_field()'>Save</button>
+```
+
+Set global record value:
+```html
+<input id='record_key' type='text' value='record_name' name='record_name'/>
+<input id='record_value' type='text' value='record_value' name='record_value'/>
+<script>
+    function save_record() {
+        const key = document.getElementById('record_key').value;
+        const value = document.getElementById('record_value').value;
+        const requestBody = (value === null || value === "") ? "" : JSON.stringify({'value': value});
+
+        fetch('/polarion/api-extender/rest/internal/records/' + key, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: requestBody
+        })
+            .then(response => {
+                if (response.ok) {
+                    return "Saved!"
+                } else {
+                    return response.text()
+                }
+            })
+            .then(text => {
+                alert(text)
+            });
+    }
+</script>
+<button onclick='save_record()'>Save</button>
+```
+
+Note that internal API in URL should be used.
+
+### Classic Wiki Page
+
+Get custom field value:
+```velocity
+#set($projects = $projectService.searchProjects("","id"))
+
+#foreach($project in $projects)
+    #set($projectId = $project.id)
+    #set($field = $customFieldsProject.getCustomField($projectId, 'custom_field'))
+    #if ($field)
+        $projectId custom_field = $field.getValue()
+        <br>
+        #set($field = false)
+    #end
+#end
+```
+
+Get global record value:
+
+```velocity
+$globalRecords.getRecord('record_name')
+```
+
+Set custom field value:
+
+```velocity
+$customFieldsProject.setCustomField('elibrary', 'custom_field', 'new_value')
+```
+
+Set global record value:
+
+```velocity
+$globalRecords.setRecord('record_name', 'record_value')
+```
+
+## Changelog
+
+| Version | Changes                                |
+|---------|----------------------------------------|
+| v1.3.0  | About page extended with help and icon |
+| v1.2.0  | Endpoints adjusted                     |
+| v1.1.4  | Global records added                   |
+| v1.1.3  | Permissions validation added           |
+| v1.1.2  | Some bug fixed                         |
+| v1.1.1  | Swagger page added to admin panel      |
+| v1.1.0  | Swagger page added                     |
+| v1.0.0  | Initial release                        |

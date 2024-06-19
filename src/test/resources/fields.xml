@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project>
+    <field id="active">true</field>
+    <field id="description" text-type="text/plain">This model project demonstrates how an actual software project might be set up using the 'Agile Software Project' template.</field>
+    <field id="lead">rProject</field>
+    <field id="name">E-Library</field>
+    <field id="start">2016-10-01</field>
+    <field id="trackerPrefix">EL</field>
+    <field id="color">#8E9D23</field>
+    <field id="icon">/polarion/icons/default/topicIcons/App_985-demo-elibrary.svg</field>
+</project>

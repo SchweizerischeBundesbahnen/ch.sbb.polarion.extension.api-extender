@@ -5,16 +5,16 @@
     <parent>
         <groupId>ch.sbb.polarion.extensions</groupId>
         <artifactId>ch.sbb.polarion.extension.generic.parent-pom</artifactId>
-        <version>2.0.0</version>
+        <version>4.10.0</version>
     </parent>
 
-    <artifactId>ch.sbb.polarion.extension.extension-name</artifactId>
-    <version>0.0.0-SNAPSHOT</version>
+    <artifactId>ch.sbb.polarion.extension.api-extender</artifactId>
+    <version>1.3.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
-        <maven-jar-plugin.Extension-Context>extension-name</maven-jar-plugin.Extension-Context>
-        <maven-jar-plugin.Automatic-Module-Name>ch.sbb.polarion.extension.extension_name</maven-jar-plugin.Automatic-Module-Name>
+        <maven-jar-plugin.Extension-Context>api-extender</maven-jar-plugin.Extension-Context>
+        <maven-jar-plugin.Automatic-Module-Name>ch.sbb.polarion.extension.api_extender</maven-jar-plugin.Automatic-Module-Name>
 
         <web.app.name>${maven-jar-plugin.Extension-Context}</web.app.name>
     </properties>
@@ -50,4 +50,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>
