@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+    <extension
+            point="com.polarion.portal.tomcat.webapps">
+        <webapp
+                name="polarion/api-extender"
+                contextRoot="webapp/api-extender">
+        </webapp>
+    </extension>
+
+    <extension
+            point="com.polarion.portal.tomcat.webapps">
+        <webapp
+                name="polarion/api-extender-admin"
+                contextRoot="webapp/api-extender-admin">
+        </webapp>
+    </extension>
+</plugin>
