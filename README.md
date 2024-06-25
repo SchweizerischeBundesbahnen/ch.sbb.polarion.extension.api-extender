@@ -9,6 +9,27 @@ This API extension can be used to solve this problem.
 
 This API can be called using REST API and in Velocity Context.
 
+## Build
+
+JSON editor extension can be produced using maven:
+```bash
+mvn clean package
+```
+
+## Installation to Polarion
+
+To install JSON editor extension to Polarion `ch.sbb.polarion.extension.json.editor-<version>.jar` should be copied to `<polarion_home>/polarion/extensions/json-editor/eclipse/plugins`
+
+It can be done manually or automated using maven build:
+```bash
+mvn clean install -Pinstall-to-local-polarion
+```
+For automated installation with maven env variable `POLARION_HOME` should be defined and point to folder where Polarion is installed.
+
+Changes only take effect after restart of Polarion.
+
+## Polarion configuration
+
 ### REST API
 
 Get version:
@@ -210,16 +231,3 @@ Set global record value:
 ```velocity
 $globalRecords.setRecord('record_name', 'record_value')
 ```
-
-## Changelog
-
-| Version | Changes                                |
-|---------|----------------------------------------|
-| v1.3.0  | About page extended with help and icon |
-| v1.2.0  | Endpoints adjusted                     |
-| v1.1.4  | Global records added                   |
-| v1.1.3  | Permissions validation added           |
-| v1.1.2  | Some bug fixed                         |
-| v1.1.1  | Swagger page added to admin panel      |
-| v1.1.0  | Swagger page added                     |
-| v1.0.0  | Initial release                        |
