@@ -4,13 +4,44 @@
 
     <parent>
         <groupId>ch.sbb.polarion.extensions</groupId>
-        <artifactId>ch.sbb.polarion.extension.generic.parent-pom</artifactId>
-        <version>4.11.0</version>
+        <artifactId>ch.sbb.polarion.extension.generic</artifactId>
+        <version>6.0.0</version>
     </parent>
 
     <artifactId>ch.sbb.polarion.extension.api-extender</artifactId>
     <version>1.3.1-SNAPSHOT</version>
     <packaging>jar</packaging>
+
+    <name>API extension for Polarion ALM</name>
+    <description>This Polarion extension provides additional functionality which is not implemented in standard Polarion API for some reason</description>
+    <url>https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender</url>
+
+    <licenses>
+        <license>
+            <name>The SBB License, Version 1.0</name>
+            <url>https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/blob/main/LICENSES/SBB.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>SBB Polarion Team</name>
+            <email>polarion-opensource@sbb.ch</email>
+            <organization>SBB AG</organization>
+            <organizationUrl>http://www.sbb.ch</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender.git</connection>
+        <developerConnection>scm:git:ssh://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender.git</developerConnection>
+        <url>http://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/tree/main</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/issues</url>
+    </issueManagement>
 
     <properties>
         <maven-jar-plugin.Extension-Context>api-extender</maven-jar-plugin.Extension-Context>
@@ -47,6 +78,16 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
