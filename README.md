@@ -11,18 +11,18 @@ This API can be called using REST API and in Velocity Context.
 
 ## Build
 
-JSON editor extension can be produced using maven:
+This extension can be produced using maven:
 ```bash
 mvn clean package
 ```
 
 ## Installation to Polarion
 
-To install JSON editor extension to Polarion `ch.sbb.polarion.extension.json.editor-<version>.jar` should be copied to `<polarion_home>/polarion/extensions/json-editor/eclipse/plugins`
-
+To install JSON editor extension to Polarion `ch.sbb.polarion.extension.json.editor-<version>.jar`
+should be copied to `<polarion_home>/polarion/extensions/json-editor/eclipse/plugins`
 It can be done manually or automated using maven build:
 ```bash
-mvn clean install -Pinstall-to-local-polarion
+mvn clean install -P install-to-local-polarion
 ```
 For automated installation with maven env variable `POLARION_HOME` should be defined and point to folder where Polarion is installed.
 
