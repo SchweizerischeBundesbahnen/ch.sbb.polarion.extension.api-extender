@@ -48,6 +48,9 @@
         <maven-jar-plugin.Automatic-Module-Name>ch.sbb.polarion.extension.api_extender</maven-jar-plugin.Automatic-Module-Name>
 
         <web.app.name>${maven-jar-plugin.Extension-Context}</web.app.name>
+
+        <!--suppress UnresolvedMavenProperty -->
+        <markdown2html-maven-plugin.failOnError>${env.MARKDOWN2HTML_MAVEN_PLUGIN_FAIL_ON_ERROR}</markdown2html-maven-plugin.failOnError>
     </properties>
 
     <dependencies>
