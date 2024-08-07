@@ -125,7 +125,7 @@ jobs:
             /home/runner/work
           key: ${{ needs.build.outputs.cache_key }}
       - name: Publish to Maven Central
-        run: mvn --batch-mode deploy -P gpg-sign -P nexus-staging -Dnexus-staging-maven-plugin.autoReleaseAfterClose=false
+        run: mvn --batch-mode -Dmaven.test.skip=true deploy -P gpg-sign -P nexus-staging -Dnexus-staging-maven-plugin.autoReleaseAfterClose=false
 
   # deploy to GitHub Packages
   deploy-github-packages:
@@ -145,7 +145,6 @@ jobs:
         with:
           distribution: adopt
           java-version: 17
-          gpg-private-key: ${{ secrets.COM_SONATYPE_CENTRAL_POLARION_OPENSOURCE_GPG_PRIVATE_KEY }}
       - name: Cache
         id: cache
         uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9  # v4
@@ -156,5 +155,5 @@ jobs:
           key: ${{ needs.build.outputs.cache_key }}
       - name: Publish to GitHub Packages
         run: |-
-          mvn --batch-mode deploy -P gpg-sign -P deploy-github-packages
+          mvn --batch-mode -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Dmaven.source.skip=true deploy -P deploy-github-packages
           gh release upload ${{ needs.build.outputs.version }} target/*.jar
