@@ -125,7 +125,7 @@ jobs:
             /home/runner/work
           key: ${{ needs.build.outputs.cache_key }}
       - name: Publish to Maven Central
-        run: mvn --batch-mode -DskipTests=true -Dmaven.javadoc.skip=true deploy -P gpg-sign -P nexus-staging
+        run: mvn --batch-mode deploy -P gpg-sign
 
   # deploy to GitHub Packages
   deploy-github-packages:
@@ -156,5 +156,5 @@ jobs:
           key: ${{ needs.build.outputs.cache_key }}
       - name: Publish to GitHub Packages
         run: |-
-          mvn --batch-mode -DskipTests=true -Dmaven.javadoc.skip=true deploy -P gpg-sign -P deploy-github-packages
+          mvn --batch-mode deploy -P gpg-sign
           gh release upload ${{ needs.build.outputs.version }} target/*.jar
