@@ -156,4 +156,4 @@ jobs:
       - name: Publish to GitHub Packages
         run: |-
           mvn --batch-mode -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Dmaven.source.skip=true deploy -P deploy-github-packages
-          gh release upload v${{ needs.build.outputs.version }} target/*.jar
+          cd ${{github.workspace}} && gh release upload v${{ needs.build.outputs.version }} target/*.jar
