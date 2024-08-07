@@ -81,6 +81,8 @@ jobs:
                 }
               }
             ]
+      - name: Print settings.xml
+        run: cat /home/runner/.m2/settings.xml
       - name: Build with Maven
         run: mvn --batch-mode clean package
       - name: Store project version
