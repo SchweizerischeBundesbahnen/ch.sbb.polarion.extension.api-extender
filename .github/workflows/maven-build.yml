@@ -84,10 +84,8 @@ jobs:
             ]
       - name: 🔘 Print settings.xml
         run: cat /home/runner/.m2/settings.xml
-      - name: 📦 Upload assets
-        run: gh release upload v1.5.0 pom.xml
       - name: 📦 Build with Maven
-        run: mvn --batch-mode clean package sonar:sonar -Dsonar.projectKey=${{ github.repository }} -Dsonar.organization=schweizerischebundesbahnen -Dsonar.host.url=https://sonarcloud.io
+        run: mvn --batch-mode clean package sonar:sonar -Dsonar.projectKey=ch.sbb.polarion.extension.api-extender -Dsonar.organization=schweizerischebundesbahnen -Dsonar.host.url=https://sonarcloud.io
           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
       - name: 💾 Store project version
         id: project_version
