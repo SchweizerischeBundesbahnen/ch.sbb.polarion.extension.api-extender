@@ -85,8 +85,7 @@ jobs:
       - name: 🔘 Print settings.xml
         run: cat /home/runner/.m2/settings.xml
       - name: 📦 Build with Maven
-        run: mvn --batch-mode clean package sonar:sonar -Dsonar.projectKey=SchweizerischeBundesbahnen_ch.sbb.polarion.extension.api-extender -Dsonar.organization=schweizerischebundesbahnen
-          -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        run: mvn --batch-mode clean package sonar:sonar -Dsonar.projectKey=grigoriev_ch.sbb.polarion.extension.api-extender -Dsonar.host.url=https://sonarcloud.io
       - name: 💾 Store project version
         id: project_version
         run: echo "project_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
