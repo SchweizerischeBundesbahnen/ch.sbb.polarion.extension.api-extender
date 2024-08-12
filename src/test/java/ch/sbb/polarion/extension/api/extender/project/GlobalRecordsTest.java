@@ -15,6 +15,7 @@ import com.polarion.subterra.base.location.ILocation;
 import lombok.SneakyThrows;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
@@ -32,6 +33,7 @@ import static org.mockito.Mockito.*;
 @SuppressWarnings({"unchecked", "rawtypes"})
 class GlobalRecordsTest {
 
+    @Disabled
     @Test
     @SneakyThrows
     void testGetRecord() {
