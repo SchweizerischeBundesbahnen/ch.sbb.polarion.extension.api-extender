@@ -57,10 +57,10 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.language>java</sonar.language>
         <sonar.verbose>true</sonar.verbose>
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
-        <skipQC>false</skipQC>
         <sonar-maven-plugin.versiom>3.11.0.3922</sonar-maven-plugin.versiom>
     </properties>
 
@@ -105,21 +105,17 @@
                 <version>${jacoco.version}</version>
                 <executions>
                     <execution>
-                        <id>prepare-agent</id>
+                        <id>jacoco-initialize</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>report</id>
+                        <id>jacoco-site</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <configuration>
-                            <formats>
-                                <format>XML</format>
-                            </formats>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -148,9 +144,6 @@
                             <goals>
                                 <goal>sonar</goal>
                             </goals>
-                            <configuration>
-                                <skip>${skipQC}</skip>
-                            </configuration>
                         </execution>
                     </executions>
                 </plugin>
