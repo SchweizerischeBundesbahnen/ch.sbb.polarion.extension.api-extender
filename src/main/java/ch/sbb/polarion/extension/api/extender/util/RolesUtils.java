@@ -26,6 +26,9 @@ public class RolesUtils {
             return Set.of();
         }
         IProject project = projectService.getProject(projectId);
+        if (project == null) {
+            return Set.of();
+        }
         return securityService.getContextRoles(project.getContextId());
     }
 
