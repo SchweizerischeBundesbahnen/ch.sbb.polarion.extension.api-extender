@@ -1,6 +1,7 @@
 package ch.sbb.polarion.extension.api.extender.rest.model;
 
 import ch.sbb.polarion.extension.api.extender.util.CustomFieldUtils;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,6 +13,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "project")
 @ToString
+
+@Schema(description = "Represents a project with a set of custom fields")
 public class Project extends GenericFields {
 
     @Override

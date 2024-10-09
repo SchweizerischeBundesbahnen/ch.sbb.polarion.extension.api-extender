@@ -11,6 +11,9 @@ import ch.sbb.polarion.extension.generic.settings.NamedSettingsRegistry;
 import ch.sbb.polarion.extension.generic.settings.SettingId;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.VisibleForTesting;
@@ -45,10 +48,21 @@ public class GlobalRecordInternalController {
         this.polarionService = polarionService;
     }
 
-    @Operation(summary = "Returns global record value")
     @GET
     @Path("/records/{key}")
     @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Returns global record value",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Successfully retrieved the global record value",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON,
+                                    schema = @Schema(implementation = Field.class)
+                            )
+                    )
+            }
+    )
     public Field getRecordValue(@PathParam("key") String key) throws JAXBException {
         final GlobalRecords globalRecords = new GlobalRecords();
         Field field = globalRecords.getRecord(key);
@@ -59,11 +73,18 @@ public class GlobalRecordInternalController {
         }
     }
 
-    @Operation(summary = "Saves global record")
     @POST
     @Path("/records/{key}")
     @Consumes(MediaType.APPLICATION_JSON)
     @SneakyThrows
+    @Operation(summary = "Saves global record",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Successfully saved the global record"
+                    )
+            }
+    )
     public void setRecordValue(@PathParam("key") String key, Field field) {
         checkPermissions();
 
@@ -75,10 +96,16 @@ public class GlobalRecordInternalController {
         globalRecords.setRecord(key, field.getValue());
     }
 
-    @Operation(summary = "Removes global record")
     @DELETE
     @Path("/records/{key}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Removes global record",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Successfully deleted the global record")
+            }
+    )
     @SneakyThrows
     public void deleteRecordValue(@PathParam("key") String key) {
         checkPermissions();

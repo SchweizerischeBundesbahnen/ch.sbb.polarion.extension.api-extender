@@ -32,61 +32,7 @@ Changes only take effect after restart of Polarion.
 
 ### REST API
 
-Get version:
-```bash
-curl --location 'https://<HOST>:<PORT>/polarion/api-extender/rest/api/version' \
-    --header 'Authorization: Bearer <TOKEN_GOES_HERE>'
-```
-Response example:
-```json
-{
-  "bundleName":"API Extension for Polarion ALM",
-  "bundleVendor":"SBB AG",
-  "automaticModuleName":"ch.sbb.polarion.extension.api_extender",
-  "bundleVersion":"1.0.0",
-  "bundleBuildTimestamp":"2023-06-27 12:43",
-  "bundleBuildTimestampDigitsOnly":"202306271243"
-}
-```
-
-Get custom field value:
-```bash
-curl --location 'https://<HOST>:<PORT>/polarion/api-extender/rest/api/projects/<PROJECT_ID>/keys/<CUSTOM_FIELD>' \
-    --header 'Authorization: Bearer <TOKEN_GOES_HERE>'
-```
-
-Get global record value:
-```bash
-curl --location 'https://<HOST>:<PORT>/polarion/api-extender/rest/api/records/<RECORD>' \
-    --header 'Authorization: Bearer <TOKEN_GOES_HERE>'
-```
-
-Response example:
-```json
-{
-  "value": "custom_value"
-}
-```
-
-Set custom field value:
-```bash
-curl --location 'https://<HOST>:<PORT>/polarion/api-extender/rest/api/projects/<PROJECT_ID>/keys/<CUSTOM_FIELD>' \
-    --header 'Content-Type: application/json' \
-    --header 'Authorization: Bearer <TOKEN_GOES_HERE>' \
-    --data '{
-      "value": "<VALUE>"
-    }'
-```
-
-Set global record value:
-```bash
-curl --location 'https://<HOST>:<PORT>/polarion/api-extender/rest/api/records/<RECORD>' \
-    --header 'Content-Type: application/json' \
-    --header 'Authorization: Bearer <TOKEN_GOES_HERE>' \
-    --data '{
-      "value": "<VALUE>"
-    }'
-```
+This extension provides REST API. OpenAPI Specification can be obtained [here](docs/openapi.json).
 
 ### Live Report Page
 

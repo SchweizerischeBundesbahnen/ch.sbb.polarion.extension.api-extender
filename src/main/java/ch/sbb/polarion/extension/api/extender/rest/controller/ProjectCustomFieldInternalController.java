@@ -11,6 +11,9 @@ import ch.sbb.polarion.extension.generic.settings.SettingId;
 import ch.sbb.polarion.extension.generic.util.ScopeUtils;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.VisibleForTesting;
@@ -45,10 +48,21 @@ public class ProjectCustomFieldInternalController {
         this.polarionService = polarionService;
     }
 
-    @Operation(summary = "Returns custom field value")
     @GET
     @Path("/projects/{projectId}/keys/{key}")
     @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Returns custom field value",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Successfully retrieved custom field value",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON,
+                                    schema = @Schema(implementation = Field.class)
+                            )
+                    )
+            }
+    )
     public Field getCustomValue(@PathParam("projectId") String projectId, @PathParam("key") String key) throws JAXBException {
         final CustomFieldsProject customFieldsProject = new CustomFieldsProject(projectId);
         Field field = customFieldsProject.getCustomField(key);
@@ -59,10 +73,17 @@ public class ProjectCustomFieldInternalController {
         }
     }
 
-    @Operation(summary = "Saves custom field")
     @POST
     @Path("/projects/{projectId}/keys/{key}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Saves custom field",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Successfully saved the custom field value"
+                    )
+            }
+    )
     @SneakyThrows
     public void setCustomValue(@PathParam("projectId") String projectId, @PathParam("key") String key, Field field) {
         checkPermissions(projectId);
@@ -75,10 +96,17 @@ public class ProjectCustomFieldInternalController {
         customFieldsProject.setCustomField(key, field.getValue());
     }
 
-    @Operation(summary = "Removes custom field")
     @DELETE
     @Path("/projects/{projectId}/keys/{key}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Removes custom field",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Successfully deleted the custom field value"
+                    )
+            }
+    )
     @SneakyThrows
     public void deleteCustomValue(@PathParam("projectId") String projectId, @PathParam("key") String key) {
         checkPermissions(projectId);
