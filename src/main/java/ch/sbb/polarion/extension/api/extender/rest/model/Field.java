@@ -1,6 +1,7 @@
 package ch.sbb.polarion.extension.api.extender.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,10 +21,15 @@ import javax.xml.bind.annotation.XmlValue;
 @Getter
 @Setter
 @ToString
+@Schema(description = "Represents a field object with an ID and value")
 public class Field {
+
     @XmlAttribute(name = "id")
     @JsonIgnore
+    @Schema(description = "The key of the field, ignored in JSON serialization")
     public String key;
+
     @XmlValue
+    @Schema(description = "The value associated with the field")
     public String value;
 }

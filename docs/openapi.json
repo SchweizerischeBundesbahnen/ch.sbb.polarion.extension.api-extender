@@ -1,0 +1,576 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "API Extender REST API",
+    "version" : "v1"
+  },
+  "paths" : {
+    "/api/context" : {
+      "get" : {
+        "operationId" : "getContext",
+        "responses" : {
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Context"
+                }
+              }
+            },
+            "description" : "Context information"
+          }
+        },
+        "summary" : "Returns basic context information of Polarion's extension",
+        "tags" : [ "Extension Information" ]
+      }
+    },
+    "/api/projects/{projectId}/keys/{key}" : {
+      "delete" : {
+        "operationId" : "deleteCustomValue",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "projectId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "key",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully deleted the custom field value"
+          }
+        },
+        "summary" : "Removes custom field",
+        "tags" : [ "Project custom fields" ]
+      },
+      "get" : {
+        "operationId" : "getCustomValue",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "projectId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "key",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Field"
+                }
+              }
+            },
+            "description" : "Successfully retrieved custom field value"
+          }
+        },
+        "summary" : "Returns custom field value",
+        "tags" : [ "Project custom fields" ]
+      },
+      "post" : {
+        "operationId" : "setCustomValue",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "projectId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "key",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Field"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successfully saved the custom field value"
+          }
+        },
+        "summary" : "Saves custom field",
+        "tags" : [ "Project custom fields" ]
+      }
+    },
+    "/api/records/{key}" : {
+      "delete" : {
+        "operationId" : "deleteRecordValue",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "key",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Successfully deleted the global record"
+          }
+        },
+        "summary" : "Removes global record",
+        "tags" : [ "Global Records" ]
+      },
+      "get" : {
+        "operationId" : "getRecordValue",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "key",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Field"
+                }
+              }
+            },
+            "description" : "Successfully retrieved the global record value"
+          }
+        },
+        "summary" : "Returns global record value",
+        "tags" : [ "Global Records" ]
+      },
+      "post" : {
+        "operationId" : "setRecordValue",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "key",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Field"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successfully saved the global record"
+          }
+        },
+        "summary" : "Saves global record",
+        "tags" : [ "Global Records" ]
+      }
+    },
+    "/api/settings" : {
+      "get" : {
+        "operationId" : "readFeaturesList_1",
+        "responses" : {
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "description" : "List of supported features"
+          }
+        },
+        "summary" : "Returns the complete list of all supported features",
+        "tags" : [ "Settings" ]
+      }
+    },
+    "/api/settings/{feature}/default-content" : {
+      "get" : {
+        "operationId" : "getDefaultValues_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "feature",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SettingsModel"
+                }
+              }
+            },
+            "description" : "Default values"
+          }
+        },
+        "summary" : "Returns default values of specified setting",
+        "tags" : [ "Settings" ]
+      }
+    },
+    "/api/settings/{feature}/names" : {
+      "get" : {
+        "operationId" : "readSettingNames_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "feature",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SettingName"
+                }
+              }
+            },
+            "description" : "List of setting names"
+          }
+        },
+        "summary" : "Returns names of specified setting",
+        "tags" : [ "Settings" ]
+      }
+    },
+    "/api/settings/{feature}/names/{name}" : {
+      "delete" : {
+        "operationId" : "deleteSetting_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "feature",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "name",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "Setting deleted successfully"
+          }
+        },
+        "summary" : "Deletes specified setting by id",
+        "tags" : [ "Settings" ]
+      },
+      "post" : {
+        "operationId" : "renameSetting_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "feature",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "name",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Setting name updated successfully"
+          }
+        },
+        "summary" : "Updates name of specified named setting",
+        "tags" : [ "Settings" ]
+      }
+    },
+    "/api/settings/{feature}/names/{name}/content" : {
+      "get" : {
+        "operationId" : "readSetting_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "feature",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "name",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "revision",
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SettingsModel"
+                }
+              }
+            },
+            "description" : "Setting content"
+          }
+        },
+        "summary" : "Returns values (content) of specified setting by its id and revision",
+        "tags" : [ "Settings" ]
+      },
+      "put" : {
+        "operationId" : "saveSetting_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "feature",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "name",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "string"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "204" : {
+            "description" : "Setting created/updated successfully"
+          }
+        },
+        "summary" : "Creates or updates named setting. Creation scenario will use default setting value if no body specified in the request.",
+        "tags" : [ "Settings" ]
+      }
+    },
+    "/api/settings/{feature}/names/{name}/revisions" : {
+      "get" : {
+        "operationId" : "readRevisionsList_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "feature",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "name",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Revision"
+                }
+              }
+            },
+            "description" : "List of revisions"
+          }
+        },
+        "summary" : "Returns revisions history of specified setting with specified id",
+        "tags" : [ "Settings" ]
+      }
+    },
+    "/api/version" : {
+      "get" : {
+        "operationId" : "getVersion",
+        "responses" : {
+          "default" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Version"
+                }
+              }
+            },
+            "description" : "Version information"
+          }
+        },
+        "summary" : "Returns version of Polarion's extension",
+        "tags" : [ "Extension Information" ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Context" : {
+        "type" : "object",
+        "description" : "Represents the context for building URLs related to Polarion services",
+        "properties" : {
+          "baseUrl" : {
+            "type" : "string",
+            "description" : "Returns the base URL constructed with the extension context",
+            "example" : "/polarion/pdf-exporter"
+          },
+          "extensionContext" : {
+            "type" : "string",
+            "description" : "The extension context used as a base for URL construction",
+            "example" : "pdf-exporter"
+          },
+          "restUrl" : {
+            "type" : "string",
+            "description" : "Returns the REST API URL constructed with the extension context",
+            "example" : "/polarion/pdf-exporter/rest"
+          },
+          "swaggerUiUrl" : {
+            "type" : "string",
+            "description" : "Returns the Swagger UI URL for the REST API"
+          }
+        }
+      },
+      "Field" : {
+        "type" : "object",
+        "description" : "Represents a field object with an ID and value",
+        "properties" : {
+          "value" : {
+            "type" : "string",
+            "description" : "The value associated with the field"
+          }
+        }
+      },
+      "Revision" : {
+        "type" : "object",
+        "description" : "Revision details",
+        "properties" : {
+          "author" : {
+            "type" : "string",
+            "description" : "The author of the revision"
+          },
+          "baseline" : {
+            "type" : "string",
+            "description" : "The baseline of the revision"
+          },
+          "date" : {
+            "type" : "string",
+            "description" : "The date of the revision"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "The description of the revision"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "The name of the revision"
+          }
+        }
+      },
+      "SettingName" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "description" : "The name of the setting"
+          },
+          "scope" : {
+            "type" : "string",
+            "description" : "The scope of the setting"
+          }
+        }
+      },
+      "SettingsModel" : {
+        "type" : "object",
+        "description" : "Settings model",
+        "properties" : {
+          "bundleTimestamp" : {
+            "type" : "string",
+            "description" : "The bundle timestamp of the setting"
+          }
+        }
+      },
+      "Version" : {
+        "type" : "object",
+        "description" : "Details about the software version",
+        "properties" : {
+          "automaticModuleName" : {
+            "type" : "string",
+            "description" : "The automatic module name"
+          },
+          "bundleBuildTimestamp" : {
+            "type" : "string",
+            "description" : "The build timestamp of the bundle"
+          },
+          "bundleName" : {
+            "type" : "string",
+            "description" : "The name of the bundle"
+          },
+          "bundleVendor" : {
+            "type" : "string",
+            "description" : "The vendor of the bundle"
+          },
+          "bundleVersion" : {
+            "type" : "string",
+            "description" : "The version of the bundle"
+          },
+          "projectURL" : {
+            "type" : "string",
+            "description" : "The project URL"
+          },
+          "supportEmail" : {
+            "type" : "string",
+            "description" : "Support email for the bundle"
+          }
+        }
+      }
+    }
+  }
+}
