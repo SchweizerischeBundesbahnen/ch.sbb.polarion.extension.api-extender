@@ -8,6 +8,8 @@ Require-Bundle: com.polarion.portal.tomcat,
  com.fasterxml.jackson,
  com.fasterxml.jackson.jaxrs,
  io.swagger,
+ org.apache.commons.logging,
+ slf4j.api,
  org.springframework.spring-core,
  org.springframework.spring-web
 Export-Package: ch.sbb.polarion.extension.api.extender
