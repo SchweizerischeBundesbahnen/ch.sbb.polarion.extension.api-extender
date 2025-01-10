@@ -19,7 +19,7 @@
 
 	<servlet>
 		<servlet-name>api-extender-admin-ui</servlet-name>
-		<servlet-class>ch.sbb.polarion.extension.api.extender.ApiExtenderAdminUiServlet</servlet-class>
+		<servlet-class>ch.sbb.polarion.extension.api_extender.ApiExtenderAdminUiServlet</servlet-class>
 
 		<init-param>
 			<param-name>debug</param-name>

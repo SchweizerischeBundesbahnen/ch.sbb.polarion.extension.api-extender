@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module id="ch.sbb.polarion.extension.api.extender" version="1.0.0">
+<module id="ch.sbb.polarion.extension.api_extender" version="1.0.0">
     <contribution configuration-id="com.polarion.xray.webui.administrationPageExtenders">
         <extender name="About"
                   parentNodeName="API Extender"
@@ -36,13 +36,13 @@
 
     <!-- Classic Wiki Page -->
     <contribution configuration-id="com.polarion.alm.wiki.renderingContext">
-        <item key="customFieldsProject" value="instance:ch.sbb.polarion.extension.api.extender.velocity.VelocityCustomFieldsProject"/>
-        <item key="globalRecords" value="instance:ch.sbb.polarion.extension.api.extender.velocity.VelocityGlobalRecords"/>
+        <item key="customFieldsProject" value="instance:ch.sbb.polarion.extension.api_extender.velocity.VelocityCustomFieldsProject"/>
+        <item key="globalRecords" value="instance:ch.sbb.polarion.extension.api_extender.velocity.VelocityGlobalRecords"/>
     </contribution>
 
     <!-- LiveReport Page -->
     <contribution configuration-id="com.polarion.alm.richpages.velocityContext">
-        <item key="customFieldsProject" value="instance:ch.sbb.polarion.extension.api.extender.velocity.VelocityReadOnlyCustomFieldsProject"/>
-        <item key="globalRecords" value="instance:ch.sbb.polarion.extension.api.extender.velocity.VelocityReadOnlyGlobalRecords"/>
+        <item key="customFieldsProject" value="instance:ch.sbb.polarion.extension.api_extender.velocity.VelocityReadOnlyCustomFieldsProject"/>
+        <item key="globalRecords" value="instance:ch.sbb.polarion.extension.api_extender.velocity.VelocityReadOnlyGlobalRecords"/>
     </contribution>
 </module>
