@@ -27,18 +27,21 @@ This API can be called using REST API and in Velocity Context.
 ## Build
 
 This extension can be produced using maven:
+
 ```bash
 mvn clean package
 ```
 
 ## Installation to Polarion
 
-To install JSON editor extension to Polarion `ch.sbb.polarion.extension.json.editor-<version>.jar`
-should be copied to `<polarion_home>/polarion/extensions/json-editor/eclipse/plugins`
+To install the extension to Polarion `ch.sbb.polarion.extension.api-extender-<version>.jar`
+should be copied to `<polarion_home>/polarion/extensions/ch.sbb.polarion.extension.api-extender/eclipse/plugins`
 It can be done manually or automated using maven build:
+
 ```bash
 mvn clean install -P install-to-local-polarion
 ```
+
 For automated installation with maven env variable `POLARION_HOME` should be defined and point to folder where Polarion is installed.
 
 Changes only take effect after restart of Polarion.
@@ -52,6 +55,7 @@ This extension provides REST API. OpenAPI Specification can be obtained [here](d
 ### Live Report Page
 
 Get version:
+
 ```velocity
 #set ($version = $customFieldsProject.getVersion())
 #if ($version)
@@ -69,6 +73,7 @@ or
 ```
 
 Get custom field value:
+
 ```velocity
 #set ($field = $customFieldsProject.getCustomField('elibrary', 'custom_field'))
 #if ($field)
@@ -78,6 +83,7 @@ Get custom field value:
 ```
 
 Get global record value:
+
 ```velocity
 #set ($field = $globalRecords.getRecord('record_name'))
 #if ($field)
@@ -89,6 +95,7 @@ Get global record value:
 Due to Polarion limitations we are not able to save custom fields in Live Report Page using Velocity, but we can use JavaScript for this.
 
 Set custom field value:
+
 ```html
 <input id='cfp_project' type='text' value='elibrary' name='project'/>
 <input id='cfp_key' type='text' value='custom_field' name='key'/>
@@ -108,22 +115,23 @@ Set custom field value:
             },
             body: requestBody
         })
-        .then(response => {
-            if (response.ok) {
-                return "Saved!"
-            } else {
-                return response.text()
-            }
-        })
-        .then(text => {
-             alert(text)
-        });
+                .then(response => {
+                    if (response.ok) {
+                        return "Saved!"
+                    } else {
+                        return response.text()
+                    }
+                })
+                .then(text => {
+                    alert(text)
+                });
     }
 </script>
 <button onclick='save_project_custom_field()'>Save</button>
 ```
 
 Set global record value:
+
 ```html
 <input id='record_key' type='text' value='record_name' name='record_name'/>
 <input id='record_value' type='text' value='record_value' name='record_value'/>
@@ -161,6 +169,7 @@ Note that internal API in URL should be used.
 ### Classic Wiki Page
 
 Get custom field value:
+
 ```velocity
 #set($projects = $projectService.searchProjects("","id"))
 
