@@ -59,6 +59,14 @@
             <artifactId>ch.sbb.polarion.extension.generic.app</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>ch.sbb.polarion.extensions</groupId>
+            <artifactId>ch.sbb.polarion.extension.generic.app</artifactId>
+            <version>${project.parent.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
