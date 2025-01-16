@@ -1,6 +1,7 @@
 package ch.sbb.polarion.extension.api.extender.settings;
 
 import ch.sbb.polarion.extension.generic.settings.GenericNamedSettings;
+import ch.sbb.polarion.extension.generic.settings.SettingsService;
 import org.jetbrains.annotations.NotNull;
 
 public class ProjectCustomFieldsSettings extends GenericNamedSettings<ProjectCustomFieldsSettingsModel> {
@@ -8,6 +9,10 @@ public class ProjectCustomFieldsSettings extends GenericNamedSettings<ProjectCus
 
     public ProjectCustomFieldsSettings() {
         super(FEATURE_NAME);
+    }
+
+    public ProjectCustomFieldsSettings(SettingsService settingsService) {
+        super(FEATURE_NAME, settingsService);
     }
 
     @Override
