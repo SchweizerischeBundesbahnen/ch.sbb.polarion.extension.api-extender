@@ -37,7 +37,7 @@ class CustomFieldsProjectTest {
         polarionServiceMock = mock(PolarionService.class);
         projectMock = mock(IProject.class);
         projectObjectMock = mock(Project.class);
-        customFieldsProject = new CustomFieldsProject(PROJECT_ID);
+        customFieldsProject = new CustomFieldsProject(PROJECT_ID, polarionServiceMock);
     }
 
     @Test
@@ -74,8 +74,6 @@ class CustomFieldsProjectTest {
         ILocation locationMock = mock(ILocation.class);
         when(projectMock.getLocation()).thenReturn(locationMock);
         when(locationMock.append(".polarion/polarion-project.xml")).thenReturn(locationMock);
-
-        CustomFieldsProject customFieldsProject = new CustomFieldsProject(PROJECT_ID, polarionServiceMock);
 
         ILocation result = customFieldsProject.getLocation();
 

@@ -3,7 +3,6 @@ package ch.sbb.polarion.extension.api.extender.velocity;
 import ch.sbb.polarion.extension.api.extender.project.CustomFieldsProject;
 import ch.sbb.polarion.extension.api.extender.rest.model.Field;
 import ch.sbb.polarion.extension.generic.context.CurrentContextConfig;
-import ch.sbb.polarion.extension.generic.context.CurrentContextExtension;
 import ch.sbb.polarion.extension.generic.rest.model.Version;
 import ch.sbb.polarion.extension.generic.test_extensions.PlatformContextMockExtension;
 import ch.sbb.polarion.extension.generic.util.VersionUtils;
@@ -23,7 +22,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith({MockitoExtension.class, PlatformContextMockExtension.class})
 @CurrentContextConfig("api-extender")
-public class VelocityReadOnlyCustomFieldsProjectTest {
+class VelocityReadOnlyCustomFieldsProjectTest {
     private VelocityReadOnlyCustomFieldsProject project;
 
     @BeforeEach

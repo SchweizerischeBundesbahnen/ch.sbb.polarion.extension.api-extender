@@ -43,9 +43,8 @@ class GlobalRecordsSettingsTest {
             mockScopeUtils.when(ScopeUtils::getDefaultLocation).thenReturn(mockDefaultLocation);
             mockScopeUtils.when(() -> ScopeUtils.getContextLocation("")).thenReturn(mockDefaultLocation);
 
-            assertThrows(ObjectNotFoundException.class, () -> {
-                GlobalRecordsSettingsModel loadedModel = globalRecordsSettings.load(projectName, SettingId.fromName("Any setting name"));
-            });
+            SettingId settingId = SettingId.fromName("Any setting name");
+            assertThrows(ObjectNotFoundException.class, () -> globalRecordsSettings.load(projectName, settingId));
         }
     }
 

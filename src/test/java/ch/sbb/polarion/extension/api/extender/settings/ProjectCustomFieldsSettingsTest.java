@@ -42,9 +42,8 @@ class ProjectCustomFieldsSettingsTest {
             mockScopeUtils.when(ScopeUtils::getDefaultLocation).thenReturn(mockDefaultLocation);
             mockScopeUtils.when(() -> ScopeUtils.getContextLocation("")).thenReturn(mockDefaultLocation);
 
-            assertThrows(ObjectNotFoundException.class, () -> {
-                ProjectCustomFieldsSettingsModel loadedModel = globalRecordsSettings.load(projectName, SettingId.fromName("Any setting name"));
-            });
+            SettingId settingId = SettingId.fromId("Any setting name");
+            assertThrows(ObjectNotFoundException.class, () -> globalRecordsSettings.load(projectName, settingId));
         }
     }
 
