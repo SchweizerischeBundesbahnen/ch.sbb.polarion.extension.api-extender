@@ -21,6 +21,20 @@ import static org.mockito.Mockito.*;
 @ExtendWith({MockitoExtension.class, CurrentContextExtension.class})
 @CurrentContextConfig("api-extender")
 class ProjectCustomFieldsSettingsTest {
+
+    @Test
+    void testDefault() {
+        try (MockedStatic<ScopeUtils> mockScopeUtils = mockStatic(ScopeUtils.class)) {
+            SettingsService mockedSettingsService = mock(SettingsService.class);
+            mockScopeUtils.when(() -> ScopeUtils.getFileContent(any())).thenCallRealMethod();
+            ProjectCustomFieldsSettings globalRecordsSettings = new ProjectCustomFieldsSettings(mockedSettingsService);
+            ProjectCustomFieldsSettingsModel projectCustomFieldsSettingsModel = globalRecordsSettings.defaultValues();
+            assertNotNull(projectCustomFieldsSettingsModel.getProjectRoles());
+            assertNotNull(projectCustomFieldsSettingsModel.getGlobalRoles());
+            assertNotNull(projectCustomFieldsSettingsModel.getAllRoles());
+        }
+    }
+
     @Test
     void testSettingDoesNotExist() {
         try (MockedStatic<ScopeUtils> mockScopeUtils = mockStatic(ScopeUtils.class)) {

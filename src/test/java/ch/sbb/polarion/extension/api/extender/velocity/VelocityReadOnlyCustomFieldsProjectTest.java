@@ -31,7 +31,7 @@ class VelocityReadOnlyCustomFieldsProjectTest {
     }
 
     @Test
-    void getVersionReturnsCorrectVersionTest() {
+    void testGetVersionReturnsCorrectVersion() {
         try (MockedStatic<VersionUtils> versionsUtilsMockedStatic = mockStatic(VersionUtils.class)) {
             Version mockVersion = mock(Version.class);
             versionsUtilsMockedStatic.when(VersionUtils::getVersion).thenReturn(mockVersion);
@@ -43,7 +43,7 @@ class VelocityReadOnlyCustomFieldsProjectTest {
     }
 
     @Test
-    void getVersionHandlesNullGracefullyTest() {
+    void testGetVersionHandlesNullGracefully() {
         try (MockedStatic<VersionUtils> versionsUtilsMockedStatic = mockStatic(VersionUtils.class)) {
             Version mockVersion = mock(Version.class);
             versionsUtilsMockedStatic.when(VersionUtils::getVersion).thenReturn(mockVersion);
@@ -55,7 +55,7 @@ class VelocityReadOnlyCustomFieldsProjectTest {
 
     @Test
     @SneakyThrows
-    void getCustomFieldReturnsField() {
+    void testGetCustomFieldReturnsField() {
         Field mockField = mock(Field.class);
         try (MockedConstruction<CustomFieldsProject> mockedCustomFieldsProject = Mockito.mockConstruction(CustomFieldsProject.class, (mock, context) ->
                 when(mock.getCustomField(anyString())).thenReturn(mockField))) {
@@ -81,7 +81,6 @@ class VelocityReadOnlyCustomFieldsProjectTest {
     void testGetCustomFieldThrowsJAXBException() {
         try (MockedConstruction<CustomFieldsProject> mockedCustomFieldsProject = Mockito.mockConstruction(CustomFieldsProject.class, (mock, context) ->
                 when(mock.getCustomField(anyString())).thenThrow(new JAXBException("Test exception")))) {
-            // Assert the exception is thrown
             assertThrows(JAXBException.class, () -> project.getCustomField("project1", "key1"));
         }
     }
