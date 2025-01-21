@@ -20,5 +20,9 @@ class GlobalRecordsSettingsModelTest {
         List<String> roles = model.getGlobalRoles();
         assertEquals(2, roles.size());
         assertTrue(roles.containsAll(Arrays.asList("role1", "role2")));
+
+        List<String> allRoles = model.getAllRoles();
+        assertEquals(2, allRoles.size());
+        assertTrue(allRoles.containsAll(Arrays.asList("role1", "role2")));
     }
 }
