@@ -1,7 +1,7 @@
-package ch.sbb.polarion.extension.api.extender.velocity;
+package ch.sbb.polarion.extension.api_extender.velocity;
 
-import ch.sbb.polarion.extension.api.extender.project.GlobalRecords;
-import ch.sbb.polarion.extension.api.extender.rest.model.Field;
+import ch.sbb.polarion.extension.api_extender.project.GlobalRecords;
+import ch.sbb.polarion.extension.api_extender.rest.model.Field;
 import ch.sbb.polarion.extension.generic.context.CurrentContextConfig;
 import ch.sbb.polarion.extension.generic.rest.model.Version;
 import ch.sbb.polarion.extension.generic.test_extensions.PlatformContextMockExtension;

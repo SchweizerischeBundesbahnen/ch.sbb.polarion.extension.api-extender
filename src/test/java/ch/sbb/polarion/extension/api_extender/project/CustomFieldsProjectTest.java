@@ -1,7 +1,7 @@
-package ch.sbb.polarion.extension.api.extender.project;
+package ch.sbb.polarion.extension.api_extender.project;
 
-import ch.sbb.polarion.extension.api.extender.rest.model.Field;
-import ch.sbb.polarion.extension.api.extender.rest.model.Project;
+import ch.sbb.polarion.extension.api_extender.rest.model.Field;
+import ch.sbb.polarion.extension.api_extender.rest.model.Project;
 import ch.sbb.polarion.extension.generic.context.CurrentContextConfig;
 import ch.sbb.polarion.extension.generic.context.CurrentContextExtension;
 import ch.sbb.polarion.extension.generic.service.PolarionService;

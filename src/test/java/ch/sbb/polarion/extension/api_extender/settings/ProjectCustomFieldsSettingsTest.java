@@ -1,4 +1,4 @@
-package ch.sbb.polarion.extension.api.extender.settings;
+package ch.sbb.polarion.extension.api_extender.settings;
 
 import ch.sbb.polarion.extension.generic.context.CurrentContextConfig;
 import ch.sbb.polarion.extension.generic.context.CurrentContextExtension;

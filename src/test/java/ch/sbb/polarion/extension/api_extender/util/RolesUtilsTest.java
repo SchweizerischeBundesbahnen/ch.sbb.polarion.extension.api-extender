@@ -1,4 +1,4 @@
-package ch.sbb.polarion.extension.api.extender.util;
+package ch.sbb.polarion.extension.api_extender.util;
 
 import ch.sbb.polarion.extension.generic.util.ScopeUtils;
 import com.polarion.alm.projects.IProjectService;

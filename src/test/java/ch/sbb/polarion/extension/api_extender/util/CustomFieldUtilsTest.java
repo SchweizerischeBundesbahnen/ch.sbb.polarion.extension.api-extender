@@ -1,4 +1,4 @@
-package ch.sbb.polarion.extension.api.extender.util;
+package ch.sbb.polarion.extension.api_extender.util;
 
 import com.polarion.alm.projects.model.IProject;
 import com.polarion.platform.core.IPlatform;
