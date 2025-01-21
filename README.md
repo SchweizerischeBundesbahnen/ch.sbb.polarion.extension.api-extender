@@ -155,17 +155,15 @@ Set global record value:
                 'Content-Type': 'application/json'
             },
             body: requestBody
-        })
-            .then(response => {
-                if (response.ok) {
-                    return "Saved!"
-                } else {
-                    return response.text()
-                }
-            })
-            .then(text => {
-                alert(text)
-            });
+        }).then(response => {
+            if (response.ok) {
+                return "Saved!"
+            } else {
+                return response.text()
+            }
+        }).then(text => {
+            alert(text)
+        });
     }
 </script>
 <button onclick='save_record()'>Save</button>
