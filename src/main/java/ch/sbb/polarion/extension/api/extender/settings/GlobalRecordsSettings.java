@@ -1,6 +1,7 @@
 package ch.sbb.polarion.extension.api.extender.settings;
 
 import ch.sbb.polarion.extension.generic.settings.GenericNamedSettings;
+import ch.sbb.polarion.extension.generic.settings.SettingsService;
 import org.jetbrains.annotations.NotNull;
 
 public class GlobalRecordsSettings extends GenericNamedSettings<GlobalRecordsSettingsModel> {
@@ -8,6 +9,10 @@ public class GlobalRecordsSettings extends GenericNamedSettings<GlobalRecordsSet
 
     public GlobalRecordsSettings() {
         super(FEATURE_NAME);
+    }
+
+    public GlobalRecordsSettings(SettingsService settingsService) {
+        super(FEATURE_NAME, settingsService);
     }
 
     @Override

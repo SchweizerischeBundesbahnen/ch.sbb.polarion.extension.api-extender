@@ -9,6 +9,7 @@ import com.polarion.platform.service.repository.IRepositoryService;
 import com.polarion.subterra.base.location.ILocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.VisibleForTesting;
 
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
@@ -18,9 +19,19 @@ public class CustomFieldsProject extends GenericFields<Project> {
 
     private final String projectId;
 
+    private final PolarionService polarionService;
+
     public CustomFieldsProject(String projectId) {
         super(PlatformContext.getPlatform().lookupService(IRepositoryService.class));
+        polarionService = new PolarionService();
         this.projectId = projectId;
+    }
+
+    @VisibleForTesting
+    CustomFieldsProject(String projectId, PolarionService polarionService) {
+        super(PlatformContext.getPlatform().lookupService(IRepositoryService.class));
+        this.projectId = projectId;
+        this.polarionService = polarionService;
     }
 
     @Nullable
@@ -37,7 +48,7 @@ public class CustomFieldsProject extends GenericFields<Project> {
 
     @Override
     protected ILocation getLocation() {
-        IProject project = new PolarionService().getProject(projectId);
+        IProject project = polarionService.getProject(projectId);
         return project.getLocation().append(POLARION_POLARION_PROJECT_XML);
     }
 
