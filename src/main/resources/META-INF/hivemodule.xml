@@ -1,36 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module id="ch.sbb.polarion.extension.api_extender" version="1.0.0">
+
     <contribution configuration-id="com.polarion.xray.webui.administrationPageExtenders">
-        <extender name="About"
+        <extender id="about"
+                  name="About"
+                  parentNodeId="api-extender"
                   parentNodeName="API Extender"
-                  parentNodeIconUrl="/polarion/icons/default/topicIcons/documentsAndWiki.svg"
-                  iconUrl="/polarion/icons/default/topicIconsSmall/documentsAndWiki.svg"
+                  parentNodeIconUrl="/polarion/api-extender-admin/ui/images/menu/30x30/_parent.svg"
+                  iconUrl="/polarion/api-extender-admin/ui/images/menu/16x16/about.svg"
                   pageUrl="/polarion/api-extender-admin/pages/about.jsp"
                   projectScope="true"
+                  projectGroupScope="false"
                   repositoryScope="true"/>
 
-        <extender name="REST API"
-                  parentNodeName="API Extender"
-                  parentNodeIconUrl="/polarion/icons/default/topicIcons/documentsAndWiki.svg"
-                  iconUrl="/polarion/icons/default/topicIconsSmall/documentsAndWiki.svg"
+        <extender id="rest-api"
+                  name="REST API"
+                  parentNodeId="api-extender"
+                  iconUrl="/polarion/api-extender-admin/ui/images/menu/16x16/rest_api.svg"
                   pageUrl="/polarion/api-extender/rest/swagger"
                   projectScope="true"
+                  projectGroupScope="false"
                   repositoryScope="true"/>
 
-        <extender name="Project Custom Fields"
-                  parentNodeName="API Extender"
-                  parentNodeIconUrl="/polarion/icons/default/topicIcons/documentsAndWiki.svg"
-                  iconUrl="/polarion/icons/default/topicIconsSmall/documentsAndWiki.svg"
+        <extender id="project-custom-fields"
+                  name="Project Custom Fields"
+                  parentNodeId="api-extender"
+                  iconUrl="/polarion/api-extender-admin/ui/images/menu/16x16/project_custom_fields.svg"
                   pageUrl="/polarion/api-extender-admin/pages/settings.jsp?settings_name=project_custom_fields&amp;scope=$scope$"
                   projectScope="true"
+                  projectGroupScope="false"
                   repositoryScope="true"/>
 
-        <extender name="Global Records"
-                  parentNodeName="API Extender"
-                  parentNodeIconUrl="/polarion/icons/default/topicIcons/documentsAndWiki.svg"
-                  iconUrl="/polarion/icons/default/topicIconsSmall/documentsAndWiki.svg"
+        <extender id="global-records"
+                  name="Global Records"
+                  parentNodeId="api-extender"
+                  iconUrl="/polarion/api-extender-admin/ui/images/menu/16x16/global_records.svg"
                   pageUrl="/polarion/api-extender-admin/pages/settings.jsp?settings_name=global_records&amp;scope=$scope$"
                   projectScope="false"
+                  projectGroupScope="false"
                   repositoryScope="true"/>
     </contribution>
 
