@@ -1,4 +1,4 @@
-<%@ page import="ch.sbb.polarion.extension.api.extender.util.RolesUtils" %>
+<%@ page import="ch.sbb.polarion.extension.api_extender.util.RolesUtils" %>
 <%@ page import="ch.sbb.polarion.extension.generic.rest.model.Version" %>
 <%@ page import="ch.sbb.polarion.extension.generic.util.ExtensionInfo" %>
 <%@ page import="java.util.Collection" %>

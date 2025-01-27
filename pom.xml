@@ -121,8 +121,8 @@
                         <package>ch.sbb.polarion.extension.generic.rest.controller.info</package>
                         <package>ch.sbb.polarion.extension.generic.rest.controller.settings</package>
                         <package>ch.sbb.polarion.extension.generic.rest.model</package>
-                        <package>ch.sbb.polarion.extension.api.extender.rest.controller</package>
-                        <package>ch.sbb.polarion.extension.api.extender.rest.model</package>
+                        <package>ch.sbb.polarion.extension.api_extender.rest.controller</package>
+                        <package>ch.sbb.polarion.extension.api_extender.rest.model</package>
                     </resourcePackages>
                 </configuration>
             </plugin>

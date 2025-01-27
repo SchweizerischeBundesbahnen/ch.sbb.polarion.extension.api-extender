@@ -12,4 +12,4 @@ Require-Bundle: com.polarion.portal.tomcat,
  slf4j.api,
  org.springframework.spring-core,
  org.springframework.spring-web
-Export-Package: ch.sbb.polarion.extension.api.extender
+Export-Package: ch.sbb.polarion.extension.api_extender
