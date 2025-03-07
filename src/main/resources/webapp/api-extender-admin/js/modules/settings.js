@@ -1,13 +1,21 @@
-const DEFAULT_SETTING_NAME = 'Default';
-SbbCommon.init({
+import ExtensionContext from '../../ui/generic/js/modules/ExtensionContext.js';
+
+const ctx = new ExtensionContext({
     extension: 'api-extender',
-    setting: SbbCommon.getValueById("settings_name"),
-    scope: SbbCommon.getValueById('scope')
+    setting: document.getElementById('settings_name').value,
+    scopeFieldId: 'scope'
 });
+
+ctx.onClick(
+    'save-toolbar-button', saveSettings,
+    'cancel-toolbar-button', cancelEdit,
+    'default-toolbar-button', revertToDefault,
+    'revisions-toolbar-button', ctx.toggleRevisions,
+);
 
 function getSelectedRoles(containerId) {
     const result = [];
-    const checkboxes = document.querySelectorAll(`div#${containerId} input[type=checkbox]:checked`);
+    const checkboxes = ctx.querySelectorAll(`div#${containerId} input[type=checkbox]:checked`);
 
     checkboxes.forEach((checkbox) => {
         result.push(checkbox.id);
@@ -17,7 +25,7 @@ function getSelectedRoles(containerId) {
 }
 
 function setSelectedRoles(containerId, allowedRoles) {
-    const checkboxes = document.querySelectorAll(`div#${containerId} input[type=checkbox]`);
+    const checkboxes = ctx.querySelectorAll(`div#${containerId} input[type=checkbox]`);
 
     checkboxes.forEach((checkbox) => {
         checkbox.checked = allowedRoles.includes(checkbox.id);
@@ -30,28 +38,28 @@ function parseAndSetSettings(text) {
     setSelectedRoles('global_roles', settings.globalRoles);
     setSelectedRoles('project_roles', settings.projectRoles);
 
-    if (settings.bundleTimestamp !== SbbCommon.getValueById('bundle-timestamp')) {
-        SbbCommon.setNewerVersionNotificationVisible(true);
+    if (settings.bundleTimestamp !== ctx.getValueById('bundle-timestamp')) {
+        ctx.setNewerVersionNotificationVisible(true);
     }
 }
 
 function saveSettings() {
-    SbbCommon.hideActionAlerts();
+    ctx.hideActionAlerts();
 
-    SbbCommon.callAsync({
+    ctx.callAsync({
         method: 'PUT',
-        url: `/polarion/${SbbCommon.extension}/rest/internal/settings/${SbbCommon.setting}/names/${DEFAULT_SETTING_NAME}/content?scope=${SbbCommon.scope}`,
+        url: `/polarion/${ctx.extension}/rest/internal/settings/${ctx.setting}/names/${ExtensionContext.DEFAULT}/content?scope=${ctx.scope}`,
         contentType: 'application/json',
         body: JSON.stringify({
             'globalRoles': getSelectedRoles('global_roles'),
             'projectRoles': getSelectedRoles('project_roles')
         }),
         onOk: () => {
-            SbbCommon.showSaveSuccessAlert();
-            SbbCommon.setNewerVersionNotificationVisible(false);
+            ctx.showSaveSuccessAlert();
+            ctx.setNewerVersionNotificationVisible(false);
             readAndFillRevisions();
         },
-        onError: () => SbbCommon.showSaveErrorAlert()
+        onError: () => ctx.showSaveErrorAlert()
     });
 }
 
@@ -62,40 +70,40 @@ function cancelEdit() {
 }
 
 function readSettings() {
-    SbbCommon.setLoadingErrorNotificationVisible(false);
+    ctx.setLoadingErrorNotificationVisible(false);
 
-    SbbCommon.callAsync({
+    ctx.callAsync({
         method: 'GET',
-        url: `/polarion/${SbbCommon.extension}/rest/internal/settings/${SbbCommon.setting}/names/${DEFAULT_SETTING_NAME}/content?scope=${SbbCommon.scope}`,
+        url: `/polarion/${ctx.extension}/rest/internal/settings/${ctx.setting}/names/${ExtensionContext.DEFAULT}/content?scope=${ctx.scope}`,
         contentType: 'application/json',
         onOk: (responseText) => {
             parseAndSetSettings(responseText, true);
             readAndFillRevisions();
         },
-        onError: () => SbbCommon.setLoadingErrorNotificationVisible(true)
+        onError: () => ctx.setLoadingErrorNotificationVisible(true)
     });
 }
 
 function readAndFillRevisions() {
-    SbbCommon.readAndFillRevisions({
+    ctx.readAndFillRevisions({
         revertToRevisionCallback: (responseText) => parseAndSetSettings(responseText)
     });
 }
 
 function revertToDefault() {
     if (confirm("Are you sure you want to return the default values?")) {
-        SbbCommon.setLoadingErrorNotificationVisible(false);
-        SbbCommon.hideActionAlerts();
+        ctx.setLoadingErrorNotificationVisible(false);
+        ctx.hideActionAlerts();
 
-        SbbCommon.callAsync({
+        ctx.callAsync({
             method: 'GET',
-            url: `/polarion/${SbbCommon.extension}/rest/internal/settings/${SbbCommon.setting}/default-content`,
+            url: `/polarion/${ctx.extension}/rest/internal/settings/${ctx.setting}/default-content`,
             contentType: 'application/json',
             onOk: (responseText) => {
                 parseAndSetSettings(responseText);
-                SbbCommon.showRevertedToDefaultAlert();
+                ctx.showRevertedToDefaultAlert();
             },
-            onError: () => SbbCommon.setLoadingErrorNotificationVisible(true)
+            onError: () => ctx.setLoadingErrorNotificationVisible(true)
         });
     }
 }

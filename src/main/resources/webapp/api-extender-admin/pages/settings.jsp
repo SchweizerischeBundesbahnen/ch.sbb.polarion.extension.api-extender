@@ -10,8 +10,8 @@
 <head>
     <title>Hooks: Settings</title>
     <link rel="stylesheet" href="../ui/generic/css/common.css?bundle=<%= version.getBundleBuildTimestampDigitsOnly() %>">
-    <script type="text/javascript" src="../ui/generic/js/common.js?bundle=<%= version.getBundleBuildTimestampDigitsOnly() %>"></script>
     <link rel="stylesheet" href="../css/api-extender-admin.css?bundle=<%= version.getBundleBuildTimestampDigitsOnly() %>">
+    <script type="module" src="../js/modules/settings.js?bundle=<%= version.getBundleBuildTimestampDigitsOnly() %>"></script>
 </head>
 
 <body>
@@ -66,11 +66,7 @@
     <input id="bundle-timestamp" type="hidden" value="<%= ch.sbb.polarion.extension.generic.util.VersionUtils.getVersion().getBundleBuildTimestamp() %>"/>
 </div>
 
-<jsp:include page='/common/jsp/buttons.jsp'>
-    <jsp:param name="saveFunction" value="saveSettings()"/>
-    <jsp:param name="cancelFunction" value="cancelEdit()"/>
-    <jsp:param name="defaultFunction" value="revertToDefault()"/>
-</jsp:include>
+<jsp:include page='/common/jsp/buttons.jsp'/>
 
 <div class="standard-admin-page">
     <h2>Quick Help</h2>
@@ -83,6 +79,5 @@
     </div>
 </div>
 
-<script type="text/javascript" src="../js/settings.js?bundle=<%= version.getBundleBuildTimestampDigitsOnly() %>"></script>
 </body>
 </html>
