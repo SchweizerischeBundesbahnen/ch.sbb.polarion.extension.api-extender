@@ -22,9 +22,7 @@ public class CustomFieldsProject extends GenericFields<Project> {
     private final PolarionService polarionService;
 
     public CustomFieldsProject(String projectId) {
-        super(PlatformContext.getPlatform().lookupService(IRepositoryService.class));
-        polarionService = new PolarionService();
-        this.projectId = projectId;
+        this(projectId, new PolarionService());
     }
 
     @VisibleForTesting
