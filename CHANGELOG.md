@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.1](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/compare/v2.0.0...v2.0.1) (2025-06-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v10.1.0 ([b88e37b](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/b88e37bd615d9413c9af01db0ffaa0d15d9b3cb5))
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v9 ([#62](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/issues/62)) ([b710255](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/b710255a251ddc7be146e560df523ba2f6cf3198))
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v9.1.0 ([635e41b](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/635e41b19176db87087c21104fdb2d9b175cff57))
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v9.1.1 ([2d69cbc](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/2d69cbc155cd926dfffc708e793fe4c8345016cc))
+* resolve generic parameter class in GenericFields ([#67](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/issues/67)) ([fd755f7](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/fd755f7011251a8ba78411a4384999f681a18c00)), closes [#68](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/issues/68)
+
 ## [2.0.0](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/compare/v1.5.0...v2.0.0) (2025-04-29)
 
 
