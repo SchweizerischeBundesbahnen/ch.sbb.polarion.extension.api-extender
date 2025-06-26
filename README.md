@@ -31,27 +31,12 @@ The extension should be copied to `<polarion_home>/polarion/extensions/ch.sbb.po
 > [!IMPORTANT]
 > Don't forget to clear `<polarion_home>/data/workspace/.config` folder after extension installation/update to make it work properly.
 
-## Build
+## Documentation
 
-This extension can be produced using maven:
-
-```bash
-mvn clean package
-```
-
-## Installation to Polarion
-
-To install the extension to Polarion `ch.sbb.polarion.extension.api-extender-<version>.jar`
-should be copied to `<polarion_home>/polarion/extensions/ch.sbb.polarion.extension.api-extender/eclipse/plugins`
-It can be done manually or automated using maven build:
-
-```bash
-mvn clean install -P install-to-local-polarion
-```
-
-For automated installation with maven env variable `POLARION_HOME` should be defined and point to folder where Polarion is installed.
-
-Changes only take effect after restart of Polarion.
+- [Development Guide](./DEVELOPMENT.md) - Comprehensive guide for setting up development environment and contributing to this project
+- [Contributing Guidelines](./CONTRIBUTING.md) - Guidelines for contributing to this project
+- [Coding Standards](./CODING_STANDARDS.md) - Coding standards and best practices
+- [Release Process](./RELEASE.md) - Information about the release process
 
 ## Polarion configuration
 
