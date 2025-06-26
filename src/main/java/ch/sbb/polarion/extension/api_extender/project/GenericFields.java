@@ -16,6 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
@@ -28,7 +29,7 @@ public abstract class GenericFields<T> {
 
     protected GenericFields(IRepositoryService repositoryService) {
         this.repositoryService = repositoryService;
-        this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        this.type = resolveGenericParameterClass();
     }
 
     protected abstract ILocation getLocation();
@@ -88,6 +89,21 @@ public abstract class GenericFields<T> {
     @SneakyThrows
     T createT() {
         return type.getDeclaredConstructor().newInstance();
+    }
+
+
+    protected @NotNull Class<T> resolveGenericParameterClass() {
+        Type superClass = getClass().getGenericSuperclass();
+
+        if (superClass instanceof ParameterizedType parameterizedType) {
+            Type[] typeArgs = parameterizedType.getActualTypeArguments();
+
+            if (typeArgs.length > 0 && typeArgs[0] instanceof Class<?> clazz) {
+                return (Class<T>) clazz;
+            }
+        }
+
+        throw new IllegalStateException("Could not resolve generic type parameter for class: " + getClass());
     }
 
 }
