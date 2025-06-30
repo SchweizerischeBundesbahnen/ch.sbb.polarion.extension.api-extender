@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.2](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/compare/v2.0.1...v2.0.2) (2025-06-30)
+
+
+### Bug Fixes
+
+* enhance GitHub Actions workflow for Maven builds and releases ([#73](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/issues/73)) ([6f774ba](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/6f774bafc13b630f5cf914c8475bc2195290118a))
+
 ## [2.0.1](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/compare/v2.0.0...v2.0.1) (2025-06-26)
 
 
