@@ -191,3 +191,25 @@ Set global record value:
 ```velocity
 $globalRecords.setRecord('record_name', 'record_value')
 ```
+
+## Tools
+This extension includes several velocity tools to facilitate development and maintenance.
+
+### Collections Tool
+
+Sort a map by its values in ascending or descending order:
+```velocity
+#set($sortedMap = $collectionsTool.sortMap($unsortedMap, true))
+```
+
+Wrap given list of objects into a IPObjectList:
+```velocity
+#set(list = $collectionsTool.convertArrayListToWeakPObjectList($workItems))
+```
+
+### Regex Tool
+
+Extract regex matches in the given text, returning the matches and their respective groups:
+```velocity
+#set($matches = $regexTool.findMatches('(\d+)', "test123and456"))
+```

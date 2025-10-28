@@ -30,6 +30,11 @@
 			<param-value>ch.sbb.polarion.extension.api_extender.rest.ApiExtenderRestApplication</param-value>
 		</init-param>
 
+        <init-param>
+            <param-name>jersey.config.server.provider.classnames</param-name>
+            <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
+        </init-param>
+
 		<init-param>
 			<param-name>debug</param-name>
 			<param-value>0</param-value>
