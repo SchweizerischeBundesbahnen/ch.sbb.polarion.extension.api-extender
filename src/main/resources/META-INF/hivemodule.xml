@@ -45,11 +45,15 @@
     <contribution configuration-id="com.polarion.alm.wiki.renderingContext">
         <item key="customFieldsProject" value="instance:ch.sbb.polarion.extension.api_extender.velocity.VelocityCustomFieldsProject"/>
         <item key="globalRecords" value="instance:ch.sbb.polarion.extension.api_extender.velocity.VelocityGlobalRecords"/>
+        <item key="collectionsTool" value="instance:ch.sbb.polarion.extension.api_extender.velocity.CollectionsTool"/>
+        <item key="regexTool" value="instance:ch.sbb.polarion.extension.api_extender.velocity.RegexTool"/>
     </contribution>
 
     <!-- LiveReport Page -->
     <contribution configuration-id="com.polarion.alm.richpages.velocityContext">
         <item key="customFieldsProject" value="instance:ch.sbb.polarion.extension.api_extender.velocity.VelocityReadOnlyCustomFieldsProject"/>
         <item key="globalRecords" value="instance:ch.sbb.polarion.extension.api_extender.velocity.VelocityReadOnlyGlobalRecords"/>
+        <item key="collectionsTool" value="instance:ch.sbb.polarion.extension.api_extender.velocity.CollectionsTool"/>
+        <item key="regexTool" value="instance:ch.sbb.polarion.extension.api_extender.velocity.RegexTool"/>
     </contribution>
 </module>

@@ -6,19 +6,21 @@ import ch.sbb.polarion.extension.api_extender.settings.GlobalRecordsSettingsMode
 import ch.sbb.polarion.extension.generic.service.PolarionService;
 import ch.sbb.polarion.extension.generic.settings.GenericNamedSettings;
 import ch.sbb.polarion.extension.generic.settings.NamedSettingsRegistry;
+import ch.sbb.polarion.extension.generic.test_extensions.PlatformContextMockExtension;
 import com.polarion.alm.projects.IProjectService;
 import com.polarion.alm.tracker.ITrackerService;
 import com.polarion.platform.IPlatformService;
-import com.polarion.platform.core.IPlatform;
-import com.polarion.platform.core.PlatformContext;
 import com.polarion.platform.security.ISecurityService;
 import com.polarion.platform.service.repository.IRepositoryService;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedConstruction;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
@@ -30,83 +32,79 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-@SuppressWarnings({"rawtypes", "unused", "unchecked", "ResultOfMethodCallIgnored"})
+@SuppressWarnings({"rawtypes", "unused", "unchecked"})
+@ExtendWith({MockitoExtension.class, PlatformContextMockExtension.class})
 class GlobalRecordInternalControllerTest {
+
+    @BeforeEach
+    void setup() {
+        NamedSettingsRegistry.INSTANCE.getAll().clear();
+    }
+
+    @AfterEach
+    void closeContext() {
+        NamedSettingsRegistry.INSTANCE.getAll().clear();
+    }
 
     @Test
     @SneakyThrows
     void testGetRecordValue() {
-        try (MockedStatic<PlatformContext> platformContextMockedStatic = mockStatic(PlatformContext.class)) {
+        try (MockedConstruction<GlobalRecords> mockedGlobalRecords = Mockito.mockConstruction(GlobalRecords.class, (mock, context) ->
+                when(mock.getRecord(anyString())).thenReturn(new Field("someId", "someValue")))) {
+            GlobalRecordInternalController controller = new GlobalRecordInternalController();
+            Field field = controller.getRecordValue("someId");
+            assertEquals("someValue", field == null ? null : field.getValue());
+        }
 
-            mockPlatform(platformContextMockedStatic);
-
-            try (MockedConstruction<GlobalRecords> mockedGlobalRecords = Mockito.mockConstruction(GlobalRecords.class, (mock, context) ->
-                    when(mock.getRecord(anyString())).thenReturn(new Field("someId", "someValue")))) {
-                GlobalRecordInternalController controller = new GlobalRecordInternalController();
-                Field field = controller.getRecordValue("someId");
-                assertEquals("someValue", field == null ? null : field.getValue());
-            }
-
-            try (MockedConstruction<GlobalRecords> mockedGlobalRecords = Mockito.mockConstruction(GlobalRecords.class, (mock, context) ->
-                    when(mock.getRecord(anyString())).thenReturn(null))) {
-                GlobalRecordInternalController controller = new GlobalRecordInternalController();
-                NotFoundException notFoundException = Assertions.assertThrows(NotFoundException.class, () -> controller.getRecordValue("someId"));
-                assertEquals("key 'someId' not found", notFoundException.getMessage());
-            }
+        try (MockedConstruction<GlobalRecords> mockedGlobalRecords = Mockito.mockConstruction(GlobalRecords.class, (mock, context) ->
+                when(mock.getRecord(anyString())).thenReturn(null))) {
+            GlobalRecordInternalController controller = new GlobalRecordInternalController();
+            NotFoundException notFoundException = Assertions.assertThrows(NotFoundException.class, () -> controller.getRecordValue("someId"));
+            assertEquals("key 'someId' not found", notFoundException.getMessage());
         }
     }
 
     @Test
     @SneakyThrows
     void testSetRecordValue() {
-        try (MockedStatic<PlatformContext> platformContextMockedStatic = mockStatic(PlatformContext.class)) {
+        Field field = new Field("someId", "someValue");
+        try (MockedConstruction<GlobalRecords> mockedGlobalRecords = Mockito.mockConstruction(GlobalRecords.class, (mock, context) ->
+                when(mock.getRecord(anyString())).thenReturn(field))) {
 
-            mockPlatform(platformContextMockedStatic);
+            ISecurityService securityService = mockRoles();
 
-            Field field = new Field("someId", "someValue");
-            try (MockedConstruction<GlobalRecords> mockedGlobalRecords = Mockito.mockConstruction(GlobalRecords.class, (mock, context) ->
-                    when(mock.getRecord(anyString())).thenReturn(field))) {
+            PolarionService polarionService = new PolarionService(mock(ITrackerService.class), mock(IProjectService.class), securityService, mock(IPlatformService.class), mock(IRepositoryService.class));
+            GlobalRecordInternalController controller = new GlobalRecordInternalController(polarionService);
 
-                ISecurityService securityService = mockRoles();
+            when(securityService.getRolesForUser("userId")).thenReturn(List.of("role3"));
+            ForbiddenException forbiddenException = Assertions.assertThrows(ForbiddenException.class, () -> controller.setRecordValue("someId", field));
+            assertEquals("You are not authorized to modify records", forbiddenException.getMessage());
 
-                PolarionService polarionService = new PolarionService(mock(ITrackerService.class), mock(IProjectService.class), securityService, mock(IPlatformService.class), mock(IRepositoryService.class));
-                GlobalRecordInternalController controller = new GlobalRecordInternalController(polarionService);
-
-                when(securityService.getRolesForUser("userId")).thenReturn(List.of("role3"));
-                ForbiddenException forbiddenException = Assertions.assertThrows(ForbiddenException.class, () -> controller.setRecordValue("someId", field));
-                assertEquals("You are not authorized to modify records", forbiddenException.getMessage());
-
-                when(securityService.getRolesForUser("userId")).thenReturn(List.of("role1"));
-                controller.setRecordValue("someId", field);
-                verify(mockedGlobalRecords.constructed().get(0), times(1)).setRecord("someId", "someValue");
-            }
+            when(securityService.getRolesForUser("userId")).thenReturn(List.of("role1"));
+            controller.setRecordValue("someId", field);
+            verify(mockedGlobalRecords.constructed().get(0), times(1)).setRecord("someId", "someValue");
         }
     }
 
     @Test
     @SneakyThrows
     void testDeleteRecordValue() {
-        try (MockedStatic<PlatformContext> platformContextMockedStatic = mockStatic(PlatformContext.class)) {
+        Field field = new Field("someId", "someValue");
+        try (MockedConstruction<GlobalRecords> mockedGlobalRecords = Mockito.mockConstruction(GlobalRecords.class, (mock, context) ->
+                when(mock.getRecord(anyString())).thenReturn(field))) {
 
-            mockPlatform(platformContextMockedStatic);
+            ISecurityService securityService = mockRoles();
 
-            Field field = new Field("someId", "someValue");
-            try (MockedConstruction<GlobalRecords> mockedGlobalRecords = Mockito.mockConstruction(GlobalRecords.class, (mock, context) ->
-                    when(mock.getRecord(anyString())).thenReturn(field))) {
+            PolarionService polarionService = new PolarionService(mock(ITrackerService.class), mock(IProjectService.class), securityService, mock(IPlatformService.class), mock(IRepositoryService.class));
+            GlobalRecordInternalController controller = new GlobalRecordInternalController(polarionService);
 
-                ISecurityService securityService = mockRoles();
+            when(securityService.getRolesForUser("userId")).thenReturn(List.of("role3"));
+            ForbiddenException forbiddenException = Assertions.assertThrows(ForbiddenException.class, () -> controller.deleteRecordValue("someId"));
+            assertEquals("You are not authorized to modify records", forbiddenException.getMessage());
 
-                PolarionService polarionService = new PolarionService(mock(ITrackerService.class), mock(IProjectService.class), securityService, mock(IPlatformService.class), mock(IRepositoryService.class));
-                GlobalRecordInternalController controller = new GlobalRecordInternalController(polarionService);
-
-                when(securityService.getRolesForUser("userId")).thenReturn(List.of("role3"));
-                ForbiddenException forbiddenException = Assertions.assertThrows(ForbiddenException.class, () -> controller.deleteRecordValue("someId"));
-                assertEquals("You are not authorized to modify records", forbiddenException.getMessage());
-
-                when(securityService.getRolesForUser("userId")).thenReturn(List.of("role1"));
-                controller.deleteRecordValue("someId");
-                verify(mockedGlobalRecords.constructed().get(0), times(1)).setRecord("someId", null);
-            }
+            when(securityService.getRolesForUser("userId")).thenReturn(List.of("role1"));
+            controller.deleteRecordValue("someId");
+            verify(mockedGlobalRecords.constructed().get(0), times(1)).setRecord("someId", null);
         }
     }
 
@@ -121,13 +119,6 @@ class GlobalRecordInternalControllerTest {
         when(settingsModel.getAllRoles()).thenReturn(Arrays.asList("role1", "role2"));
         when(settings.read(any(), any(), any())).thenReturn(settingsModel);
         return securityService;
-    }
-
-    private void mockPlatform(MockedStatic<PlatformContext> platformContextMockedStatic) {
-        IPlatform platform = mock(IPlatform.class);
-        IRepositoryService repositoryService = mock(IRepositoryService.class);
-        platformContextMockedStatic.when(PlatformContext::getPlatform).thenReturn(platform);
-        when(platform.lookupService(IRepositoryService.class)).thenReturn(repositoryService);
     }
 
 }

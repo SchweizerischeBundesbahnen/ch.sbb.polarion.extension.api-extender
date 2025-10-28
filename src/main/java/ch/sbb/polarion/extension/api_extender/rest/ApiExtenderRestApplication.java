@@ -4,6 +4,8 @@ import ch.sbb.polarion.extension.api_extender.rest.controller.GlobalRecordApiCon
 import ch.sbb.polarion.extension.api_extender.rest.controller.GlobalRecordInternalController;
 import ch.sbb.polarion.extension.api_extender.rest.controller.ProjectCustomFieldApiController;
 import ch.sbb.polarion.extension.api_extender.rest.controller.ProjectCustomFieldInternalController;
+import ch.sbb.polarion.extension.api_extender.rest.controller.RegexToolApiController;
+import ch.sbb.polarion.extension.api_extender.rest.controller.RegexToolInternalController;
 import ch.sbb.polarion.extension.api_extender.settings.GlobalRecordsSettings;
 import ch.sbb.polarion.extension.api_extender.settings.ProjectCustomFieldsSettings;
 import ch.sbb.polarion.extension.generic.rest.GenericRestApplication;
@@ -30,7 +32,9 @@ public class ApiExtenderRestApplication extends GenericRestApplication {
                 new GlobalRecordApiController(),
                 new GlobalRecordInternalController(),
                 new ProjectCustomFieldApiController(),
-                new ProjectCustomFieldInternalController()
+                new ProjectCustomFieldInternalController(),
+                new RegexToolApiController(),
+                new RegexToolInternalController()
         );
     }
 }
