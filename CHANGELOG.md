@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.1.0](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/compare/v3.0.0...v3.1.0) (2025-11-05)
+
+
+### Features
+
+* introduce additional velocity functions ([#87](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/issues/87)) ([e521e2e](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/e521e2e87ce980e8c8c77499943756176a052903)), closes [#86](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/issues/86)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v11.0.2 ([4b03031](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/4b03031fc7bb6f15200934683d2799114c510fb2))
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v11.1.0 ([b60509c](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/b60509c63a987b6a0ccb714aff605ed946d854b4))
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v11.2.0 ([9dff34e](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/9dff34e44e2acf34e9ddb638c3bf3bdb94e1d1ac))
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v11.3.0 ([41e3e85](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/41e3e8527b9219cfbbd94546a25ddce1332dc960))
+
 ## [3.0.0](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/compare/v2.0.2...v3.0.0) (2025-07-03)
 
 
