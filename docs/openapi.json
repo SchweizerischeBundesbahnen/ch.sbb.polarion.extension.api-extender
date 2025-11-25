@@ -264,7 +264,7 @@
     },
     "/api/settings": {
       "get": {
-        "operationId": "readFeaturesList_1",
+        "operationId": "readFeaturesList",
         "responses": {
           "default": {
             "content": {
@@ -285,7 +285,7 @@
     },
     "/api/settings/{feature}/default-content": {
       "get": {
-        "operationId": "getDefaultValues_1",
+        "operationId": "getDefaultValues",
         "parameters": [
           {
             "in": "path",
@@ -316,13 +316,21 @@
     },
     "/api/settings/{feature}/names": {
       "get": {
-        "operationId": "readSettingNames_1",
+        "operationId": "readSettingNames",
         "parameters": [
           {
             "in": "path",
             "name": "feature",
             "required": true,
             "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "scope",
+            "schema": {
+              "default": "",
               "type": "string"
             }
           }
@@ -339,7 +347,7 @@
             "description": "List of setting names"
           }
         },
-        "summary": "Returns names of specified setting",
+        "summary": "Returns names of specified setting in specified scope (global or certain project)",
         "tags": [
           "Settings"
         ]
@@ -347,7 +355,7 @@
     },
     "/api/settings/{feature}/names/{name}": {
       "delete": {
-        "operationId": "deleteSetting_1",
+        "operationId": "deleteSetting",
         "parameters": [
           {
             "in": "path",
@@ -362,6 +370,14 @@
             "name": "name",
             "required": true,
             "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "scope",
+            "schema": {
+              "default": "",
               "type": "string"
             }
           }
@@ -371,13 +387,13 @@
             "description": "Setting deleted successfully"
           }
         },
-        "summary": "Deletes specified setting by id",
+        "summary": "Deletes specified setting by id and scope (global or certain project)",
         "tags": [
           "Settings"
         ]
       },
       "post": {
-        "operationId": "renameSetting_1",
+        "operationId": "renameSetting",
         "parameters": [
           {
             "in": "path",
@@ -392,6 +408,14 @@
             "name": "name",
             "required": true,
             "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "scope",
+            "schema": {
+              "default": "",
               "type": "string"
             }
           }
@@ -410,7 +434,7 @@
             "description": "Setting name updated successfully"
           }
         },
-        "summary": "Updates name of specified named setting",
+        "summary": "Updates name of specified named setting in specified scope (global or certain project)",
         "tags": [
           "Settings"
         ]
@@ -418,7 +442,7 @@
     },
     "/api/settings/{feature}/names/{name}/content": {
       "get": {
-        "operationId": "readSetting_1",
+        "operationId": "readSetting",
         "parameters": [
           {
             "in": "path",
@@ -433,6 +457,14 @@
             "name": "name",
             "required": true,
             "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "scope",
+            "schema": {
+              "default": "",
               "type": "string"
             }
           },
@@ -456,13 +488,13 @@
             "description": "Setting content"
           }
         },
-        "summary": "Returns values (content) of specified setting by its id and revision",
+        "summary": "Returns values (content) of specified setting by its id, scope (global or certain project) and revision",
         "tags": [
           "Settings"
         ]
       },
       "put": {
-        "operationId": "saveSetting_1",
+        "operationId": "saveSetting",
         "parameters": [
           {
             "in": "path",
@@ -477,6 +509,14 @@
             "name": "name",
             "required": true,
             "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "scope",
+            "schema": {
+              "default": "",
               "type": "string"
             }
           }
@@ -495,7 +535,7 @@
             "description": "Setting created/updated successfully"
           }
         },
-        "summary": "Creates or updates named setting. Creation scenario will use default setting value if no body specified in the request.",
+        "summary": "Creates or updates named setting in specified scope (global or certain project). Creation scenario will use default setting value if no body specified in the request.",
         "tags": [
           "Settings"
         ]
@@ -503,7 +543,7 @@
     },
     "/api/settings/{feature}/names/{name}/revisions": {
       "get": {
-        "operationId": "readRevisionsList_1",
+        "operationId": "readRevisionsList",
         "parameters": [
           {
             "in": "path",
@@ -520,6 +560,14 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "in": "query",
+            "name": "scope",
+            "schema": {
+              "default": "",
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -534,7 +582,7 @@
             "description": "List of revisions"
           }
         },
-        "summary": "Returns revisions history of specified setting with specified id",
+        "summary": "Returns revisions history of specified setting with specified id and in specified scope (global or certain project)",
         "tags": [
           "Settings"
         ]
