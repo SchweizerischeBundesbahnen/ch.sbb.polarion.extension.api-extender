@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>ch.sbb.polarion.extension.api-extender</artifactId>
-    <version>4.0.1-SNAPSHOT</version>
+    <version>4.0.1</version>
     <packaging>jar</packaging>
 
     <name>API extension for Polarion ALM</name>
