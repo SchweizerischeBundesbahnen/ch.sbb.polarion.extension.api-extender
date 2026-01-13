@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.0.1](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/compare/v4.0.0...v4.0.1) (2026-01-12)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v13.1.0 ([35d053a](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/35d053a093108eb59be3b729895e0cda605db854))
+* rename `setField` to `setRecord` in `VelocityGlobalRecords` ([#98](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/issues/98)) ([f0228d2](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/f0228d29990be760c2ea2d72a06eb613a0da6af7)), closes [#97](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/issues/97)
+
 ## [4.0.0](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/compare/v3.1.0...v4.0.0) (2026-01-09)
 
 
