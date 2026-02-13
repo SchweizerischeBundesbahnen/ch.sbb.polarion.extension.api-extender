@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 public class CollectionsTool {
@@ -34,13 +34,15 @@ public class CollectionsTool {
      * @param ascending Whether to sort the values in ascending order
      * @return A SortedMap of the same type as the provided map
      */
-    public <T> SortedMap<T, Integer> sortMap(Map<T, Integer> shuffled, boolean ascending) {
-        Comparator<T> comparator = Comparator.comparing(shuffled::get);
-        Comparator<T> treeComparator = ascending ? comparator : comparator.reversed();
-        SortedMap<T, Integer> sortedMap = new TreeMap<>(treeComparator);
+    public <T> Map<T, Integer> sortMap(Map<T, Integer> shuffled, boolean ascending) {
+        Comparator<Map.Entry<T, Integer>> comparator = Map.Entry.comparingByValue();
+        if (!ascending) {
+            comparator = comparator.reversed();
+        }
 
-        sortedMap.putAll(shuffled);
-        return sortedMap;
+        return shuffled.entrySet().stream()
+                .sorted(comparator)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
     }
 
 }
