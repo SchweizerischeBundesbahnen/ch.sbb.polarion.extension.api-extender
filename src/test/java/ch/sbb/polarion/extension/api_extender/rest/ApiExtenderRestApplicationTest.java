@@ -14,7 +14,7 @@ class ApiExtenderRestApplicationTest {
     @Test
     void testConstructor() {
         ApiExtenderRestApplication application = new ApiExtenderRestApplication();
-        assertDoesNotThrow(application::getExtensionControllerSingletons);
+        assertDoesNotThrow(application::getExtensionControllerClasses);
     }
 
 }
