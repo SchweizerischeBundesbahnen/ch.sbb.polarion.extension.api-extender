@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -35,7 +34,7 @@ class CollectionsToolTest {
         unsorted.put("banana", 1);
         unsorted.put("cherry", 2);
 
-        SortedMap<String, Integer> sorted = collectionsTool.sortMap(unsorted, true);
+        Map<String, Integer> sorted = collectionsTool.sortMap(unsorted, true);
 
         assertEquals(3, sorted.size());
         List<String> keys = new ArrayList<>(sorted.keySet());
@@ -51,7 +50,7 @@ class CollectionsToolTest {
         unsorted.put("banana", 1);
         unsorted.put("cherry", 2);
 
-        SortedMap<String, Integer> sorted = collectionsTool.sortMap(unsorted, false);
+        Map<String, Integer> sorted = collectionsTool.sortMap(unsorted, false);
 
         assertEquals(3, sorted.size());
         List<String> keys = new ArrayList<>(sorted.keySet());
@@ -64,7 +63,7 @@ class CollectionsToolTest {
     void sortMap_shouldHandleEmptyMap() {
         Map<String, Integer> empty = new HashMap<>();
 
-        SortedMap<String, Integer> sorted = collectionsTool.sortMap(empty, true);
+        Map<String, Integer> sorted = collectionsTool.sortMap(empty, true);
 
         assertTrue(sorted.isEmpty());
     }
@@ -74,7 +73,7 @@ class CollectionsToolTest {
         Map<String, Integer> single = new HashMap<>();
         single.put("only", 42);
 
-        SortedMap<String, Integer> sorted = collectionsTool.sortMap(single, true);
+        Map<String, Integer> sorted = collectionsTool.sortMap(single, true);
 
         assertEquals(1, sorted.size());
         assertTrue(sorted.containsKey("only"));
@@ -88,13 +87,12 @@ class CollectionsToolTest {
         unsorted.put("second", 5);
         unsorted.put("third", 5);
 
-        SortedMap<String, Integer> sorted = collectionsTool.sortMap(unsorted, true);
+        Map<String, Integer> sorted = collectionsTool.sortMap(unsorted, true);
 
-        // When all values are equal, TreeMap with value-based comparator treats keys as equivalent
-        // and only retains one entry (last one put based on comparison order)
-        assertEquals(1, sorted.size());
-        // The retained entry should have value 5
-        assertTrue(sorted.containsValue(5));
+        assertEquals(3, sorted.size());
+        assertTrue(sorted.containsKey("first"));
+        assertTrue(sorted.containsKey("second"));
+        assertTrue(sorted.containsKey("third"));
     }
 
     @Test
@@ -104,17 +102,42 @@ class CollectionsToolTest {
         unsorted.put("zero", 0);
         unsorted.put("positive", 5);
 
-        SortedMap<String, Integer> sortedAsc = collectionsTool.sortMap(unsorted, true);
+        Map<String, Integer> sortedAsc = collectionsTool.sortMap(unsorted, true);
         List<String> keysAsc = new ArrayList<>(sortedAsc.keySet());
         assertEquals("negative", keysAsc.get(0));
         assertEquals("zero", keysAsc.get(1));
         assertEquals("positive", keysAsc.get(2));
 
-        SortedMap<String, Integer> sortedDesc = collectionsTool.sortMap(unsorted, false);
+        Map<String, Integer> sortedDesc = collectionsTool.sortMap(unsorted, false);
         List<String> keysDesc = new ArrayList<>(sortedDesc.keySet());
         assertEquals("positive", keysDesc.get(0));
         assertEquals("zero", keysDesc.get(1));
         assertEquals("negative", keysDesc.get(2));
+    }
+
+    @Test
+    void sortMap_shouldNotRemoveDuplicateValues() {
+        Map<String, Integer> unsorted = new HashMap<>();
+        unsorted.put("E1", 1);
+        unsorted.put("E2", 0);
+        unsorted.put("E3", 2);
+        unsorted.put("E4", 0);
+
+        Map<String, Integer> sortedAsc = collectionsTool.sortMap(unsorted, true);
+        assertEquals(4, sortedAsc.size());
+        List<String> keysAsc = new ArrayList<>(sortedAsc.keySet());
+        assertEquals(0, sortedAsc.get(keysAsc.get(0)));
+        assertEquals(0, sortedAsc.get(keysAsc.get(1)));
+        assertEquals(1, sortedAsc.get(keysAsc.get(2)));
+        assertEquals(2, sortedAsc.get(keysAsc.get(3)));
+
+        Map<String, Integer> sortedDesc = collectionsTool.sortMap(unsorted, false);
+        assertEquals(4, sortedDesc.size());
+        List<String> keysDesc = new ArrayList<>(sortedDesc.keySet());
+        assertEquals(2, sortedDesc.get(keysDesc.get(0)));
+        assertEquals(1, sortedDesc.get(keysDesc.get(1)));
+        assertEquals(0, sortedDesc.get(keysDesc.get(2)));
+        assertEquals(0, sortedDesc.get(keysDesc.get(3)));
     }
 
     @Test
@@ -124,7 +147,7 @@ class CollectionsToolTest {
         unsorted.put(2, 50);
         unsorted.put(3, 75);
 
-        SortedMap<Integer, Integer> sorted = collectionsTool.sortMap(unsorted, true);
+        Map<Integer, Integer> sorted = collectionsTool.sortMap(unsorted, true);
 
         assertEquals(3, sorted.size());
         List<Integer> keys = new ArrayList<>(sorted.keySet());
