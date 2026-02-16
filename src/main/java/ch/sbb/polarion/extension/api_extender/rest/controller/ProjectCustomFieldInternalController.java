@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.VisibleForTesting;
 
+import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.ForbiddenException;
@@ -32,6 +33,7 @@ import javax.xml.bind.JAXBException;
 import java.util.Collection;
 import java.util.List;
 
+@Singleton
 @Tag(name = "Project custom fields")
 @Hidden
 @Path("/internal")

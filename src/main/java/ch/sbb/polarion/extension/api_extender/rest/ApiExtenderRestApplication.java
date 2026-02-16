@@ -27,14 +27,14 @@ public class ApiExtenderRestApplication extends GenericRestApplication {
     }
 
     @Override
-    protected @NotNull Set<Object> getExtensionControllerSingletons() {
+    protected @NotNull Set<Class<?>> getExtensionControllerClasses() {
         return Set.of(
-                new GlobalRecordApiController(),
-                new GlobalRecordInternalController(),
-                new ProjectCustomFieldApiController(),
-                new ProjectCustomFieldInternalController(),
-                new RegexToolApiController(),
-                new RegexToolInternalController()
+                GlobalRecordApiController.class,
+                GlobalRecordInternalController.class,
+                ProjectCustomFieldApiController.class,
+                ProjectCustomFieldInternalController.class,
+                RegexToolApiController.class,
+                RegexToolInternalController.class
         );
     }
 }
