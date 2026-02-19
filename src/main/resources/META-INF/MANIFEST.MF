@@ -1,16 +1,2 @@
-Support-Email: polarion-opensource@sbb.ch
 Bundle-Name: API Extension for Polarion ALM
-Require-Bundle: com.polarion.portal.tomcat,
- com.polarion.alm.ui,
- com.polarion.platform.guice,
- com.polarion.alm.tracker,
- org.glassfish.jersey,
- com.fasterxml.jackson.core,
- com.fasterxml.jackson.databind,
- com.fasterxml.jackson.annotations,
- com.fasterxml.jackson.module.jaxb.annotations,
- org.apache.commons.logging,
- slf4j.api,
- org.springframework.spring-core,
- org.springframework.spring-web
 Export-Package: ch.sbb.polarion.extension.api_extender
