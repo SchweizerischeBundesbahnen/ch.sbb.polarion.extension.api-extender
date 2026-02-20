@@ -24,6 +24,7 @@ jobs:
       IO_JFROG_SBB_POLARION_TOKEN: ${{ secrets.IO_JFROG_SBB_POLARION_TOKEN }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       MARKDOWN2HTML_MAVEN_PLUGIN_FAIL_ON_ERROR: true
+      GITHUB_TOKEN: ${{ github.token }}  # providing this prevent from reaching GitHub requests limit
     steps:
       - name: 📄 Checkout the repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
@@ -60,7 +61,6 @@ jobs:
         if: github.event_name == 'push'
         env:
           GITHUB_HEAD_REF: ${{ github.head_ref }}
-          COM_SONATYPE_CENTRAL_POLARION_OPENSOURCE_GPG_PASSPHRASE: ${{ secrets.COM_SONATYPE_CENTRAL_POLARION_OPENSOURCE_GPG_PASSPHRASE }}
         run: |
           if [ -n "${GITHUB_HEAD_REF}" ]; then
             mvn --batch-mode -s "${SETTINGS_XML}" clean verify sonar:sonar -Dsonar.branch.name="${GITHUB_HEAD_REF}"
@@ -87,9 +87,11 @@ jobs:
             target/*.pom
           retention-days: 1
           if-no-files-found: error
+  # Deploy releases to Maven Central from main and LTS branches (release-v*)
+  # See RELEASE.md for LTS branch documentation
   deploy-maven-central:
     needs: build
-    if: ${{ needs.build.outputs.is_release == 'true' && github.ref == 'refs/heads/main' }}
+    if: ${{ needs.build.outputs.is_release == 'true' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release-v')) }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -98,6 +100,7 @@ jobs:
       COM_SONATYPE_CENTRAL_POLARION_OPENSOURCE_USERNAME: ${{ secrets.COM_SONATYPE_CENTRAL_POLARION_OPENSOURCE_USERNAME }}
       COM_SONATYPE_CENTRAL_POLARION_OPENSOURCE_TOKEN: ${{ secrets.COM_SONATYPE_CENTRAL_POLARION_OPENSOURCE_TOKEN }}
       COM_SONATYPE_CENTRAL_POLARION_OPENSOURCE_GPG_PASSPHRASE: ${{ secrets.COM_SONATYPE_CENTRAL_POLARION_OPENSOURCE_GPG_PASSPHRASE }}
+      GITHUB_TOKEN: ${{ github.token }}  # providing this prevent from reaching GitHub requests limit
     steps:
       - name: 📄 Checkout the repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
@@ -123,9 +126,11 @@ jobs:
             -Dcentral.timeout=3600 \
             -Dmaven.wagon.http.connectionTimeout=3600000 \
             -Dmaven.wagon.http.readTimeout=3600000
+  # Deploy to GitHub Packages (snapshots from main only) and upload release assets to GitHub Release
+  # LTS branches (release-v*) only upload release assets, no snapshot deployment
   deploy-github-packages:
     needs: build
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/main' || (needs.build.outputs.is_release == 'true' && startsWith(github.ref, 'refs/heads/release-v')) }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
