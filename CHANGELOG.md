@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.1](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/compare/v3.1.0...v3.1.1) (2026-02-21)
+
+
+### Bug Fixes
+
+* replace `SortedMap` with `LinkedHashMap` in `sortMap` implementation ([#102](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/issues/102)) ([2921445](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/2921445374ea07b1f624c1619bcf6f21e6bc292b)), closes [#101](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/issues/101)
+
 ## [3.1.0](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/compare/v3.0.0...v3.1.0) (2025-11-05)
 
 
