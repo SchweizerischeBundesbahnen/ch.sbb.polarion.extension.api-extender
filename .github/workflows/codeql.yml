@@ -1,0 +1,78 @@
+---
+# CodeQL analysis with build-mode: manual.
+#
+# Replaces the previous default setup (build-mode: none), which yielded
+# incomplete type information — most-recent run reported only ~84% of
+# expressions with known type, below the 85% recommended threshold.
+# Manual mode runs the same Maven build as maven-build.yml so CodeQL has
+# the full classpath and dataflow precision improves materially.
+#
+# Build is compile-only (skip tests/javadoc/source jars) — none of those
+# help CodeQL.
+name: CodeQL
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+  schedule:
+    # Weekly, off-peak Sunday — matches the cadence default setup uses.
+    - cron: 17 5 * * 0
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+  packages: read
+env:
+  JAVA_VERSION: 21
+  JAVA_DISTRIBUTION: temurin
+  SETTINGS_XML: ${{ github.workspace }}/.mvn/settings.xml
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - language: java-kotlin
+            build-mode: manual
+    env:
+      # Same secret-binding pattern as maven-build.yml. PR-triggered runs
+      # from forks do not receive secrets (GitHub default), so the trust
+      # boundary is the same as the existing build job.
+      IO_JFROG_SBB_POLARION_TOKEN: ${{ secrets.IO_JFROG_SBB_POLARION_TOKEN }}  # zizmor: ignore[secrets-outside-env]
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654  # v5.2.0
+        with:
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: maven
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@e46ed2cbd01164d986452f91f178727624ae40d7  # v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+          # security-extended matches GitHub's default suite. Swap to
+          # security-and-quality for additional code-quality queries.
+          queries: security-extended
+      - name: Build (manual mode — compile only, no tests, no Sonar)
+        if: matrix.build-mode == 'manual'
+        run: |
+          mvn --batch-mode -s "${SETTINGS_XML}" \
+            clean install \
+            -DskipTests \
+            -Dmaven.javadoc.skip=true \
+            -Dmaven.source.skip=true
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@e46ed2cbd01164d986452f91f178727624ae40d7  # v4
+        with:
+          category: /language:${{ matrix.language }}
