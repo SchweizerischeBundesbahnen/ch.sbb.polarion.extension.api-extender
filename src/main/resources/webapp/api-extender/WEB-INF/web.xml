@@ -26,7 +26,7 @@
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 
 		<init-param>
-			<param-name>javax.ws.rs.Application</param-name>
+			<param-name>jakarta.ws.rs.Application</param-name>
 			<param-value>ch.sbb.polarion.extension.api_extender.rest.ApiExtenderRestApplication</param-value>
 		</init-param>
 
