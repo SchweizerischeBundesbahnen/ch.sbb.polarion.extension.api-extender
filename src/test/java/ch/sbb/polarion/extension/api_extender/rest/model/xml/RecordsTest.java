@@ -4,7 +4,7 @@ import ch.sbb.polarion.extension.api_extender.rest.model.Records;
 import ch.sbb.polarion.extension.generic.jaxb.JAXBUtils;
 import org.junit.jupiter.api.Test;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

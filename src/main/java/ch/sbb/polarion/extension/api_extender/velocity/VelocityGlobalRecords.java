@@ -4,7 +4,7 @@ import ch.sbb.polarion.extension.api_extender.project.GlobalRecords;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import java.io.IOException;
 
 @NoArgsConstructor
