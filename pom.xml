@@ -5,7 +5,7 @@
     <parent>
         <groupId>ch.sbb.polarion.extensions</groupId>
         <artifactId>ch.sbb.polarion.extension.generic</artifactId>
-        <version>15.0.0</version>
+        <version>15.0.1</version>
     </parent>
 
     <artifactId>ch.sbb.polarion.extension.api-extender</artifactId>
@@ -19,7 +19,7 @@
     <licenses>
         <license>
             <name>The SBB License, Version 1.0</name>
-            <url>https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/blob/main/LICENSES/SBB.txt</url>
+            <url>https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/blob/main/NOTICE</url>
         </license>
     </licenses>
 
