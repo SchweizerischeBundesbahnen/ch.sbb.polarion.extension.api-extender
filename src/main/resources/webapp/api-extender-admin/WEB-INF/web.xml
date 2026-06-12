@@ -1,64 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
-		 https://jakarta.ee/xml/ns/jakartaee/web-app_6_1.xsd"
-		 version="6.1">
-	<display-name>api-extender-admin</display-name>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_6_1.xsd"
+         version="6.1">
+    <display-name>api-extender-admin</display-name>
 
-	<filter>
-		<filter-name>DoAsFilter</filter-name>
-		<filter-class>com.polarion.portal.tomcat.servlets.DoAsFilter</filter-class>
-	</filter>
+    <filter>
+        <filter-name>DoAsFilter</filter-name>
+        <filter-class>com.polarion.portal.tomcat.servlets.DoAsFilter</filter-class>
+    </filter>
 
-	<filter-mapping>
-		<filter-name>DoAsFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+    <filter-mapping>
+        <filter-name>DoAsFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
-	<servlet>
-		<servlet-name>api-extender-admin-ui</servlet-name>
-		<servlet-class>ch.sbb.polarion.extension.api_extender.ApiExtenderAdminUiServlet</servlet-class>
+    <servlet>
+        <servlet-name>api-extender-admin-ui</servlet-name>
+        <servlet-class>ch.sbb.polarion.extension.api_extender.ApiExtenderAdminUiServlet</servlet-class>
 
-		<init-param>
-			<param-name>debug</param-name>
-			<param-value>0</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>0</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
 
-	<servlet-mapping>
-		<servlet-name>api-extender-admin-ui</servlet-name>
-		<url-pattern>/ui/*</url-pattern>
-	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>api-extender-admin-ui</servlet-name>
+        <url-pattern>/ui/*</url-pattern>
+    </servlet-mapping>
 
-	<session-config>
-		<session-timeout>30</session-timeout>
-	</session-config>
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
 
-	<mime-mapping>
-		<extension>log</extension>
-		<mime-type>text/plain</mime-type>
-	</mime-mapping>
+    <mime-mapping>
+        <extension>log</extension>
+        <mime-type>text/plain</mime-type>
+    </mime-mapping>
 
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>All</web-resource-name>
-			<url-pattern>/*</url-pattern>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>user</role-name>
-		</auth-constraint>
-	</security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>All</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
 
-	<!-- Login configuration uses form-based authentication -->
-	<login-config>
-		<auth-method>FORM</auth-method>
-		<realm-name>PolarionRealm</realm-name>
-		<form-login-config>
-			<form-login-page>/login/login</form-login-page>
-			<form-error-page>/login/error</form-error-page>
-		</form-login-config>
-	</login-config>
+    <!-- Login configuration uses form-based authentication -->
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>PolarionRealm</realm-name>
+        <form-login-config>
+            <form-login-page>/login/login</form-login-page>
+            <form-error-page>/login/error</form-error-page>
+        </form-login-config>
+    </login-config>
 </web-app>
