@@ -10,7 +10,6 @@
 <head>
     <title>Hooks: Settings</title>
     <link rel="stylesheet" href="../ui/generic/css/common.css?bundle=<%= version.getBundleBuildTimestampDigitsOnly() %>">
-    <link rel="stylesheet" href="../css/api-extender-admin.css?bundle=<%= version.getBundleBuildTimestampDigitsOnly() %>">
     <script type="module" src="../js/modules/settings.js?bundle=<%= version.getBundleBuildTimestampDigitsOnly() %>"></script>
 </head>
 
