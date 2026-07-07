@@ -14,7 +14,9 @@ import com.polarion.platform.core.PlatformContext;
 import com.polarion.platform.security.ISecurityService;
 import com.polarion.platform.service.repository.IRepositoryService;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
@@ -32,6 +34,16 @@ import static org.mockito.Mockito.*;
 
 @SuppressWarnings({"rawtypes", "unused", "unchecked", "ResultOfMethodCallIgnored"})
 class ProjectCustomFieldInternalControllerTest {
+
+    @BeforeEach
+    void beforeEach() {
+        NamedSettingsRegistry.INSTANCE.getAll().clear();
+    }
+
+    @AfterEach
+    void afterEach() {
+        NamedSettingsRegistry.INSTANCE.getAll().clear();
+    }
 
     @Test
     @SneakyThrows
