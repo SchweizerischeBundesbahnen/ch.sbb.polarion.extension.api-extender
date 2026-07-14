@@ -1,5 +1,22 @@
 # Changelog
 
+## [5.1.0](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/compare/v5.0.0...v5.1.0) (2026-07-14)
+
+
+### Features
+
+* Polarion UI 2606 restyle ([#134](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/issues/134)) ([34e61f1](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/34e61f1931b6c758e46899cff46f3c9fd79295a0))
+
+
+### Bug Fixes
+
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v15.1.0 ([#126](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/issues/126)) ([16e4e56](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/16e4e56c297d4f2de68fd6ce658614ce61bad901))
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v15.2.0 ([468f570](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/468f570328ec28f823038ae897998f3fe04827e0))
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v15.3.1 ([e444607](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/e444607a2a44a5e5f4f7f1cc2f7e209bfcf3276b))
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v15.3.2 ([90c8734](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/90c8734067940d1aaec47c76e39c0052a66d6e0d))
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v15.4.1 ([8e3610e](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/8e3610e328256ed39f704bc8f6782b53e0ef18ce))
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v15.4.2 ([0e75cd9](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/0e75cd9398efc5c233b9ed2c0eb61af9b23410ec))
+
 ## [5.0.0](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/compare/v4.0.3...v5.0.0) (2026-06-12)
 
 
