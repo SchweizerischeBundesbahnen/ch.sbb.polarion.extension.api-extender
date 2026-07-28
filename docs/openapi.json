@@ -338,6 +338,37 @@
         ]
       }
     },
+    "/api/roles": {
+      "get": {
+        "operationId": "getRoles_1",
+        "parameters": [
+          {
+            "description": "Scope, e.g. project/<projectId>/ (empty for global scope)",
+            "in": "query",
+            "name": "scope",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RolesInfo"
+                }
+              }
+            },
+            "description": "Successfully retrieved the available roles"
+          }
+        },
+        "summary": "Get the global and project roles available in the specified scope",
+        "tags": [
+          "Roles"
+        ]
+      }
+    },
     "/api/settings": {
       "get": {
         "operationId": "readFeaturesList",
@@ -708,7 +739,7 @@
     },
     "/internal/roles": {
       "get": {
-        "operationId": "listRoles",
+        "operationId": "getRoles",
         "parameters": [
           {
             "description": "Scope, e.g. project/<projectId>/ (empty for global scope)",
@@ -733,7 +764,7 @@
         },
         "summary": "Get the global and project roles available in the specified scope",
         "tags": [
-          "Authorization"
+          "Roles"
         ]
       }
     }
@@ -860,20 +891,20 @@
         "type": "object"
       },
       "RolesInfo": {
-        "description": "Available global and project roles for the current scope, used to configure who may write",
+        "description": "Roles available to grant in a given scope",
         "properties": {
           "globalRoles": {
-            "description": "Global roles",
+            "description": "Roles defined for the whole repository",
             "items": {
-              "description": "Global roles",
+              "description": "Roles defined for the whole repository",
               "type": "string"
             },
             "type": "array"
           },
           "projectRoles": {
-            "description": "Project roles (empty when the scope is not a project)",
+            "description": "Roles defined for the project of the scope; empty in global scope",
             "items": {
-              "description": "Project roles (empty when the scope is not a project)",
+              "description": "Roles defined for the project of the scope; empty in global scope",
               "type": "string"
             },
             "type": "array"

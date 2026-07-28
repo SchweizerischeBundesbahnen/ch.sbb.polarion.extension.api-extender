@@ -4,16 +4,16 @@ import App from '../src/App';
 import { installFetchMock } from './mockFetch';
 
 // The feature router (App.tsx): the `?feature=` param picks the page. The two authorization pages are
-// the same component over two different named settings, which is the part worth pinning here - the
-// setting name never appears in the URL, so only the router decides which one is written.
+// react-sbb-polarion's shared page over two different named settings - the page itself is tested
+// there, so what is worth pinning here is that each feature id writes its own setting, which the URL
+// never carries, and that only the setting which stores project roles offers them.
 
 const SCOPE = 'project/elibrary/';
 const origUrl = window.location.pathname + window.location.search;
 const setUrl = (search: string) => window.history.replaceState({}, '', search);
 
 const settingsRoutes = (seen: string[]) => [
-  { method: 'GET', match: /\/version$/, json: { bundleBuildTimestamp: '2026-01-01 00:00' } },
-  { method: 'GET', match: /\/roles\?/, json: { globalRoles: ['admin'], projectRoles: [] } },
+  { method: 'GET', match: /\/roles\?/, json: { globalRoles: ['admin'], projectRoles: ['project_user'] } },
   {
     method: 'GET',
     match: /\/settings\/[^/]+\/names\/Default\/content\?/,
@@ -42,6 +42,8 @@ describe('feature router', () => {
     await vi.waitFor(() => expect(document.querySelector('.roles-list')).not.toBeNull());
     expect(document.querySelector('h1')!.textContent).toBe('Project Custom Fields');
     expect(seen.some((url) => url.includes('/settings/project_custom_fields/'))).toBe(true);
+    // This setting stores both role kinds, so the scope's project roles are on offer.
+    expect(document.body.textContent).toContain('Project Roles');
   });
 
   it('opens the global records page against its own setting', async () => {
@@ -53,6 +55,9 @@ describe('feature router', () => {
     await vi.waitFor(() => expect(document.querySelector('.roles-list')).not.toBeNull());
     expect(document.querySelector('h1')!.textContent).toBe('Global Records');
     expect(seen.some((url) => url.includes('/settings/global_records/'))).toBe(true);
+    // Global records store no project roles, so offering the scope's would lose the ticks on save.
+    expect(document.body.textContent).toContain('Global Roles');
+    expect(document.body.textContent).not.toContain('Project Roles');
   });
 
   it('falls back to the dev Landing for an unknown feature', async () => {

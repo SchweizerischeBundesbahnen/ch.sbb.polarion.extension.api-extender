@@ -1,42 +1,17 @@
 package ch.sbb.polarion.extension.api_extender.settings;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import ch.sbb.polarion.extension.generic.settings.AuthorizationModel;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Data
-@Builder
+/**
+ * Who may write project custom fields: global and project roles, stored exactly as the shared
+ * {@link AuthorizationModel} does. It adds nothing of its own - the type exists so the settings
+ * framework can register it under its own feature name.
+ */
 @NoArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ProjectCustomFieldsSettingsModel extends AuthSettingsModel {
-
-    @Override
-    protected String serializeModelData() {
-        return serializeEntry(GLOBAL_ROLES, serializeRoles(globalRoles)) +
-                serializeEntry(PROJECT_ROLES, serializeRoles(projectRoles));
-    }
-
-    @Override
-    protected void deserializeModelData(String serializedString) {
-        globalRoles = deserializeRoles(GLOBAL_ROLES, serializedString);
-        projectRoles = deserializeRoles(PROJECT_ROLES, serializedString);
-    }
-
-    @JsonIgnore
-    public List<String> getAllRoles() {
-        List<String> roles = new ArrayList<>();
-        roles.addAll(getGlobalRoles());
-        roles.addAll(getProjectRoles());
-        return roles;
-    }
-
+public class ProjectCustomFieldsSettingsModel extends AuthorizationModel {
 }

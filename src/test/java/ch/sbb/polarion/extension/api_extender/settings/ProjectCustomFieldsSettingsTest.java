@@ -137,12 +137,12 @@ class ProjectCustomFieldsSettingsTest {
             when(mockedSettingsService.read(eq(settingTwoLocation), any())).thenReturn(settingTwoModel.serialize());
 
             ProjectCustomFieldsSettingsModel loadedOneModel = settings.load(projectName, SettingId.fromName(settingOne));
-            assertFalse(loadedOneModel.projectRoles.isEmpty());
+            assertFalse(loadedOneModel.getProjectRoles().isEmpty());
             assertEquals("setting one test", loadedOneModel.getProjectRoles().get(0));
             assertEquals("setting_one", loadedOneModel.getBundleTimestamp());
 
             ProjectCustomFieldsSettingsModel loadedTwoModel = settings.load(projectName, SettingId.fromName(settingTwo));
-            assertFalse(loadedTwoModel.projectRoles.isEmpty());
+            assertFalse(loadedTwoModel.getProjectRoles().isEmpty());
             assertEquals("setting two test", loadedTwoModel.getProjectRoles().get(0));
             assertEquals("setting_two", loadedTwoModel.getBundleTimestamp());
         }

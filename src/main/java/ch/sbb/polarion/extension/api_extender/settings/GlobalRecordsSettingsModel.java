@@ -1,22 +1,22 @@
 package ch.sbb.polarion.extension.api_extender.settings;
 
+import ch.sbb.polarion.extension.generic.settings.AuthorizationModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.List;
 
-@Data
-@Builder
+/**
+ * Who may write global records. Global records belong to the repository, not to a project, so only
+ * global roles are stored - the project roles the shared model carries are deliberately left out of
+ * both the stored data and the permission check.
+ */
 @NoArgsConstructor
-@ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GlobalRecordsSettingsModel extends AuthSettingsModel {
+public class GlobalRecordsSettingsModel extends AuthorizationModel {
 
     @Override
     protected String serializeModelData() {
@@ -28,9 +28,9 @@ public class GlobalRecordsSettingsModel extends AuthSettingsModel {
         globalRoles = deserializeRoles(GLOBAL_ROLES, serializedString);
     }
 
+    @Override
     @JsonIgnore
     public List<String> getAllRoles() {
-        return getGlobalRoles();
+        return globalRoles == null ? List.of() : globalRoles;
     }
-
 }

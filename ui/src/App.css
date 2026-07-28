@@ -1,78 +1,29 @@
-/* api-extender admin app. Everything the page shell needs comes from react-sbb-polarion
-   (PageLayout.css / the bundled control CSS); only what is specific to this app lives here. */
-
-/* ---- Authorization pages (project custom fields, global records) ---- */
-.authorization-page .roles-group {
-  margin-bottom: 16px;
-}
-
-.authorization-page .roles-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.authorization-page .roles-list li {
-  padding: 2px 0;
-}
-
-.authorization-page .roles-list label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  width: fit-content;
-}
-
-/* Shared help/heading helpers used by the ported admin pages (Authorization). */
-.align-left {
-  text-align: left;
-}
-
-.quick-help {
-  margin-top: 20px;
-}
-
-.quick-help-text h3 {
-  margin: 12px 0 4px;
-}
-
-.quick-help-text p {
-  margin: 4px 0;
-}
-
 /* ---- Dev-only Landing page (?feature=landing) ---- */
 .landing-intro {
   color: #666;
 }
-
 .landing-scope {
   display: flex;
   align-items: center;
   gap: 8px;
   margin: 12px 0;
 }
-
 .landing-scope .searchable-dropdown {
   min-width: 280px;
 }
-
 .feature-list {
   list-style: none;
   margin: 12px 0 0;
   padding: 0;
 }
-
 .feature-list li {
   padding: 6px 0;
   border-top: 1px solid #eee;
 }
-
 .feature-list a {
   font-weight: 600;
   color: var(--sbb-accent);
 }
-
 .feature-list .feature-desc {
   display: block;
   color: #666;
