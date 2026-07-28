@@ -5,6 +5,7 @@ import ch.sbb.polarion.extension.api_extender.rest.controller.GlobalRecordIntern
 import ch.sbb.polarion.extension.api_extender.rest.controller.ProjectCustomFieldApiController;
 import ch.sbb.polarion.extension.api_extender.rest.controller.ProjectCustomFieldInternalController;
 import ch.sbb.polarion.extension.api_extender.rest.controller.RegexToolApiController;
+import ch.sbb.polarion.extension.api_extender.rest.controller.RolesInternalController;
 import ch.sbb.polarion.extension.api_extender.rest.controller.RegexToolInternalController;
 import ch.sbb.polarion.extension.api_extender.settings.GlobalRecordsSettings;
 import ch.sbb.polarion.extension.api_extender.settings.ProjectCustomFieldsSettings;
@@ -34,7 +35,8 @@ public class ApiExtenderRestApplication extends GenericRestApplication {
                 ProjectCustomFieldApiController.class,
                 ProjectCustomFieldInternalController.class,
                 RegexToolApiController.class,
-                RegexToolInternalController.class
+                RegexToolInternalController.class,
+                RolesInternalController.class
         );
     }
 }

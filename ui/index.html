@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Extender</title>
+    <!-- Baseline Polarion look. Served by Polarion in production; 404s harmlessly during `vite dev`. -->
+    <link rel="stylesheet" href="/polarion/wiki/skins/sidecar/presentation.css" />
+    <!-- Control design tokens + searchable-dropdown / checkboxes / buttons / alerts CSS and the
+         generic data-table look now ship bundled: the control CSS in
+         @grigoriev/react-sbb-polarion (imported in main.tsx) and tables.css vendored
+         under src/generic (also imported in main.tsx). No longer linked from the generic webapp. -->
+    <!-- Markdown styling for the About page README help article (served by GenericUiServlet). -->
+    <link rel="stylesheet" href="/polarion/api-extender-app/ui/generic/css/github-markdown-light.css" />
+  </head>
+  <!-- .sbb-ui scopes generic's --sbb-* design tokens (now bundled in the lib) to the app, including
+       anything portaled to document.body (e.g. the searchable-dropdown popup). -->
+  <body class="sbb-ui">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
