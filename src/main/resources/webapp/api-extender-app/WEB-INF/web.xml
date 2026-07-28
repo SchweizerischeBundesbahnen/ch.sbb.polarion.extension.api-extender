@@ -4,7 +4,7 @@
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
                              https://jakarta.ee/xml/ns/jakartaee/web-app_6_1.xsd"
          version="6.1">
-    <display-name>api-extender-admin</display-name>
+    <display-name>api-extender-app</display-name>
 
     <filter>
         <filter-name>DoAsFilter</filter-name>
@@ -17,8 +17,8 @@
     </filter-mapping>
 
     <servlet>
-        <servlet-name>api-extender-admin-ui</servlet-name>
-        <servlet-class>ch.sbb.polarion.extension.api_extender.ApiExtenderAdminUiServlet</servlet-class>
+        <servlet-name>api-extender-app</servlet-name>
+        <servlet-class>ch.sbb.polarion.extension.api_extender.ApiExtenderAppServlet</servlet-class>
 
         <init-param>
             <param-name>debug</param-name>
@@ -28,7 +28,7 @@
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>api-extender-admin-ui</servlet-name>
+        <servlet-name>api-extender-app</servlet-name>
         <url-pattern>/ui/*</url-pattern>
     </servlet-mapping>
 
@@ -40,6 +40,17 @@
         <extension>log</extension>
         <mime-type>text/plain</mime-type>
     </mime-mapping>
+
+    <!-- Static, non-sensitive assets served without authentication: the app's own bundle assets and
+         the shared generic UI toolkit (JS/CSS). Exempting /ui/generic/* lets these load same-origin
+         in Polarion and lets the vite dev proxy fetch them without a Polarion session. -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>All</web-resource-name>
+            <url-pattern>/ui/app/assets/*</url-pattern>
+            <url-pattern>/ui/generic/*</url-pattern>
+        </web-resource-collection>
+    </security-constraint>
 
     <security-constraint>
         <web-resource-collection>

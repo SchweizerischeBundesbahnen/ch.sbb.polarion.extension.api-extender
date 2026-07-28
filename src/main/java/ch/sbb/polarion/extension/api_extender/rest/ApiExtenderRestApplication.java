@@ -9,6 +9,8 @@ import ch.sbb.polarion.extension.api_extender.rest.controller.RegexToolInternalC
 import ch.sbb.polarion.extension.api_extender.settings.GlobalRecordsSettings;
 import ch.sbb.polarion.extension.api_extender.settings.ProjectCustomFieldsSettings;
 import ch.sbb.polarion.extension.generic.rest.GenericRestApplication;
+import ch.sbb.polarion.extension.generic.rest.controller.roles.RolesApiController;
+import ch.sbb.polarion.extension.generic.rest.controller.roles.RolesInternalController;
 import ch.sbb.polarion.extension.generic.settings.NamedSettingsRegistry;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +36,11 @@ public class ApiExtenderRestApplication extends GenericRestApplication {
                 ProjectCustomFieldApiController.class,
                 ProjectCustomFieldInternalController.class,
                 RegexToolApiController.class,
-                RegexToolInternalController.class
+                RegexToolInternalController.class,
+                // The role endpoints are opt-in in generic: only the extensions whose settings grant
+                // permissions to roles serve them.
+                RolesInternalController.class,
+                RolesApiController.class
         );
     }
 }

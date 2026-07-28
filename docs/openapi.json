@@ -5,6 +5,61 @@
     "version": "v1"
   },
   "paths": {
+    "/api/configuration-properties": {
+      "get": {
+        "operationId": "getConfigurationProperties",
+        "responses": {
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfigurationPropertiesModel"
+                }
+              }
+            },
+            "description": "Configuration properties"
+          }
+        },
+        "summary": "Returns the extension configuration properties (active and obsolete)",
+        "tags": [
+          "Extension Information"
+        ]
+      }
+    },
+    "/api/configuration-status": {
+      "get": {
+        "operationId": "getConfigurationStatus",
+        "parameters": [
+          {
+            "description": "Scope to evaluate the status for, e.g. 'project/elibrary/'",
+            "in": "query",
+            "name": "scope",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ConfigurationStatus"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Configuration status entries"
+          }
+        },
+        "summary": "Returns the extension configuration status for the given scope",
+        "tags": [
+          "Extension Information"
+        ]
+      }
+    },
     "/api/context": {
       "get": {
         "operationId": "getContext",
@@ -134,6 +189,27 @@
         ]
       }
     },
+    "/api/readme": {
+      "get": {
+        "operationId": "getDocumentation",
+        "responses": {
+          "default": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "HTML help article"
+          }
+        },
+        "summary": "Returns the build-generated README help article shown on the About page",
+        "tags": [
+          "Extension Information"
+        ]
+      }
+    },
     "/api/records/{key}": {
       "delete": {
         "operationId": "deleteRecordValue",
@@ -259,6 +335,37 @@
         "summary": "Find regex matches in text",
         "tags": [
           "Regex Tool"
+        ]
+      }
+    },
+    "/api/roles": {
+      "get": {
+        "operationId": "getRoles_1",
+        "parameters": [
+          {
+            "description": "Scope, e.g. project/<projectId>/ (empty for global scope)",
+            "in": "query",
+            "name": "scope",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RolesInfo"
+                }
+              }
+            },
+            "description": "Successfully retrieved the available roles"
+          }
+        },
+        "summary": "Get the global and project roles available in the specified scope",
+        "tags": [
+          "Roles"
         ]
       }
     },
@@ -588,6 +695,27 @@
         ]
       }
     },
+    "/api/user-guide": {
+      "get": {
+        "operationId": "getUserGuide",
+        "responses": {
+          "default": {
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "HTML help article"
+          }
+        },
+        "summary": "Returns the build-generated USER_GUIDE help article shown on the User Guide page",
+        "tags": [
+          "Extension Information"
+        ]
+      }
+    },
     "/api/version": {
       "get": {
         "operationId": "getVersion",
@@ -608,10 +736,102 @@
           "Extension Information"
         ]
       }
+    },
+    "/internal/roles": {
+      "get": {
+        "operationId": "getRoles",
+        "parameters": [
+          {
+            "description": "Scope, e.g. project/<projectId>/ (empty for global scope)",
+            "in": "query",
+            "name": "scope",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RolesInfo"
+                }
+              }
+            },
+            "description": "Successfully retrieved the available roles"
+          }
+        },
+        "summary": "Get the global and project roles available in the specified scope",
+        "tags": [
+          "Roles"
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
+      "ConfigurationPropertiesModel": {
+        "description": "Extension configuration properties shown on the About page",
+        "properties": {
+          "obsoleteProperties": {
+            "description": "Obsolete or non-valid configuration properties (only key and value are set), sorted by key",
+            "items": {
+              "$ref": "#/components/schemas/ConfigurationPropertyModel"
+            },
+            "type": "array"
+          },
+          "properties": {
+            "description": "Active configuration properties, sorted by key",
+            "items": {
+              "$ref": "#/components/schemas/ConfigurationPropertyModel"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "ConfigurationPropertyModel": {
+        "description": "A single extension configuration property as shown on the About page",
+        "properties": {
+          "defaultValue": {
+            "description": "Default value of the property, if any",
+            "type": "string"
+          },
+          "description": {
+            "description": "Human readable description of the property, if any",
+            "type": "string"
+          },
+          "key": {
+            "description": "Property key",
+            "type": "string"
+          },
+          "value": {
+            "description": "Current value of the property",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ConfigurationStatus": {
+        "properties": {
+          "details": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "OK",
+              "WARNING",
+              "ERROR"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "Context": {
         "description": "Represents the context for building URLs related to Polarion services",
         "properties": {
@@ -668,6 +888,32 @@
             "type": "string"
           }
         },
+        "type": "object"
+      },
+      "RolesInfo": {
+        "description": "Roles available to grant in a given scope",
+        "properties": {
+          "globalRoles": {
+            "description": "Roles defined for the whole repository",
+            "items": {
+              "description": "Roles defined for the whole repository",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "projectRoles": {
+            "description": "Roles defined for the project of the scope; empty in global scope",
+            "items": {
+              "description": "Roles defined for the project of the scope; empty in global scope",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "globalRoles",
+          "projectRoles"
+        ],
         "type": "object"
       },
       "SettingName": {

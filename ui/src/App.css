@@ -1,0 +1,31 @@
+/* ---- Dev-only Landing page (?feature=landing) ---- */
+.landing-intro {
+  color: #666;
+}
+.landing-scope {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+}
+.landing-scope .searchable-dropdown {
+  min-width: 280px;
+}
+.feature-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+.feature-list li {
+  padding: 6px 0;
+  border-top: 1px solid #eee;
+}
+.feature-list a {
+  font-weight: 600;
+  color: var(--sbb-accent);
+}
+.feature-list .feature-desc {
+  display: block;
+  color: #666;
+  font-size: 12px;
+}
