@@ -4,7 +4,7 @@ import { FEATURES } from '../features';
 import { getCookie, setCookie } from '../services/cookies';
 import { fetchProjects } from '../services/projects';
 import type { PolarionProject } from '../services/projects';
-import { getProjectIdFromScope, getScope } from '../services/scope';
+import { getScope } from '../services/scope';
 
 const DEV_SCOPE_COOKIE = 'api-extender-dev-scope';
 
@@ -19,11 +19,10 @@ function initialScope(): string {
 }
 
 /**
- * Development landing page. Not shown in Polarion (there each feature is opened directly via its own
- * admin menu entry / the navigation extender, already scoped), but during `vite dev` it lets us reach
- * every feature from `?feature=landing`. It carries a project scope: pick a project and every feature
- * link includes `scope=project/<id>/` (for the admin pages) and `projectId=<id>` (for the Scan &
- * pages, which are scoped). The choice is remembered in a cookie.
+ * Development landing page. Not shown in Polarion (there each feature is opened directly from its own
+ * administration menu entry, already scoped), but during `vite dev` it lets us reach every feature from
+ * `?feature=landing`. Pick a project and every feature link carries `scope=project/<id>/`, which is
+ * what the administration pages read. The choice is remembered in a cookie.
  */
 export default function Landing() {
   const [projects, setProjects] = useState<PolarionProject[]>([]);
@@ -62,8 +61,6 @@ export default function Landing() {
     const params = new URLSearchParams({ feature: featureId });
     if (scope) {
       params.set('scope', scope);
-      const projectId = getProjectIdFromScope(scope);
-      if (projectId) params.set('projectId', projectId);
     }
     return `?${params.toString()}`;
   };

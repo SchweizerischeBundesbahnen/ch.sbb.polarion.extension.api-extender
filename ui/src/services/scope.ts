@@ -9,9 +9,3 @@ export function getScope(): string {
   const raw = new URLSearchParams(window.location.search).get('scope') || '';
   return raw && !raw.endsWith('/') ? `${raw}/` : raw;
 }
-
-/** Extracts the project id from a scope string. Handles scope with or without a trailing slash. */
-export function getProjectIdFromScope(scope: string): string {
-  const match = scope.match(/project\/([^/]+)/);
-  return match ? match[1] : '';
-}

@@ -2,22 +2,27 @@
 
 This submodule contains the React frontend for the API Extender Polarion extension, built on the shared
 `@grigoriev/react-sbb-polarion` (RSP) component library. It is a single Vite bundle
-with feature routing by `?feature=<id>`, hosting three surfaces:
+with feature routing by `?feature=<id>`, hosting three administration pages:
 
-- **Scan & Repair** (no `?feature=`, the default): scan and repair XML issues in Polarion entities
-  (Work Items, Documents, Baseline Collections). Opened by `ApiExtenderNavigationExtender`.
 - **About** (`?feature=about`): the shared RSP About page.
-- **Repair Authorization** (`?feature=authorization`): configure which global/project roles may repair.
+- **Project Custom Fields** (`?feature=project-custom-fields`): which global and project roles may
+  write project custom fields.
+- **Global Records** (`?feature=global-records`): which global roles may write global records. Global
+  records belong to the repository, so this page offers no project roles.
+
+The last two are RSP's shared `AuthorizationSettings` page over two different named settings — the JSP
+they replace was one file opened twice with a different `settings_name`.
 
 The app is built with Vite and React, producing a static bundle that gets embedded into the extension JAR during the Maven build.
 
 ## How it integrates with Polarion
 
-1. **Navigation entry point** — `ApiExtenderNavigationExtender` registers an "XML-Repair" item in Polarion's left side panel. Clicking it loads `/polarion/api-extender-app/ui/app/index.html`.
+1. **Entry points** — `hivemodule.xml` registers one administration menu entry per page, each opening
+   `/polarion/api-extender-app/ui/app/index.html?feature=<id>&embedded=true&scope=$scope$`.
 
 2. **Webapp registration** — `plugin.xml` declares a `api-extender-app` webapp. Polarion's Tomcat serves the static files through `ApiExtenderAppServlet` (mapped to `/ui/*`).
 
-3. **REST communication** — The React app calls the existing REST API at `/polarion/api-extender/rest/internal/*` (or `/api/*` with a bearer token) to list repairers, run scans, and execute repairs.
+3. **REST communication** — The React app calls the existing REST API at `/polarion/api-extender/rest/internal/*` (or `/api/*` with a bearer token): the settings endpoints for the stored roles, and `/roles` for the roles the current scope offers. Both come from the generic parent; the role endpoints are opt-in and this extension registers them in `ApiExtenderRestApplication`.
 
 4. **Build pipeline** — During `mvn package`, the `frontend-maven-plugin` runs `npm ci` and `npm run build` inside this folder. The `maven-resources-plugin` then copies `ui/dist/app/` into `src/main/resources/webapp/api-extender-app/app/`, so it ends up in the final JAR. `ci`, not `install`: the packaged bundle must come from the committed `package-lock.json`, the same graph the tests run against — so a `package.json` edit that is not reflected in the lock fails the build instead of being silently repaired. Locally you still use `npm install` (below), which is what updates the lock.
 
@@ -33,10 +38,12 @@ npm install
 npm run dev
 ```
 
-By default the dev server runs on `http://localhost:5173`. The app requires a `projectId` query parameter, so open it as:
+By default the dev server runs on `http://localhost:5173`. A bare URL opens the dev landing page, which
+lists every feature and lets you pick the project scope; to open one page directly, pass the same
+parameters Polarion does:
 
 ```
-http://localhost:5173/?projectId=elibrary
+http://localhost:5173/?feature=project-custom-fields&scope=project/elibrary/
 ```
 
 To proxy requests to a running Polarion instance, create a `.env.local` file:

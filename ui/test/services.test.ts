@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { getCookie, setCookie } from '../src/services/cookies';
 import { fetchProjects } from '../src/services/projects';
-import { getProjectIdFromScope, getScope } from '../src/services/scope';
+import { getScope } from '../src/services/scope';
 import { type FetchMock, installFetchMock } from './mockFetch';
 
 const PROJECTS_MATCH = /\/polarion\/rest\/v1\/projects/;
@@ -23,12 +23,6 @@ describe('scope service', () => {
     expect(getScope()).toBe('project/elibrary/');
     setSearch('');
     expect(getScope()).toBe('');
-  });
-
-  it('extracts the project id from a scope, with or without trailing slash', () => {
-    expect(getProjectIdFromScope('project/elibrary/')).toBe('elibrary');
-    expect(getProjectIdFromScope('project/elibrary')).toBe('elibrary');
-    expect(getProjectIdFromScope('')).toBe('');
   });
 });
 
