@@ -1,5 +1,5 @@
 import { type ComponentType, useMemo } from 'react';
-import { AuthorizationSettings, createAuthorizationService } from '@grigoriev/react-sbb-polarion';
+import { AuthorizationSettings, createAuthorizationService } from '@sbb-polarion/react-sbb-polarion';
 import About from './pages/About';
 import useRemote from './services/useRemote';
 
