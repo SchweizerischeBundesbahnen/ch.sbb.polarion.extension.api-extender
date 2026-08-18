@@ -6,6 +6,6 @@
 //   2. this app's own App.css.
 // The Polarion-served stylesheets linked in index.html (presentation.css, github-markdown-light.css)
 // are baseline chrome / help-article styling and are not loaded here. Also registers jest-dom matchers.
-import '@grigoriev/react-sbb-polarion/style.css';
+import '@sbb-polarion/react-sbb-polarion/style.css';
 import '@testing-library/jest-dom/vitest';
 import '../src/App.css';
