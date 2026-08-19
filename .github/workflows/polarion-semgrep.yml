@@ -12,13 +12,8 @@ on:
 permissions: {}
 jobs:
   semgrep:
-    # Pinned at the feature branch until
-    # SchweizerischeBundesbahnen/github-workflows-polarion#95 merges, so that the
-    # first Code Scanning run happens before that pull request lands rather than
-    # after it. Both refs move to @main once it is merged.
-    uses: SchweizerischeBundesbahnen/github-workflows-polarion/.github/workflows/reusable-polarion-semgrep.yml@feat/reusable-polarion-semgrep
+    uses: SchweizerischeBundesbahnen/github-workflows-polarion/.github/workflows/reusable-polarion-semgrep.yml@main
     permissions:
       contents: read
       security-events: write
-    with:
-      rules-ref: feat/reusable-polarion-semgrep
+      actions: read
