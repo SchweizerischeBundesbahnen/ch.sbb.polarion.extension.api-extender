@@ -1,0 +1,24 @@
+---
+name: Polarion Semgrep
+on:
+  push:
+    branches: [main, release-v*]
+  pull_request:
+    branches: [main, release-v*]
+    types: [opened, synchronize, reopened, ready_for_review]
+  schedule:
+    # Weekly, off-peak Sunday — twenty minutes after the CodeQL run.
+    - cron: 37 5 * * 0
+permissions: {}
+jobs:
+  semgrep:
+    # Pinned at the feature branch until
+    # SchweizerischeBundesbahnen/github-workflows-polarion#95 merges, so that the
+    # first Code Scanning run happens before that pull request lands rather than
+    # after it. Both refs move to @main once it is merged.
+    uses: SchweizerischeBundesbahnen/github-workflows-polarion/.github/workflows/reusable-polarion-semgrep.yml@feat/reusable-polarion-semgrep
+    permissions:
+      contents: read
+      security-events: write
+    with:
+      rules-ref: feat/reusable-polarion-semgrep
