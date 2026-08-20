@@ -19,12 +19,6 @@ export default defineConfig(({ command, mode }) => {
       resolve,
       server: {
         proxy: {
-          // Generic UI toolkit (BreadcrumbBridge JS + any generic assets) served by GenericUiServlet.
-          // Served unauthenticated in Polarion, so the dev proxy can fetch it without a session.
-          '/polarion/api-extender-app/ui/generic': {
-            target: polarionUrl,
-            changeOrigin: true,
-          },
           '/polarion/api-extender/rest': {
             target: polarionUrl,
             changeOrigin: true,
