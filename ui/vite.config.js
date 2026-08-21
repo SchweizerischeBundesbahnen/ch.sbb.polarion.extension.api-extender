@@ -5,7 +5,7 @@ export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const polarionUrl = env.VITE_BASE_URL || 'http://localhost';
 
-  // The shared @grigoriev/react-sbb-polarion package is linked via a `file:`
+  // The shared @sbb-polarion/react-sbb-polarion package is linked via a `file:`
   // dependency, which npm symlinks into node_modules together with its own dev copies of React and
   // sonner. Dedupe so the app and the linked library resolve to this app's single instance of each:
   // React (avoids the dual-React "invalid hook call") and sonner (the RSP `Toaster` host and this
@@ -19,12 +19,6 @@ export default defineConfig(({ command, mode }) => {
       resolve,
       server: {
         proxy: {
-          // Generic UI toolkit (BreadcrumbBridge JS + any generic assets) served by GenericUiServlet.
-          // Served unauthenticated in Polarion, so the dev proxy can fetch it without a session.
-          '/polarion/api-extender-app/ui/generic': {
-            target: polarionUrl,
-            changeOrigin: true,
-          },
           '/polarion/api-extender/rest': {
             target: polarionUrl,
             changeOrigin: true,

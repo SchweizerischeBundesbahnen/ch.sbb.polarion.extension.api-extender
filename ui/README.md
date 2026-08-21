@@ -1,7 +1,7 @@
 # API Extender App (React UI)
 
 This submodule contains the React frontend for the API Extender Polarion extension, built on the shared
-`@grigoriev/react-sbb-polarion` (RSP) component library. It is a single Vite bundle
+`@sbb-polarion/react-sbb-polarion` (RSP) component library. It is a single Vite bundle
 with feature routing by `?feature=<id>`, hosting three administration pages:
 
 - **About** (`?feature=about`): the shared RSP About page.
