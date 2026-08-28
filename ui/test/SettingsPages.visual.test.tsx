@@ -4,7 +4,7 @@ import { page } from 'vitest/browser';
 import App from '../src/App';
 import { installFetchMock } from './mockFetch';
 import type { Route } from './mockFetch';
-import { settleBeforeCapture } from './visualHelpers';
+import { settleBeforeCapture, settleLayout } from './visualHelpers';
 
 // Docker-only snapshots of the two authorization pages. Both are react-sbb-polarion's shared
 // AuthorizationSettings, so their look comes entirely from the library - and the one difference this
@@ -33,6 +33,7 @@ async function snapshot(feature: string, routes: Route[], name: string) {
     expect(document.querySelectorAll('.roles-list input[type="checkbox"]').length).toBeGreaterThan(0),
   );
   const app = document.querySelector('.app') as HTMLElement;
+  await settleLayout();
   await page.viewport(1280, Math.ceil(app.scrollHeight) + 40);
   await settleBeforeCapture();
   await expect(page.elementLocator(app)).toMatchScreenshot(name);
