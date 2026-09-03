@@ -7,6 +7,9 @@ import { installFetchMock } from './mockFetch';
 // react-sbb-polarion's shared page over two different named settings - the page itself is tested
 // there, so what is worth pinning here is that each feature id writes its own setting, which the URL
 // never carries, and that only the setting which stores project roles offers them.
+//
+// Each role set is a multi-select SearchableSelect, which upgrades the component's <select> after the
+// render. Waiting for one trigger per expected group is therefore what proves the page is up.
 
 const SCOPE = 'project/elibrary/';
 const origUrl = window.location.pathname + window.location.search;
@@ -39,7 +42,7 @@ describe('feature router', () => {
     setUrl(`?feature=project-custom-fields&embedded=true&scope=${encodeURIComponent(SCOPE)}`);
     render(<App />);
 
-    await vi.waitFor(() => expect(document.querySelector('.roles-list')).not.toBeNull());
+    await vi.waitFor(() => expect(document.querySelectorAll('.roles-group .sd-trigger-multi')).toHaveLength(2));
     expect(document.querySelector('h1')!.textContent).toBe('Project Custom Fields');
     expect(seen.some((url) => url.includes('/settings/project_custom_fields/'))).toBe(true);
     // This setting stores both role kinds, so the scope's project roles are on offer.
@@ -52,7 +55,7 @@ describe('feature router', () => {
     setUrl(`?feature=global-records&embedded=true&scope=${encodeURIComponent(SCOPE)}`);
     render(<App />);
 
-    await vi.waitFor(() => expect(document.querySelector('.roles-list')).not.toBeNull());
+    await vi.waitFor(() => expect(document.querySelectorAll('.roles-group .sd-trigger-multi')).toHaveLength(1));
     expect(document.querySelector('h1')!.textContent).toBe('Global Records');
     expect(seen.some((url) => url.includes('/settings/global_records/'))).toBe(true);
     // Global records store no project roles, so offering the scope's would lose the ticks on save.

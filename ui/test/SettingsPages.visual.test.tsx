@@ -9,6 +9,8 @@ import { settleBeforeCapture, settleLayout } from './visualHelpers';
 // Docker-only snapshots of the two authorization pages. Both are react-sbb-polarion's shared
 // AuthorizationSettings, so their look comes entirely from the library - and the one difference this
 // extension makes is visual: Global Records offers no project roles, because the setting stores none.
+// Each role set is a multi-select SearchableSelect, so what these pin is the trigger with its chips,
+// not the former checkbox list.
 
 const origUrl = window.location.pathname + window.location.search;
 
@@ -24,14 +26,14 @@ const content = (feature: string): Route => ({
   json: { globalRoles: ['admin'], projectRoles: [] },
 });
 
-async function snapshot(feature: string, routes: Route[], name: string) {
+async function snapshot(feature: string, routes: Route[], name: string, controls: number) {
   installFetchMock(routes);
   window.history.replaceState({}, '', `?feature=${feature}&embedded=true&scope=project/elibrary/`);
   render(<App />);
 
-  await vi.waitFor(() =>
-    expect(document.querySelectorAll('.roles-list input[type="checkbox"]').length).toBeGreaterThan(0),
-  );
+  // Every control, not just the first: they are upgraded asynchronously, and a capture taken between
+  // two of them catches the page mid-upgrade.
+  await vi.waitFor(() => expect(document.querySelectorAll('.roles-group .sd-trigger-multi')).toHaveLength(controls));
   const app = document.querySelector('.app') as HTMLElement;
   await settleLayout();
   await page.viewport(1280, Math.ceil(app.scrollHeight) + 40);
@@ -51,6 +53,7 @@ describe.skipIf(!__PIXEL_REFERENCES__)('Authorization pages visual', () => {
       'project-custom-fields',
       [roles(['project_admin', 'project_user']), content('project_custom_fields')],
       'project-custom-fields-loaded',
+      2,
     );
   });
 
@@ -59,6 +62,7 @@ describe.skipIf(!__PIXEL_REFERENCES__)('Authorization pages visual', () => {
       'global-records',
       [roles(['project_admin', 'project_user']), content('global_records')],
       'global-records-loaded',
+      1,
     );
   });
 });
