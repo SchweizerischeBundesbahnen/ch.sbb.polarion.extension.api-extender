@@ -1,5 +1,19 @@
 # Changelog
 
+## [5.3.0](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/compare/v5.2.0...v5.3.0) (2026-09-04)
+
+
+### Features
+
+* upgrade authorization settings page where roles selection is implemented as dropdowns instead of checkboxes ([#157](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/issues/157)) ([169ac7f](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/169ac7f9a620fd82144fc6cbfe34fdff71cf66a8))
+
+
+### Bug Fixes
+
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v16.1.0 ([0238303](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/0238303b680956470efc618e5b1985be6656efd2))
+* **deps:** update dependency globals to v17.12.0 ([e7e768a](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/e7e768a44002a0d8c33c8410a0e803d824da341e))
+* **deps:** update dependency typescript-eslint to v8.69.0 ([bed8645](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/bed8645a4aace8cb463ab4f0623f04c8734e951b))
+
 ## [5.2.0](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/compare/v5.1.1...v5.2.0) (2026-08-21)
 
 
