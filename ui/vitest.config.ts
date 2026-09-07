@@ -19,7 +19,7 @@ const componentDir = (testFileName: string): string => testFileName.split(/[\\/]
 const pixelReferences = process.env.PIXEL_REFERENCES === '1';
 
 export default defineConfig({
-  define: { __PIXEL_REFERENCES__: JSON.stringify(pixelReferences) },
+  define: { __PIXEL_REFERENCES__: pixelReferences },
   plugins: [react()],
   // Single instance of each shared dep (react-sbb-polarion is a file: symlink with its own copies):
   // React avoids the dual-React invalid-hook-call; sonner ensures this app's `toast()` and RSP's
