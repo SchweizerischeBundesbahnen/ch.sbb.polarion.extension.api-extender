@@ -74,8 +74,8 @@ export default function Landing() {
       </p>
 
       <div className="landing-scope">
-        <label>Project scope:</label>
-        <SearchableSelect value={scope} onChange={setScope} options={scopeOptions} placeholder="" />
+        <label htmlFor="landing-scope">Project scope:</label>
+        <SearchableSelect id="landing-scope" value={scope} onChange={setScope} options={scopeOptions} placeholder="" />
       </div>
       {error && <div className="alert alert-error">{error}</div>}
 

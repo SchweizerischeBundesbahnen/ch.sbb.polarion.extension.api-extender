@@ -1,7 +1,9 @@
+import { pageViolations } from '@sbb-polarion/react-sbb-polarion/testing';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render } from 'vitest-browser-react';
+import { page } from 'vitest/browser';
 import App from '../src/App';
-import { installFetchMock } from './mockFetch';
+import { installFetchMock, jsonResponse } from './mockFetch';
 
 // The feature router (App.tsx): the `?feature=` param picks the page. The two authorization pages are
 // react-sbb-polarion's shared page over two different named settings - the page itself is tested
@@ -92,5 +94,94 @@ describe('feature router', () => {
 
     await vi.waitFor(() => expect(document.querySelector('.alert-error')).not.toBeNull());
     expect(document.querySelector('.alert-error')!.textContent).toContain('Could not load projects');
+  });
+});
+
+describe('accessibility', () => {
+  const REVISIONS = {
+    method: 'GET',
+    match: /\/revisions\?/,
+    json: [{ name: '4321', date: '2026-01-01', author: 'jdoe' }],
+  };
+
+  async function mountSettings(feature: string, controls: number) {
+    installFetchMock([REVISIONS, ...settingsRoutes([])]);
+    setUrl(`?feature=${feature}&embedded=true&scope=${encodeURIComponent(SCOPE)}`);
+    render(<App />);
+    await vi.waitFor(() => expect(document.querySelectorAll('.roles-group .sd-trigger-multi')).toHaveLength(controls));
+  }
+
+  const toolbarButton = (text: string) =>
+    Array.from(document.querySelectorAll<HTMLButtonElement>('.action-buttons button')).find(
+      (b) => b.textContent?.trim() === text,
+    )!;
+
+  it('has no WCAG A/AA violations on the project custom fields page', async () => {
+    await mountSettings('project-custom-fields', 2);
+    expect(await pageViolations()).toEqual([]);
+  });
+
+  it('has no WCAG A/AA violations on the global records page', async () => {
+    await mountSettings('global-records', 1);
+    expect(await pageViolations()).toEqual([]);
+  });
+
+  it('has no WCAG A/AA violations with the revisions shown', async () => {
+    await mountSettings('project-custom-fields', 2);
+    toolbarButton('Revisions').click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain('jdoe'));
+    expect(await pageViolations()).toEqual([]);
+  });
+
+  it('has no WCAG A/AA violations with the cancel confirmation open', async () => {
+    await mountSettings('project-custom-fields', 2);
+    toolbarButton('Cancel').click();
+    await vi.waitFor(() => expect(document.body.textContent).toContain('Are you sure you want to cancel editing'));
+    expect(await pageViolations()).toEqual([]);
+  });
+
+  it('has no WCAG A/AA violations when the setting cannot be loaded', async () => {
+    installFetchMock([
+      { method: 'GET', match: /\/roles\?/, respond: () => jsonResponse({ message: 'boom' }, 500) },
+      ...settingsRoutes([]),
+    ]);
+    setUrl(`?feature=project-custom-fields&embedded=true&scope=${encodeURIComponent(SCOPE)}`);
+    render(<App />);
+    await vi.waitFor(() => expect(document.querySelector('.alert-error')).not.toBeNull());
+    expect(await pageViolations()).toEqual([]);
+  });
+
+  it('names the dev Landing scope control after its label', async () => {
+    installFetchMock([{ method: 'GET', match: /\/polarion\/rest\/v1\/projects/, json: { data: [] } }]);
+    setUrl('?feature=landing');
+    render(<App />);
+    await vi.waitFor(() => expect(document.querySelector('.landing-scope .sd-trigger')).not.toBeNull());
+    expect(page.getByRole('combobox', { name: 'Project scope:' }).element()).toBeVisible();
+  });
+
+  it('has no WCAG A/AA violations on the dev Landing', async () => {
+    installFetchMock([
+      {
+        method: 'GET',
+        match: /\/polarion\/rest\/v1\/projects/,
+        json: { data: [{ id: 'elibrary', attributes: { name: 'E-Library' } }] },
+      },
+    ]);
+    setUrl('?feature=landing');
+    render(<App />);
+    await vi.waitFor(() => expect(document.querySelector('.feature-list')).not.toBeNull());
+    await vi.waitFor(() => expect(document.querySelector('.landing-scope .sd-trigger')).not.toBeNull());
+    expect(await pageViolations()).toEqual([]);
+  });
+
+  it('has no WCAG A/AA violations on the dev Landing with the load error', async () => {
+    installFetchMock([
+      { method: 'GET', match: /\/polarion\/rest\/v1\/projects/, json: { message: 'nope' }, status: 500 },
+    ]);
+    setUrl('?feature=landing');
+    render(<App />);
+    await vi.waitFor(() => expect(document.querySelector('.alert-error')).not.toBeNull());
+    await vi.waitFor(() => expect(document.querySelector('.landing-scope .sd-trigger')).not.toBeNull());
+    expect(await pageViolations()).toEqual([]);
   });
 });
