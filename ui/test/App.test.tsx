@@ -152,10 +152,19 @@ describe('accessibility', () => {
   });
 
   it('names the dev Landing scope control after its label', async () => {
-    installFetchMock([{ method: 'GET', match: /\/polarion\/rest\/v1\/projects/, json: { data: [] } }]);
+    installFetchMock([
+      {
+        method: 'GET',
+        match: /\/polarion\/rest\/v1\/projects/,
+        json: { data: [{ id: 'elibrary', attributes: { name: 'E-Library' } }] },
+      },
+    ]);
     setUrl('?feature=landing');
     render(<App />);
     await vi.waitFor(() => expect(document.querySelector('.landing-scope .sd-trigger')).not.toBeNull());
+    await vi.waitFor(() =>
+      expect(document.querySelector('.landing-scope option[value="project/elibrary/"]')).not.toBeNull(),
+    );
     expect(page.getByRole('combobox', { name: 'Project scope:' }).element()).toBeVisible();
   });
 
@@ -171,6 +180,9 @@ describe('accessibility', () => {
     render(<App />);
     await vi.waitFor(() => expect(document.querySelector('.feature-list')).not.toBeNull());
     await vi.waitFor(() => expect(document.querySelector('.landing-scope .sd-trigger')).not.toBeNull());
+    await vi.waitFor(() =>
+      expect(document.querySelector('.landing-scope option[value="project/elibrary/"]')).not.toBeNull(),
+    );
     expect(await pageViolations()).toEqual([]);
   });
 
