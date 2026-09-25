@@ -1,50 +1,21 @@
 import js from '@eslint/js';
-import prettier from 'eslint-config-prettier';
-import reactHooks from 'eslint-plugin-react-hooks';
+import { polarionEslintConfig } from '@sbb-polarion/react-sbb-polarion/eslint-config';
 import globals from 'globals';
-import tseslint from 'typescript-eslint';
 
-// Mirrors react-sbb-polarion's eslint.config.js so the React apps lint identically.
-export default tseslint.config(
-  {
-    ignores: [
-      'dist',
-      'node',
-      'node_modules',
-      'coverage',
-      '.vite',
-      'test/expected',
-      'test/__diff__',
-      'test/__screenshots__',
-      '.vitest',
-    ],
-  },
-  // TypeScript + React sources.
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    plugins: { 'react-hooks': reactHooks },
-    languageOptions: {
-      ecmaVersion: 2022,
-      globals: { ...globals.browser, ...globals.node },
+// The shared setup of the SBB Polarion React apps (TypeScript, React hooks, jsx-a11y, Prettier), plus the
+// plain JS tooling that is this extension's own.
+export default polarionEslintConfig({
+  ignores: ['node', '.vite', 'test/expected', 'test/__diff__', 'test/__screenshots__', '.vitest'],
+  configs: [
+    // Plain JS/ESM (this config, vite.config.js, the docker-test wrapper).
+    {
+      files: ['**/*.{js,mjs}'],
+      extends: [js.configs.recommended],
+      languageOptions: {
+        ecmaVersion: 2022,
+        sourceType: 'module',
+        globals: { ...globals.node },
+      },
     },
-    rules: {
-      // eslint-plugin-react-hooks recommended set (declared explicitly - the plugin's shipped flat
-      // config uses a legacy string-array `plugins` key that ESLint 10 rejects when spread directly).
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
-    },
-  },
-  // Plain JS/ESM (this config, vite.config.js, the docker-test wrapper).
-  {
-    files: ['**/*.{js,mjs}'],
-    extends: [js.configs.recommended],
-    languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: 'module',
-      globals: { ...globals.node },
-    },
-  },
-  // Keep last: turns off ESLint rules that would conflict with Prettier's formatting.
-  prettier,
-);
+  ],
+});

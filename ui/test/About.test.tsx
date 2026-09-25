@@ -1,3 +1,4 @@
+import { pageViolations } from '@sbb-polarion/react-sbb-polarion/testing';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render } from 'vitest-browser-react';
 import App from '../src/App';
@@ -46,5 +47,29 @@ describe('About page (wrapper)', () => {
     setUrl('?feature=about&embedded=true');
     render(<App />);
     await vi.waitFor(() => expect(document.querySelector('.alert-error')).not.toBeNull());
+  });
+});
+
+describe('accessibility', () => {
+  it('has no WCAG A/AA violations', async () => {
+    installFetchMock(aboutRoutes());
+    setUrl('?feature=about&embedded=true');
+    render(<App />);
+    await vi.waitFor(() => expect(document.querySelector('.about-page .app-icon')).not.toBeNull());
+    await vi.waitFor(() => expect(document.body.textContent).toContain('Readme'));
+    expect(await pageViolations()).toEqual([]);
+  });
+
+  it('has no WCAG A/AA violations with the error alert', async () => {
+    installFetchMock([
+      { method: 'GET', match: /\/version$/, respond: () => jsonResponse({ errorMessage: 'boom' }, 500) },
+      { method: 'GET', match: /\/configuration-properties$/, json: { properties: [], obsoleteProperties: [] } },
+      { method: 'GET', match: /\/configuration-status/, json: [] },
+      { method: 'GET', match: /\/readme$/, respond: () => new Response('', { status: 404 }) },
+    ]);
+    setUrl('?feature=about&embedded=true');
+    render(<App />);
+    await vi.waitFor(() => expect(document.querySelector('.alert-error')).not.toBeNull());
+    expect(await pageViolations()).toEqual([]);
   });
 });
