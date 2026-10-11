@@ -1,5 +1,47 @@
 # Changelog
 
+## [5.3.0](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/compare/v5.2.0...v5.3.0) (2026-10-11)
+
+
+### Features
+
+* upgrade authorization settings page where roles selection is implemented as dropdowns instead of checkboxes ([#157](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/issues/157)) ([169ac7f](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/169ac7f9a620fd82144fc6cbfe34fdff71cf66a8))
+
+
+### Bug Fixes
+
+* **deps:** update dependency @types/react-dom to v19.2.7 ([bbd3bf5](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/bbd3bf5ab27dc6247d839caa71523f945615123f))
+* **deps:** update dependency @vitejs/plugin-react to v6.1.2 ([2fac0f8](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/2fac0f86ecfa6b32a2e634ab12f438b17f706a90))
+* **deps:** update dependency axe-core to v4.14.0 ([f538d4a](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/f538d4a0058d6e17c7a7c10225e45c31c67e9712))
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v16.1.0 ([0238303](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/0238303b680956470efc618e5b1985be6656efd2))
+* **deps:** update dependency ch.sbb.polarion.extensions:ch.sbb.polarion.extension.generic to v16.2.0 ([0e1faa4](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/0e1faa4363c519d5aa24a31bf804baf6604d972e))
+* **deps:** update dependency eslint to v10.10.0 ([3a8b702](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/3a8b7020be5841c8f8f1389b61d9f5d9b0ed970d))
+* **deps:** update dependency eslint to v10.11.0 ([0fe63f1](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/0fe63f154687566b96e8d5493fc0d02e6ad55fbe))
+* **deps:** update dependency eslint to v10.12.0 ([417046e](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/417046e91a833740aca5a7f7ec637ce7fe0e4502))
+* **deps:** update dependency globals to v17.12.0 ([e7e768a](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/e7e768a44002a0d8c33c8410a0e803d824da341e))
+* **deps:** update dependency globals to v17.13.0 ([1d35d30](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/1d35d3042e4c0c75bdd26157d79963c2b5ad5633))
+* **deps:** update dependency playwright to v1.63.0 ([325df0e](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/325df0e55e99ecceb7e5150cb50b32b74c1309b7))
+* **deps:** update dependency playwright to v1.64.0 ([101ede5](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/101ede599ed5b4952007e4b206f414bc931b65ec))
+* **deps:** update dependency prettier to v3.9.7 ([8098ce0](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/8098ce0a52ba7cb30c37fb7633a27a24a7b1564a))
+* **deps:** update dependency prettier to v3.9.8 ([45b1aba](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/45b1aba361d4a7563ac5dd89d023ca0c065f1c25))
+* **deps:** update dependency prettier to v3.9.9 ([27eec9a](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/27eec9a9464e6ca385ec86945f88c767c3721566))
+* **deps:** update dependency typescript-eslint to v8.69.0 ([bed8645](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/bed8645a4aace8cb463ab4f0623f04c8734e951b))
+* **deps:** update dependency typescript-eslint to v8.70.0 ([91ad0b9](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/91ad0b9850fbc1b1fd7fb0e46e92a23ea00a577c))
+* **deps:** update dependency typescript-eslint to v8.70.1 ([423af66](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/423af66dd8fcc20cefc00fb507cff57c2297ab64))
+* **deps:** update dependency typescript-eslint to v8.71.0 ([2f1f4d8](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/2f1f4d8452f1848ca4aa852d3fc706538161cc3e))
+* **deps:** update dependency typescript-eslint to v8.71.1 ([84b3b45](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/84b3b45905e5e3a15be54f7efe0e1281c8d5ad51))
+* **deps:** update dependency vite to v8.3.0 ([467a8fc](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/467a8fc3e6d168848d24268941d71e2628eff7cd))
+* **deps:** update dependency vite to v8.3.1 ([0a70616](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/0a706162dd2a2c1679c26b09a3a2526c48dd20d9))
+* **deps:** update dependency vite to v8.3.2 ([4014d85](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/4014d8564c939b77ad68404e0d4d803fbca32738))
+* **deps:** update dependency vite to v8.3.3 ([12974eb](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/12974eb2becb9a511b4fbcd949783427c6e80b3c))
+* **deps:** update dependency vitest-browser-react to v2.3.0 ([d35946c](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/d35946c26914bc1594f7fe3382f0da4e40440a0d))
+* **deps:** update npm to v12.1.0 ([e830442](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/e83044282b0957f158feec17659af033357ef7a6))
+* **deps:** update npm to v12.2.0 ([7b58ff6](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/7b58ff654f231a7109663b5fe4aa8046995f3959))
+* **deps:** update react monorepo to v19.3.0 ([0c68bbf](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/0c68bbfd146f855d57ed4efcfd402662b75fcf47))
+* **deps:** update vitest monorepo to v5.0.1 ([c9f6db5](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/c9f6db54acac071960b81a1f837a836e4e8eee00))
+* **deps:** update vitest monorepo to v5.0.2 ([86b4e77](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/86b4e776ecb6c92e0e5f19375a2b88a4342f1f73))
+* **deps:** update vitest monorepo to v5.0.3 ([7bd784e](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/commit/7bd784e7dc57c4afe9c44d43c85ddc773d5b3a7a))
+
 ## [5.2.0](https://github.com/SchweizerischeBundesbahnen/ch.sbb.polarion.extension.api-extender/compare/v5.1.1...v5.2.0) (2026-08-21)
 
 
