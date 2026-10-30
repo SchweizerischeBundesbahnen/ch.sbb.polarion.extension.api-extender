@@ -438,6 +438,7 @@ The template can use the Velocity 2 syntax, for example decimal literals and `$f
 > - The template does not see the variables of the page. It sees only the variables given in the call.
 > - Write the template in single quotes. Velocity Engine 1.4 replaces variables in double-quoted strings before `render` gets the template.
 > - `#parse` and `#include` are not available. The engine cannot read files or class path resources.
+> - A `#macro` is available only inside the `eval` call that defines it.
 > - Reflection is blocked, for example `$s.class.forName(...)` and `$s.class.classLoader`.
 > - More than five key-value pairs are not possible. Use a `Map` instead.
 > - A template error gives `null`, and the page shows the call as text. The Polarion log contains the error.

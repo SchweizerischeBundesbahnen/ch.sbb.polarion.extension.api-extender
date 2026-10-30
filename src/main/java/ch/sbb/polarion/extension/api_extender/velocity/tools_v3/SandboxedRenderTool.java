@@ -32,6 +32,8 @@ public class SandboxedRenderTool extends SafeConfig {
         engine.setProperty(RuntimeConstants.RESOURCE_LOADERS, "string");
         engine.setProperty("resource.loader.string.class", StringResourceLoader.class.getName());
         engine.setProperty(RuntimeConstants.UBERSPECT_CLASSNAME, SecureUberspector.class.getName());
+        // The engine is shared by all users, and inline macros are global by default.
+        engine.setProperty(RuntimeConstants.VM_PERM_INLINE_LOCAL, true);
         engine.init();
         return engine;
     }
@@ -39,42 +41,43 @@ public class SandboxedRenderTool extends SafeConfig {
     // Polarion's Velocity 1.4 does not call varargs methods, so the key-value pairs have fixed overloads.
 
     public String eval(String template) {
-        return evalWith(template);
+        return render(template, new HashMap<>());
     }
 
     public String eval(String template, Map<?, ?> variables) {
-        return evalWith(template, variables);
+        Map<String, Object> values = new HashMap<>();
+        if (variables != null) {
+            variables.forEach((key, value) -> values.put(String.valueOf(key), value));
+        }
+        return render(template, values);
     }
 
     public String eval(String template, Object k1, Object v1) {
-        return evalWith(template, k1, v1);
+        return render(template, toMap(k1, v1));
     }
 
     public String eval(String template, Object k1, Object v1, Object k2, Object v2) {
-        return evalWith(template, k1, v1, k2, v2);
+        return render(template, toMap(k1, v1, k2, v2));
     }
 
     public String eval(String template, Object k1, Object v1, Object k2, Object v2, Object k3, Object v3) {
-        return evalWith(template, k1, v1, k2, v2, k3, v3);
+        return render(template, toMap(k1, v1, k2, v2, k3, v3));
     }
 
+    @SuppressWarnings("java:S107")
     public String eval(String template, Object k1, Object v1, Object k2, Object v2, Object k3, Object v3, Object k4, Object v4) {
-        return evalWith(template, k1, v1, k2, v2, k3, v3, k4, v4);
+        return render(template, toMap(k1, v1, k2, v2, k3, v3, k4, v4));
     }
 
     @SuppressWarnings("java:S107")
     public String eval(String template, Object k1, Object v1, Object k2, Object v2, Object k3, Object v3, Object k4, Object v4, Object k5, Object v5) {
-        return evalWith(template, k1, v1, k2, v2, k3, v3, k4, v4, k5, v5);
+        return render(template, toMap(k1, v1, k2, v2, k3, v3, k4, v4, k5, v5));
     }
 
-    /**
-     * @param variables key-value pairs ({@code 'name', $value, ...}) or one {@link Map}
-     */
-    private String evalWith(String template, Object... variables) {
+    private String render(String template, Map<String, Object> values) {
         if (template == null) {
             return null;
         }
-        Map<String, Object> values = toMap(variables);
         StringWriter writer = new StringWriter();
         try {
             ENGINE.evaluate(new VelocityContext(values), writer, LOG_TAG, template);
@@ -86,14 +89,10 @@ public class SandboxedRenderTool extends SafeConfig {
         return writer.toString();
     }
 
-    private static Map<String, Object> toMap(Object[] variables) {
+    private static Map<String, Object> toMap(Object... keysAndValues) {
         Map<String, Object> values = new HashMap<>();
-        if (variables.length == 1 && variables[0] instanceof Map<?, ?> map) {
-            map.forEach((key, value) -> values.put(String.valueOf(key), value));
-            return values;
-        }
-        for (int i = 0; i < variables.length; i += 2) {
-            values.put(String.valueOf(variables[i]), variables[i + 1]);
+        for (int i = 0; i + 1 < keysAndValues.length; i += 2) {
+            values.put(String.valueOf(keysAndValues[i]), keysAndValues[i + 1]);
         }
         return values;
     }

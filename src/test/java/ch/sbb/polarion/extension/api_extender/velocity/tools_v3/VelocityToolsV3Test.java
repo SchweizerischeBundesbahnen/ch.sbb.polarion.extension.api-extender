@@ -102,6 +102,20 @@ class VelocityToolsV3Test {
     }
 
     @Test
+    void renderToolAcceptsNullMap() {
+        SandboxedRenderTool render = (SandboxedRenderTool) velocityToolsV3.get("render");
+        assertEquals("plain", render.eval("plain", (Map<?, ?>) null));
+    }
+
+    @Test
+    void renderToolKeepsMacrosInsideOneCall() {
+        SandboxedRenderTool render = (SandboxedRenderTool) velocityToolsV3.get("render");
+        assertEquals("first", render.eval("#macro(leakCheck)first#end#leakCheck()"));
+        assertEquals("#leakCheck()", render.eval("#leakCheck()"));
+        assertEquals("second", render.eval("#macro(leakCheck)second#end#leakCheck()"));
+    }
+
+    @Test
     void renderToolRejectsWrongInput() {
         SandboxedRenderTool render = (SandboxedRenderTool) velocityToolsV3.get("render");
         assertNull(render.eval(null));
