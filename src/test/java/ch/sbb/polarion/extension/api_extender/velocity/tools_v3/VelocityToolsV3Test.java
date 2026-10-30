@@ -1,6 +1,7 @@
 package ch.sbb.polarion.extension.api_extender.velocity.tools_v3;
 
 import ch.sbb.polarion.extension.generic.test_extensions.BundleJarsPrioritizingRunnableMockExtension;
+import ch.sbb.polarion.extension.generic.util.BundleJarsPrioritizingRunnable;
 import org.apache.velocity.tools.generic.CollectionTool;
 import org.apache.velocity.tools.generic.EscapeTool;
 import org.apache.velocity.tools.generic.JsonTool;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(BundleJarsPrioritizingRunnableMockExtension.class)
 class VelocityToolsV3Test {
@@ -99,6 +101,38 @@ class VelocityToolsV3Test {
         assertEquals("3", render.eval("$a.size()", Map.of("a", List.of(1, 2, 3))));
         assertEquals("a,b", render.eval("#foreach($i in $items)$i#if($foreach.hasNext),#end#end", "items", List.of("a", "b")));
         assertEquals("12345", render.eval("$a$b$c$d$e", "a", 1, "b", 2, "c", 3, "d", 4, "e", 5));
+    }
+
+    @Test
+    void namesAreTheToolNames() {
+        assertEquals(VelocityToolsV3.TOOL_NAMES, velocityToolsV3.getNames());
+    }
+
+    @Test
+    void failedToolCreationIsReportedWithItsCause() {
+        Exception cause = new IllegalArgumentException("creation failed");
+        when(BundleJarsPrioritizingRunnable.executeCached(VelocityToolsV3Factory.class, Map.of(VelocityToolsV3Factory.PARAM_TOOL, "math"), false))
+                .thenReturn(Map.of(BundleJarsPrioritizingRunnable.ERROR_KEY, cause));
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> velocityToolsV3.get("math"));
+
+        assertSame(cause, exception.getCause());
+    }
+
+    @Test
+    void jsonToolBlocksEveryLoadingMethod() {
+        RestrictedJsonTool json = (RestrictedJsonTool) velocityToolsV3.get("json");
+        assertNull(json.acquireString("http://localhost/secret"));
+        assertNull(json.acquireReader("http://localhost/secret"));
+        assertNull(json.getResourceReader("META-INF/MANIFEST.MF"));
+    }
+
+    @Test
+    void renderToolAcceptsEveryNumberOfPairs() {
+        SandboxedRenderTool render = (SandboxedRenderTool) velocityToolsV3.get("render");
+        assertEquals("12", render.eval("$a$b", "a", 1, "b", 2));
+        assertEquals("123", render.eval("$a$b$c", "a", 1, "b", 2, "c", 3));
+        assertEquals("1234", render.eval("$a$b$c$d", "a", 1, "b", 2, "c", 3, "d", 4));
     }
 
     @Test
