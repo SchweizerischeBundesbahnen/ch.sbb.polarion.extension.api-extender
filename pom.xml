@@ -49,6 +49,9 @@
 
         <web.app.name>${maven-jar-plugin.Extension-Context}</web.app.name>
 
+        <velocity-tools.version>3.1</velocity-tools.version>
+        <velocity-engine.version>2.4.1</velocity-engine.version>
+        <commons-lang3.version>3.21.0</commons-lang3.version>
     </properties>
 
     <dependencies>
@@ -56,6 +59,38 @@
             <groupId>ch.sbb.polarion.extensions</groupId>
             <artifactId>ch.sbb.polarion.extension.generic.app</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+
+        <!-- Polarion renders scripts with its own Velocity 1.4 and Tools 2.0, so these jars load only through BundleJarsPrioritizingRunnable. -->
+        <dependency>
+            <groupId>org.apache.velocity.tools</groupId>
+            <artifactId>velocity-tools-generic</artifactId>
+            <version>${velocity-tools.version}</version>
+            <exclusions>
+                <!-- An embedded slf4j-api binds to Polarion's StaticLoggerBinder and fails with a loader constraint violation. -->
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Velocity Tools 3.1 brings engine 2.3. -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
+            <version>${velocity-engine.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Velocity Tools 3.1 brings 3.10, engine 2.4.1 is built against 3.17.0. -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
         </dependency>
 
         <dependency>
