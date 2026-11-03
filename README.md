@@ -474,3 +474,29 @@ Some generic tools of Velocity Tools 3 are not available:
 - View tools (`params`, `cookie`, `pager` and others): they need a servlet request.
 
 The ListTool (`$lists`) and IteratorTool (`$mill`) of Live Report Pages do not exist in Velocity Tools 3.
+
+## Script widgets with Velocity 2
+
+The `Script - Block Velocity 2` and `Script - Inline Velocity 2` widgets of Live Report Pages render a Velocity script with Velocity Engine 2.4.1, which is part of this extension.
+They are the same as the Polarion `Script - Block` and `Script - Inline` widgets, but the script can use the [Velocity 2 syntax](https://velocity.apache.org/engine/2.4.1/user-guide.html).
+
+Add the widgets from the `Scripting` group of the widget sidebar.
+Like the Polarion widgets, they are restricted widgets.
+
+The script gets the same variables as in the Polarion widgets, for example `$transaction`, `$page`, `$widgetContext`, `$trackerService`, `$pageParameters` and `$velocityToolsV3`.
+
+```velocity
+#set($limit = 2.5)
+#set($ids = ['WI-1', 'WI-2'])
+#set($colors = {'open': 'red', 'done': 'green'})
+#foreach($id in $ids)$id#if($foreach.hasNext), #end#end
+$colors.open $limit
+```
+
+> [!IMPORTANT]
+> Limitations:
+> - `#parse` and `#include` are not available. The engine cannot read the scripts in `.polarion/pages/scripts/velocity`.
+> - The Polarion global macros, for example `#info`, `#warning` and `#loadJs`, are not available.
+> - A `#macro` is available only inside the widget that defines it.
+> - Velocity 2 changes some behavior of Velocity 1.4, for example whitespace handling and empty values in `#if`. See the [Velocity 2.0 upgrade notes](https://velocity.apache.org/engine/2.0/upgrading.html).
+> - A script error shows a warning in the widget. The Polarion log contains the error and the script.
