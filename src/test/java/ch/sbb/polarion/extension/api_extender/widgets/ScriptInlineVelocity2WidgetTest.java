@@ -21,6 +21,6 @@ class ScriptInlineVelocity2WidgetTest {
     @Test
     void hasOwnLabelAndIcon() {
         assertEquals("Script - Inline Velocity V2", widget.getLabel(mock(SharedContext.class)));
-        assertEquals("/polarion/ria/images/widgets/script_lightblue.png", widget.getIcon(mock(RichPageWidgetContext.class)));
+        assertEquals("/polarion/api-extender-app/ui/images/app-icon.svg", widget.getIcon(mock(RichPageWidgetContext.class)));
     }
 }

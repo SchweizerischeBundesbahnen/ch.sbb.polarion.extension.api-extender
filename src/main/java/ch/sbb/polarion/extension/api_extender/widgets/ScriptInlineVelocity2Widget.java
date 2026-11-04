@@ -13,11 +13,6 @@ public class ScriptInlineVelocity2Widget extends ScriptBlockVelocity2Widget {
     static final String LABEL = "Script - Inline Velocity V2";
 
     @Override
-    public @NotNull String getIcon(@NotNull RichPageWidgetContext widgetContext) {
-        return "/polarion/ria/images/widgets/script_lightblue.png";
-    }
-
-    @Override
     public @NotNull String getLabel(@NotNull SharedContext context) {
         return LABEL;
     }

@@ -39,11 +39,12 @@ public class ScriptBlockVelocity2Widget extends RichPageWidget {
     public static final String ID = "ch.sbb.polarion.extension.api_extender.widgets.scriptBlockVelocity2";
     static final String LABEL = "Script - Block Velocity V2";
     static final String PARAMETER_SCRIPT = "script";
+    static final String APP_ICON = "/polarion/api-extender-app/ui/images/app-icon.svg";
     private static final String LOG_TAG = "Velocity 2 script widget";
 
     @Override
     public @NotNull String getIcon(@NotNull RichPageWidgetContext widgetContext) {
-        return "/polarion/ria/images/widgets/script_blue.png";
+        return APP_ICON;
     }
 
     @Override
