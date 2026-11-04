@@ -507,7 +507,7 @@ A "Wiki Content" block of a LiveDoc document and the content of a Classic Wiki P
 Write the region between two `{velocityV2}` markers:
 
 ```velocity
-Velocity 1.4 renders this line: $document
+Velocity 1.4 renders this line: #set($sum = 1 + 2)$sum
 {velocityV2}
 #set($colors = {'open': 'red', 'done': 'green'})
 #foreach($state in $colors.keySet())$state: $colors[$state]#if($foreach.hasNext), #end#end
@@ -538,8 +538,15 @@ All regions of a Classic Wiki Page share one context. An included page has its o
 > - Without this extension, Polarion renders the region with Velocity 1.4.
 > - Classic Wiki Pages support regions about 10 seconds after the first wiki page opens after a Polarion start, and after a reset of the wiki cache.
 
-The "Wiki Content" dialog of LiveDocs shows "Velocity 2 is available" below the Syntax Help link.
-The toolbar of a Classic Wiki Page shows the same text: before the Attachments button in view mode, and at the right edge in edit mode.
-Hover the text to see an example of a `{velocityV2}` region.
+### Hints in the user interface
+
+These places show "Velocity 2 is available". Hover the text to see an example of a `{velocityV2}` region:
+
+- LiveDoc "Wiki Content" dialog: below the Syntax Help link.
+- Classic Wiki Page in view mode: in the toolbar, before the Attachments button.
+- Classic Wiki Page in edit mode: at the right edge of the toolbar.
+
+The LiveReport widgets show no hint: their names already say "Velocity V2".
+
 The extension adds the hints with a script, which Polarion loads into every page through the `com.polarion.portal.tomcat.externalJsFile` extension point.
-No administrator configuration is necessary. The hints are available after a Polarion restart.
+No administrator configuration is necessary.
