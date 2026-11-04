@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class ScriptInlineVelocity2Widget extends ScriptBlockVelocity2Widget {
 
     public static final String ID = "ch.sbb.polarion.extension.api_extender.widgets.scriptInlineVelocity2";
-    static final String LABEL = "Script - Inline Velocity 2";
+    static final String LABEL = "Script - Inline Velocity V2";
 
     @Override
     public @NotNull String getIcon(@NotNull RichPageWidgetContext widgetContext) {

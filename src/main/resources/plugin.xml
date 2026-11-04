@@ -15,4 +15,16 @@
                 contextRoot="webapp/api-extender-app">
         </webapp>
     </extension>
+
+    <!-- Polarion renders a <script> tag for this file into the main portal page, without the scriptInjection.*
+         administrator configuration. The servlet serves it flat by its base name at
+         /polarion/codemirror-modes/api-extender-ui-loader.js, so the name must stay unique across all plugins.
+         The response is cached as immutable, so the file only loads webapp/api-extender-app/js/api-extender-ui.js,
+         which holds the actual UI additions.
+         Point `location` at a single file: a directory contributes every file in it to every Polarion page.
+         The extension registry is read at startup, so a change here needs a Polarion restart. -->
+    <extension
+            point="com.polarion.portal.tomcat.externalJsFile">
+        <file location="external-js/api-extender-ui-loader.js"/>
+    </extension>
 </plugin>

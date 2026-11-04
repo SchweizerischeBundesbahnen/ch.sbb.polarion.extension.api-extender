@@ -37,7 +37,7 @@ import java.util.function.UnaryOperator;
 public class ScriptBlockVelocity2Widget extends RichPageWidget {
 
     public static final String ID = "ch.sbb.polarion.extension.api_extender.widgets.scriptBlockVelocity2";
-    static final String LABEL = "Script - Block Velocity 2";
+    static final String LABEL = "Script - Block Velocity V2";
     static final String PARAMETER_SCRIPT = "script";
     private static final String LOG_TAG = "Velocity 2 script widget";
 

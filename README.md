@@ -477,7 +477,7 @@ The ListTool (`$lists`) and IteratorTool (`$mill`) of Live Report Pages do not e
 
 ## Script widgets with Velocity 2
 
-The `Script - Block Velocity 2` and `Script - Inline Velocity 2` widgets of Live Report Pages render a Velocity script with Velocity Engine 2.4.1, which is part of this extension.
+The `Script - Block Velocity V2` and `Script - Inline Velocity V2` widgets of Live Report Pages render a Velocity script with Velocity Engine 2.4.1, which is part of this extension.
 They are the same as the Polarion `Script - Block` and `Script - Inline` widgets, but the script can use the [Velocity 2 syntax](https://velocity.apache.org/engine/2.4.1/user-guide.html).
 
 Add the widgets from the `Scripting` group of the widget sidebar.
@@ -537,3 +537,7 @@ All regions of a Classic Wiki Page share one context. An included page has its o
 > - A script error shows an error message in place of the region. The Polarion log contains the error and the script.
 > - Without this extension, Polarion renders the region with Velocity 1.4.
 > - Classic Wiki Pages support regions about 10 seconds after the first wiki page opens after a Polarion start, and after a reset of the wiki cache.
+
+The "Wiki Content" dialog of LiveDocs shows a hint about `{velocityV2}` regions below the Syntax Help link.
+The extension adds the hint with a script, which Polarion loads into every page through the `com.polarion.portal.tomcat.externalJsFile` extension point.
+No administrator configuration is necessary. The hint is available after a Polarion restart.
