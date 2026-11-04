@@ -162,16 +162,37 @@
             }
             cell.setAttribute(PROCESSED, 'velocity-v2-hint');
 
-            const menu = doc.getElementById('menuView');
-            const background = doc.defaultView.getComputedStyle(menu).backgroundColor || '#f5f5f5';
-            const labelCell = doc.createElement('td');
-            labelCell.style.cssText = 'white-space: nowrap; vertical-align: middle; padding: 0 10px;';
-            labelCell.appendChild(createVelocityV2Label(doc, { scope: 'page', align: 'right', background }));
-            cell.parentElement.insertBefore(labelCell, cell);
+            cell.parentElement.insertBefore(createToolbarLabelCell(doc), cell);
         }
     };
 
-    const features = [wikiContentDialogHint, wikiPageToolbarHint];
+    /**
+     * The toolbar of a Classic Wiki Page in edit mode has the same #menuView, but no Attachments button.
+     * The label goes after the full-width spacer cell which follows the Preview button, so it sits at the right edge.
+     */
+    const wikiPageEditToolbarHint = {
+        apply(doc) {
+            const preview = doc.querySelector('#menuView #formaction_preview');
+            const row = preview && preview.closest('td') && preview.closest('td').parentElement;
+            const spacer = row && Array.from(row.children).find((cell) => cell.getAttribute('width') === '100%');
+            if (!spacer || row.hasAttribute(PROCESSED)) {
+                return;
+            }
+            row.setAttribute(PROCESSED, 'velocity-v2-hint');
+            spacer.insertAdjacentElement('afterend', createToolbarLabelCell(doc));
+        }
+    };
+
+    function createToolbarLabelCell(doc) {
+        const menu = doc.getElementById('menuView');
+        const background = doc.defaultView.getComputedStyle(menu).backgroundColor || '#f5f5f5';
+        const labelCell = doc.createElement('td');
+        labelCell.style.cssText = 'white-space: nowrap; vertical-align: middle; padding: 0 10px;';
+        labelCell.appendChild(createVelocityV2Label(doc, { scope: 'page', align: 'right', background }));
+        return labelCell;
+    }
+
+    const features = [wikiContentDialogHint, wikiPageToolbarHint, wikiPageEditToolbarHint];
 
     // GWT changes the DOM very often, so the features run at most once per animation frame.
     let scheduled = false;
