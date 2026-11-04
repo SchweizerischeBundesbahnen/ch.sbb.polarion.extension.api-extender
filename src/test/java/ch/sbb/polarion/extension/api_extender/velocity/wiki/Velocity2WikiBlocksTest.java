@@ -12,16 +12,16 @@ class Velocity2WikiBlocksTest {
 
     @Test
     void detectsMarker() {
-        assertTrue(Velocity2WikiBlocks.containsMarker("a {velocity2}#set($x = 1){velocity2}"));
+        assertTrue(Velocity2WikiBlocks.containsMarker("a {velocityV2}#set($x = 1){velocityV2}"));
         assertFalse(Velocity2WikiBlocks.containsMarker("#set($x = 1)"));
     }
 
     @Test
     void replacesRegionsWithTokens() {
-        Velocity2WikiBlocks blocks = Velocity2WikiBlocks.extract("before {velocity2}$a{velocity2} middle {velocity2}\n$b\n{velocity2} after");
+        Velocity2WikiBlocks blocks = Velocity2WikiBlocks.extract("before {velocityV2}$a{velocityV2} middle {velocityV2}\n$b\n{velocityV2} after");
 
         assertEquals(List.of("$a", "\n$b\n"), blocks.getScripts());
-        assertFalse(blocks.getSource().contains("{velocity2}"));
+        assertFalse(blocks.getSource().contains("{velocityV2}"));
         assertFalse(blocks.getSource().contains("$"));
         assertTrue(blocks.getSource().startsWith("before velocitytwo"), blocks.getSource());
         assertTrue(blocks.getSource().endsWith(" after"), blocks.getSource());
@@ -29,7 +29,7 @@ class Velocity2WikiBlocksTest {
 
     @Test
     void restoresOutputInPlaceOfTokens() {
-        Velocity2WikiBlocks blocks = Velocity2WikiBlocks.extract("<p>{velocity2}$a{velocity2}</p><p>{velocity2}$b{velocity2}</p>");
+        Velocity2WikiBlocks blocks = Velocity2WikiBlocks.extract("<p>{velocityV2}$a{velocityV2}</p><p>{velocityV2}$b{velocityV2}</p>");
         String rendered = "<div>" + blocks.getSource() + "</div>";
 
         assertEquals("<div><p>A</p><p>B</p></div>", blocks.restore(rendered, List.of("A", "B")));
@@ -39,7 +39,7 @@ class Velocity2WikiBlocksTest {
     void tokensWithTenOrMoreRegionsDoNotOverlap() {
         StringBuilder source = new StringBuilder();
         for (int i = 0; i < 12; i++) {
-            source.append("{velocity2}").append(i).append("{velocity2};");
+            source.append("{velocityV2}").append(i).append("{velocityV2};");
         }
         Velocity2WikiBlocks blocks = Velocity2WikiBlocks.extract(source.toString());
 
@@ -48,22 +48,22 @@ class Velocity2WikiBlocksTest {
 
     @Test
     void regionDoesNotCrossBlockDelimiter() {
-        String source = "{velocity2}unclosed" + DELIMITER + "{velocity2}$b{velocity2}";
+        String source = "{velocityV2}unclosed" + DELIMITER + "{velocityV2}$b{velocityV2}";
         Velocity2WikiBlocks blocks = Velocity2WikiBlocks.extract(source);
 
         assertEquals(List.of("$b"), blocks.getScripts());
-        assertTrue(blocks.getSource().startsWith("{velocity2}unclosed" + DELIMITER), blocks.getSource());
+        assertTrue(blocks.getSource().startsWith("{velocityV2}unclosed" + DELIMITER), blocks.getSource());
     }
 
     @Test
     void tokensDifferBetweenRenderings() {
-        String source = "{velocity2}$a{velocity2}";
+        String source = "{velocityV2}$a{velocityV2}";
         assertNotEquals(Velocity2WikiBlocks.extract(source).getSource(), Velocity2WikiBlocks.extract(source).getSource());
     }
 
     @Test
     void tokenIsPlainLowercaseText() {
-        String token = Velocity2WikiBlocks.extract("{velocity2}$a{velocity2}").getSource();
+        String token = Velocity2WikiBlocks.extract("{velocityV2}$a{velocityV2}").getSource();
         assertTrue(token.matches("[a-z0-9]+"), token);
     }
 }

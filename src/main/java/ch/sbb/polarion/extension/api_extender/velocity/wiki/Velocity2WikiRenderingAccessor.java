@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * Wraps the accessor which renders the Wiki Content blocks of LiveDocs, and renders the
- * {@code {velocity2}...{velocity2}} regions in them with the embedded Velocity 2 engine.
+ * {@code {velocityV2}...{velocityV2}} regions in them with the embedded Velocity 2 engine.
  * <p>
  * The regions render before Polarion renders the rest of the source with Velocity 1.4 and wiki markup.
  * So a region does not see variables which Velocity 1.4 sets, and its output is HTML without wiki markup processing.

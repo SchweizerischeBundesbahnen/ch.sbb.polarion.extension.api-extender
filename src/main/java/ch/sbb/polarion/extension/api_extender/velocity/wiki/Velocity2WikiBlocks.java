@@ -10,14 +10,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Finds the {@code {velocity2}...{velocity2}} regions in a wiki source and replaces each with a token.
+ * Finds the {@code {velocityV2}...{velocityV2}} regions in a wiki source and replaces each with a token.
  * <p>
  * Velocity 1.4 and the wiki markup renderer leave the tokens unchanged, so {@link #restore(String, List)}
  * can put the Velocity 2 output in their place after Polarion renders the rest of the source.
  */
 public final class Velocity2WikiBlocks {
 
-    public static final String MARKER = "{velocity2}";
+    public static final String MARKER = "{velocityV2}";
 
     // Polarion joins all Wiki Content blocks of a document with this delimiter and splits the rendered result by it.
     // A region must not cross it, or the rendered blocks get mixed up.

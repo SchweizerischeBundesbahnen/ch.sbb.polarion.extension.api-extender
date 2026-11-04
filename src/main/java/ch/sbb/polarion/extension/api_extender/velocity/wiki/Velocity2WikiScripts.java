@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 /**
- * Renders the {@code {velocity2}} regions of LiveDocs and Classic Wiki Pages with the embedded Velocity 2 engine.
+ * Renders the {@code {velocityV2}} regions of LiveDocs and Classic Wiki Pages with the embedded Velocity 2 engine.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class Velocity2WikiScripts {

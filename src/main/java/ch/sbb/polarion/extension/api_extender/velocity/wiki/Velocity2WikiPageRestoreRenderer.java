@@ -8,7 +8,7 @@ import com.xpn.xwiki.render.XWikiVirtualMacro;
 import java.util.Map;
 
 /**
- * The last renderer of Classic Wiki Pages. It puts the output of the {@code {velocity2}} regions
+ * The last renderer of Classic Wiki Pages. It puts the output of the {@code {velocityV2}} regions
  * in place of the tokens which {@link Velocity2WikiPageExtractRenderer} wrote.
  */
 public class Velocity2WikiPageRestoreRenderer implements XWikiRenderer {

@@ -55,13 +55,13 @@ class Velocity2WikiRenderingAccessorTest {
 
     @Test
     void rendersRegionsWithVelocity2() {
-        String html = accessor.render(null, "1.4: $x {velocity2}#set($d = 1.5)$greeting $d{velocity2}", null, false, null, null);
+        String html = accessor.render(null, "1.4: $x {velocityV2}#set($d = 1.5)$greeting $d{velocityV2}", null, false, null, null);
         assertEquals("<p>1.4: $x Hello 1.5</p>", html);
     }
 
     @Test
     void regionsShareOneContext() {
-        String html = accessor.render(null, "{velocity2}#set($a = 'A'){velocity2}|{velocity2}$a{velocity2}", null, false, null, null);
+        String html = accessor.render(null, "{velocityV2}#set($a = 'A'){velocityV2}|{velocityV2}$a{velocityV2}", null, false, null, null);
         assertEquals("<p>|A</p>", html);
     }
 
@@ -69,20 +69,20 @@ class Velocity2WikiRenderingAccessorTest {
     void documentIsAVariable() {
         IModule document = mock(IModule.class, RETURNS_DEEP_STUBS);
         when(document.getModuleName()).thenReturn("Spec");
-        String html = accessor.render(document, "{velocity2}$document.moduleName{velocity2}", null, false, null, null);
+        String html = accessor.render(document, "{velocityV2}$document.moduleName{velocityV2}", null, false, null, null);
         assertEquals("<p>Spec</p>", html);
     }
 
     @Test
     void errorRendersMessageInPlaceOfRegion() {
-        String html = accessor.render(null, "ok {velocity2}#if({velocity2}", null, false, null, null);
+        String html = accessor.render(null, "ok {velocityV2}#if({velocityV2}", null, false, null, null);
         assertTrue(html.startsWith("<p>ok <div class=\"polarion-errormessage\">"), html);
     }
 
     @Test
     void delegateResultNullStaysNull() {
         when(delegate.render(any(), anyString(), any(), anyBoolean(), any(), any())).thenReturn(null);
-        assertNull(accessor.render(null, "{velocity2}x{velocity2}", null, false, null, null));
+        assertNull(accessor.render(null, "{velocityV2}x{velocityV2}", null, false, null, null));
     }
 
     @Test

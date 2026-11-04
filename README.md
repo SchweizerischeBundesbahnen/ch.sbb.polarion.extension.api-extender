@@ -504,15 +504,15 @@ $colors.open $limit
 ## Velocity 2 in LiveDoc documents and Classic Wiki Pages
 
 A "Wiki Content" block of a LiveDoc document and the content of a Classic Wiki Page can contain Velocity 2 regions.
-Write the region between two `{velocity2}` markers:
+Write the region between two `{velocityV2}` markers:
 
 ```velocity
 Velocity 1.4 renders this line: $document
-{velocity2}
+{velocityV2}
 #set($colors = {'open': 'red', 'done': 'green'})
 #foreach($state in $colors.keySet())$state: $colors[$state]#if($foreach.hasNext), #end#end
 <br/>Document: $document.moduleName, price: #set($p = 12.5)$p
-{velocity2}
+{velocityV2}
 ```
 
 The rest of the content stays Velocity 1.4 and wiki markup. The content can contain more than one region.
@@ -531,7 +531,7 @@ All regions of a Classic Wiki Page share one context. An included page has its o
 > Limitations:
 > - The regions render before Velocity 1.4. A region does not see the variables which Velocity 1.4 sets, and Velocity 1.4 does not see the variables of a region.
 > - The output of a region is HTML. Polarion does not apply wiki markup to it, for example `1 Heading` or `*bold*`.
-> - A region cannot contain a `{velocity2}` marker, and it ends at the end of the block.
+> - A region cannot contain a `{velocityV2}` marker, and it ends at the end of the block.
 > - A `#macro` is available only inside the region that defines it.
 > - `#parse`, `#include` and the Polarion global macros are not available.
 > - A script error shows an error message in place of the region. The Polarion log contains the error and the script.

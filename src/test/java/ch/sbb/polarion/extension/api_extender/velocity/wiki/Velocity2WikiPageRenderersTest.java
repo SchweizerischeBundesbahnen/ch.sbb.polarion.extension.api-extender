@@ -47,8 +47,8 @@ class Velocity2WikiPageRenderersTest {
 
     @Test
     void extractAndRestoreRenderRegions() {
-        String extracted = extract.render("1.4: $x {velocity2}#set($d = 1.5)$greeting $d{velocity2}", null, null, context);
-        assertFalse(extracted.contains("velocity2}"), extracted);
+        String extracted = extract.render("1.4: $x {velocityV2}#set($d = 1.5)$greeting $d{velocityV2}", null, null, context);
+        assertFalse(extracted.contains("velocityV2}"), extracted);
         assertFalse(extracted.contains("$greeting"), extracted);
 
         // Velocity 1.4 and wiki markup run between the two renderers.
@@ -58,14 +58,14 @@ class Velocity2WikiPageRenderersTest {
 
     @Test
     void includedPageTokensAreRestoredToo() {
-        String outer = extract.render("{velocity2}outer{velocity2}", null, null, context);
-        String inner = extract.render("{velocity2}inner{velocity2}", null, null, context);
+        String outer = extract.render("{velocityV2}outer{velocityV2}", null, null, context);
+        String inner = extract.render("{velocityV2}inner{velocityV2}", null, null, context);
         assertEquals("outer|inner", restore.render(outer + "|" + inner, null, null, context));
     }
 
     @Test
     void scriptErrorRendersMessage() {
-        String extracted = extract.render("{velocity2}#if({velocity2}", null, null, context);
+        String extracted = extract.render("{velocityV2}#if({velocityV2}", null, null, context);
         assertTrue(restore.render(extracted, null, null, context).startsWith("<div class=\"polarion-errormessage\">"));
     }
 
