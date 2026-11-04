@@ -538,6 +538,8 @@ All regions of a Classic Wiki Page share one context. An included page has its o
 > - Without this extension, Polarion renders the region with Velocity 1.4.
 > - Classic Wiki Pages support regions about 10 seconds after the first wiki page opens after a Polarion start, and after a reset of the wiki cache.
 
-The "Wiki Content" dialog of LiveDocs shows a hint about `{velocityV2}` regions below the Syntax Help link.
-The extension adds the hint with a script, which Polarion loads into every page through the `com.polarion.portal.tomcat.externalJsFile` extension point.
-No administrator configuration is necessary. The hint is available after a Polarion restart.
+The "Wiki Content" dialog of LiveDocs shows "Velocity 2 is available" below the Syntax Help link.
+The toolbar of a Classic Wiki Page shows the same text before the Attachments button.
+Hover the text to see an example of a `{velocityV2}` region.
+The extension adds the hints with a script, which Polarion loads into every page through the `com.polarion.portal.tomcat.externalJsFile` extension point.
+No administrator configuration is necessary. The hints are available after a Polarion restart.
