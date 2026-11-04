@@ -500,3 +500,37 @@ $colors.open $limit
 > - A `#macro` is available only inside the widget that defines it.
 > - Velocity 2 changes some behavior of Velocity 1.4, for example whitespace handling and empty values in `#if`. See the [Velocity 2.0 upgrade notes](https://velocity.apache.org/engine/2.0/upgrading.html).
 > - A script error shows a warning in the widget. The Polarion log contains the error and the script.
+
+## Velocity 2 in LiveDoc documents
+
+A "Wiki Content" block of a LiveDoc document can contain Velocity 2 regions.
+Write the region between two `{velocity2}` markers:
+
+```velocity
+Velocity 1.4 renders this line: $document
+{velocity2}
+#set($colors = {'open': 'red', 'done': 'green'})
+#foreach($state in $colors.keySet())$state: $colors[$state]#if($foreach.hasNext), #end#end
+<br/>Document: $document.moduleName, price: #set($p = 12.5)$p
+{velocity2}
+```
+
+The rest of the block stays Velocity 1.4 and wiki markup. A block can contain more than one region.
+
+The region gets these variables:
+
+- The objects of the Classic Wiki Page rendering context, for example `$trackerService`, `$projectService`, `$velocityToolsV3` and `$globalRecords`.
+- `$transaction`: the current read-only transaction, if one exists.
+- `$document`: the LiveDoc document as `IModule`.
+
+All regions of a document share one context, in the order of the blocks.
+
+> [!IMPORTANT]
+> Limitations:
+> - The regions render before Velocity 1.4. A region does not see the variables which Velocity 1.4 sets, and Velocity 1.4 does not see the variables of a region.
+> - The output of a region is HTML. Polarion does not apply wiki markup to it, for example `1 Heading` or `*bold*`.
+> - A region cannot contain a `{velocity2}` marker, and it ends at the end of the block.
+> - A `#macro` is available only inside the region that defines it.
+> - `#parse`, `#include` and the Polarion global macros are not available.
+> - A script error shows an error message in place of the region. The Polarion log contains the error and the script.
+> - Without this extension, Polarion renders the region with Velocity 1.4.

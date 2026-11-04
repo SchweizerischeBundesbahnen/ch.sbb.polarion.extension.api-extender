@@ -6,9 +6,13 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -28,8 +32,21 @@ public class Velocity2ScriptRenderer implements BundleJarsPrioritizingRunnable {
      */
     public static final String PARAM_VARIABLES = "variables";
 
+    /**
+     * A list of scripts, rendered in order with one shared context. Replaces {@link #PARAM_SCRIPT}.
+     */
+    public static final String PARAM_SCRIPTS = "scripts";
+
     public static final String RESULT_HTML = "html";
     public static final String RESULT_ERROR = "error";
+    /**
+     * For {@link #PARAM_SCRIPTS}: one entry per script, {@code null} where the script failed.
+     */
+    public static final String RESULT_HTMLS = "htmls";
+    /**
+     * For {@link #PARAM_SCRIPTS}: one entry per script, {@code null} where the script succeeded.
+     */
+    public static final String RESULT_ERRORS = "errors";
 
     /**
      * Generic creates the runner instance before it sets the context class loader, and Velocity loads its classes through it.
@@ -52,19 +69,37 @@ public class Velocity2ScriptRenderer implements BundleJarsPrioritizingRunnable {
     @Override
     @SuppressWarnings("unchecked")
     public Map<String, Object> run(Map<String, Object> params) {
-        String script = (String) params.get(PARAM_SCRIPT);
         String logTag = (String) params.get(PARAM_LOG_TAG);
         Supplier<Map<String, Object>> variables = (Supplier<Map<String, Object>>) params.get(PARAM_VARIABLES);
-
         VelocityContext context = new VelocityContext(new HashMap<>(variables.get()));
+
+        if (params.get(PARAM_SCRIPTS) instanceof List<?> scripts) {
+            List<String> htmls = new ArrayList<>();
+            List<String> errors = new ArrayList<>();
+            for (Object script : scripts) {
+                Result result = evaluate(context, logTag, (String) script);
+                htmls.add(result.html());
+                errors.add(result.error());
+            }
+            return Map.of(RESULT_HTMLS, htmls, RESULT_ERRORS, errors);
+        }
+
+        Result result = evaluate(context, logTag, (String) params.get(PARAM_SCRIPT));
+        return result.error() != null ? Map.of(RESULT_ERROR, result.error()) : Map.of(RESULT_HTML, result.html());
+    }
+
+    private static @NotNull Result evaluate(@NotNull VelocityContext context, String logTag, String script) {
         StringWriter writer = new StringWriter();
         try {
             EngineHolder.ENGINE.evaluate(context, writer, logTag, script);
         } catch (RuntimeException e) {
             // The engine logs to the SLF4J no-operation logger, so this is the only trace of the error.
             Logger.getLogger(Velocity2ScriptRenderer.class).error("Exception while evaluating the Velocity 2 script:\n" + script + "\n", e);
-            return Map.of(RESULT_ERROR, String.valueOf(e.getMessage()));
+            return new Result(null, String.valueOf(e.getMessage()));
         }
-        return Map.of(RESULT_HTML, writer.toString());
+        return new Result(writer.toString(), null);
+    }
+
+    private record Result(@Nullable String html, @Nullable String error) {
     }
 }

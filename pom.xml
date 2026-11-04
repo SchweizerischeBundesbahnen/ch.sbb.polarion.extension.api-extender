@@ -49,6 +49,9 @@
 
         <web.app.name>${maven-jar-plugin.Extension-Context}</web.app.name>
 
+        <!-- com.polarion.alm.wiki gives the wiki rendering context to Velocity 2 blocks in LiveDocs. -->
+        <maven-jar-plugin.Require-Bundle>${maven-jar-plugin.Require-Bundle.common},com.polarion.alm.wiki</maven-jar-plugin.Require-Bundle>
+
         <velocity-tools.version>3.1</velocity-tools.version>
         <velocity-engine.version>2.4.1</velocity-engine.version>
         <commons-lang3.version>3.21.0</commons-lang3.version>
@@ -91,6 +94,13 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.polarion.alm.wiki</groupId>
+            <artifactId>sidecar</artifactId>
+            <version>${polarion.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
