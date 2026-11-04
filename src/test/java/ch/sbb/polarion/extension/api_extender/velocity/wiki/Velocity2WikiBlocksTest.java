@@ -1,4 +1,4 @@
-package ch.sbb.polarion.extension.api_extender.velocity.livedoc;
+package ch.sbb.polarion.extension.api_extender.velocity.wiki;
 
 import org.junit.jupiter.api.Test;
 

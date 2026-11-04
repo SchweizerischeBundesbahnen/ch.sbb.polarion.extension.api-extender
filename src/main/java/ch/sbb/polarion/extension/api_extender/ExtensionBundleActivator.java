@@ -1,6 +1,6 @@
 package ch.sbb.polarion.extension.api_extender;
 
-import ch.sbb.polarion.extension.api_extender.velocity.livedoc.Velocity2WikiRenderingInstaller;
+import ch.sbb.polarion.extension.api_extender.velocity.wiki.Velocity2WikiRenderingInstaller;
 import ch.sbb.polarion.extension.generic.GenericBundleActivator;
 import com.polarion.alm.ui.server.forms.extensions.IFormExtension;
 import org.osgi.framework.BundleContext;

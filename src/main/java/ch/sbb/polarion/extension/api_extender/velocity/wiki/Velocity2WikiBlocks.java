@@ -1,4 +1,4 @@
-package ch.sbb.polarion.extension.api_extender.velocity.livedoc;
+package ch.sbb.polarion.extension.api_extender.velocity.wiki;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Finds the {@code {velocity2}...{velocity2}} regions in the wiki source of a LiveDoc and replaces each with a token.
+ * Finds the {@code {velocity2}...{velocity2}} regions in a wiki source and replaces each with a token.
  * <p>
  * Velocity 1.4 and the wiki markup renderer leave the tokens unchanged, so {@link #restore(String, List)}
  * can put the Velocity 2 output in their place after Polarion renders the rest of the source.
@@ -66,6 +66,13 @@ public final class Velocity2WikiBlocks {
 
     public @NotNull List<String> getScripts() {
         return scripts;
+    }
+
+    /**
+     * @return the token of each region, in the order of {@link #getScripts()}
+     */
+    public @NotNull List<String> getTokens() {
+        return tokens;
     }
 
     /**

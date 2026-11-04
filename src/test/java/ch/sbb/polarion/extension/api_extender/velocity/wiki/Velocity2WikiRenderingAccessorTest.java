@@ -1,4 +1,4 @@
-package ch.sbb.polarion.extension.api_extender.velocity.livedoc;
+package ch.sbb.polarion.extension.api_extender.velocity.wiki;
 
 import ch.sbb.polarion.extension.generic.test_extensions.BundleJarsPrioritizingRunnableMockExtension;
 import com.polarion.alm.tracker.internal.WikiRenderingProvider;
@@ -88,11 +88,11 @@ class Velocity2WikiRenderingAccessorTest {
     @Test
     void errorMessageIsEscaped() {
         assertEquals("<div class=\"polarion-errormessage\"><span class=\"polarion-messagetype\">Velocity 2 error: </span>&lt;b&gt; &amp; &quot;</div>",
-                Velocity2WikiRenderingAccessor.renderError("<b> & \""));
+                Velocity2WikiScripts.renderError("<b> & \""));
     }
 
     @Test
     void noScriptsNoRendering() {
-        assertEquals(List.of(), Velocity2WikiRenderingAccessor.renderScripts(List.of(), Map.of(), "test"));
+        assertEquals(List.of(), Velocity2WikiScripts.render(List.of(), Map.of(), "test"));
     }
 }

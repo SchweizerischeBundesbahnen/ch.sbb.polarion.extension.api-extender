@@ -1,4 +1,4 @@
-package ch.sbb.polarion.extension.api_extender.velocity.livedoc;
+package ch.sbb.polarion.extension.api_extender.velocity.wiki;
 
 import com.polarion.alm.tracker.internal.WikiRenderingProvider;
 import com.polarion.core.util.logging.Logger;

@@ -501,9 +501,9 @@ $colors.open $limit
 > - Velocity 2 changes some behavior of Velocity 1.4, for example whitespace handling and empty values in `#if`. See the [Velocity 2.0 upgrade notes](https://velocity.apache.org/engine/2.0/upgrading.html).
 > - A script error shows a warning in the widget. The Polarion log contains the error and the script.
 
-## Velocity 2 in LiveDoc documents
+## Velocity 2 in LiveDoc documents and Classic Wiki Pages
 
-A "Wiki Content" block of a LiveDoc document can contain Velocity 2 regions.
+A "Wiki Content" block of a LiveDoc document and the content of a Classic Wiki Page can contain Velocity 2 regions.
 Write the region between two `{velocity2}` markers:
 
 ```velocity
@@ -515,15 +515,17 @@ Velocity 1.4 renders this line: $document
 {velocity2}
 ```
 
-The rest of the block stays Velocity 1.4 and wiki markup. A block can contain more than one region.
+The rest of the content stays Velocity 1.4 and wiki markup. The content can contain more than one region.
 
 The region gets these variables:
 
 - The objects of the Classic Wiki Page rendering context, for example `$trackerService`, `$projectService`, `$velocityToolsV3` and `$globalRecords`.
 - `$transaction`: the current read-only transaction, if one exists.
-- `$document`: the LiveDoc document as `IModule`.
+- In LiveDoc documents: `$document`, the document as `IModule`.
+- In Classic Wiki Pages: `$page` and `$doc`, the same objects as in Velocity 1.4.
 
-All regions of a document share one context, in the order of the blocks.
+All regions of a LiveDoc document share one context, in the order of the blocks.
+All regions of a Classic Wiki Page share one context. An included page has its own context.
 
 > [!IMPORTANT]
 > Limitations:
@@ -534,3 +536,4 @@ All regions of a document share one context, in the order of the blocks.
 > - `#parse`, `#include` and the Polarion global macros are not available.
 > - A script error shows an error message in place of the region. The Polarion log contains the error and the script.
 > - Without this extension, Polarion renders the region with Velocity 1.4.
+> - Classic Wiki Pages support regions about 10 seconds after the first wiki page opens after a Polarion start, and after a reset of the wiki cache.
