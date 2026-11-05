@@ -20,7 +20,7 @@ import java.util.function.Supplier;
  * Renders the {@code {velocityV2}} regions of LiveDocs and Classic Wiki Pages with the embedded Velocity 2 engine.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class Velocity2WikiScripts {
+public final class Velocity2WikiScripts {
 
     static final String VARIABLE_TRANSACTION = "transaction";
 
@@ -41,7 +41,7 @@ final class Velocity2WikiScripts {
      *
      * @return the HTML of each script, or an error message in its place
      */
-    static @NotNull List<String> render(@NotNull List<String> scripts, @NotNull Map<String, Object> variables, @NotNull String logTag) {
+    public static @NotNull List<String> render(@NotNull List<String> scripts, @NotNull Map<String, Object> variables, @NotNull String logTag) {
         if (scripts.isEmpty()) {
             return List.of();
         }

@@ -1,6 +1,7 @@
 package ch.sbb.polarion.extension.api_extender.widgets;
 
 import ch.sbb.polarion.extension.api_extender.velocity.engine_v2.Velocity2ScriptRenderer;
+import ch.sbb.polarion.extension.api_extender.velocity.livereport.Velocity14Context;
 import ch.sbb.polarion.extension.generic.util.BundleJarsPrioritizingRunnable;
 import com.polarion.alm.server.api.model.rp.widget.impl.RichPageRenderingContextImpl;
 import com.polarion.alm.shared.api.SharedContext;
@@ -16,11 +17,8 @@ import com.polarion.alm.shared.api.utils.collections.ImmutableStrictList;
 import com.polarion.alm.shared.api.utils.collections.ReadOnlyStrictMap;
 import com.polarion.alm.shared.api.utils.collections.StrictMapImpl;
 import com.polarion.alm.shared.api.utils.html.HtmlFragmentBuilder;
-import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -122,19 +120,7 @@ public class ScriptBlockVelocity2Widget extends RichPageWidget {
         return object != null ? LOG_TAG + " in: " + object.getReferenceToCurrent().toPath() : LOG_TAG;
     }
 
-    /**
-     * Velocity 1.4 returns {@code Object[]} from {@code getKeys()}, but this code compiles against Velocity 2,
-     * which returns {@code String[]}. A direct call fails with {@link NoSuchMethodError}, so the context is read by reflection.
-     */
-    @SneakyThrows
     static @NotNull Map<String, Object> toMap(@NotNull Object velocityContext) {
-        Object[] keys = (Object[]) velocityContext.getClass().getMethod("getKeys").invoke(velocityContext);
-        Method getter = velocityContext.getClass().getMethod("get", String.class);
-        Map<String, Object> variables = new HashMap<>();
-        for (Object key : keys) {
-            String name = String.valueOf(key);
-            variables.put(name, getter.invoke(velocityContext, name));
-        }
-        return variables;
+        return Velocity14Context.toMap(velocityContext);
     }
 }

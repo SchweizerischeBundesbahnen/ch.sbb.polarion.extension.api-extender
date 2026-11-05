@@ -33,7 +33,7 @@ public class Velocity2WikiOutputs {
     /**
      * The formal reference notation keeps text which follows the region, for example {@code .txt}, out of the reference.
      */
-    static @NotNull String reference(@NotNull String token) {
+    public static @NotNull String reference(@NotNull String token) {
         return "${" + CONTEXT_KEY + ".get('" + token + "')}";
     }
 

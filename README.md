@@ -501,6 +501,30 @@ $colors.open $limit
 > - Velocity 2 changes some behavior of Velocity 1.4, for example whitespace handling and empty values in `#if`. See the [Velocity 2.0 upgrade notes](https://velocity.apache.org/engine/2.0/upgrading.html).
 > - A script error shows a warning in the widget. The Polarion log contains the error and the script.
 
+## Velocity 2 regions in the Polarion Script widgets
+
+The script of the Polarion `Script - Block` and `Script - Inline` widgets can also contain `{velocityV2}` regions.
+The region renders with Velocity Engine 2.4.1, and the rest of the script stays Velocity 1.4.
+The same applies to every widget with a script parameter, for example `Scripted Chart`.
+
+```velocity
+<p>Velocity 1.4 renders this line: $me</p>
+{velocityV2}
+#set($colors = {'open': 'red', 'done': 'green'})
+<p>#foreach($state in $colors.keySet())$state: $colors[$state]#if($foreach.hasNext), #end#end</p>
+{velocityV2}
+```
+
+The region gets the same variables as the script, for example `$transaction`, `$page` and `$widgetContext`.
+All regions of one script share one context.
+The limitations of the Velocity 2 regions in LiveDoc documents apply, except that no wiki markup is involved.
+
+> [!IMPORTANT]
+> The extension changes the bytecode of the Polarion class which renders these scripts, when Polarion loads the class.
+> So the regions work after a Polarion restart with the extension installed.
+> After a hot redeploy onto a running Polarion, the regions work again after the next restart.
+> The Polarion log then contains `Velocity 2 rendering of {velocityV2} regions in LiveReport scripts is installed`.
+
 ## Velocity 2 in LiveDoc documents and Classic Wiki Pages
 
 A "Wiki Content" block of a LiveDoc document and the content of a Classic Wiki Page can contain Velocity 2 regions.
