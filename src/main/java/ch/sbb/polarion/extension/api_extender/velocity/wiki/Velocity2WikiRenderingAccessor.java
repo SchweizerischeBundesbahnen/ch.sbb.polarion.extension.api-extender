@@ -5,6 +5,7 @@ import com.polarion.alm.tracker.model.IModule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,8 +13,11 @@ import java.util.Map;
  * Wraps the accessor which renders the Wiki Content blocks of LiveDocs, and renders the
  * {@code {velocityV2}...{velocityV2}} regions in them with the embedded Velocity 2 engine.
  * <p>
- * The regions render before Polarion renders the rest of the source with Velocity 1.4 and wiki markup.
- * So a region does not see variables which Velocity 1.4 sets, and its output is HTML without wiki markup processing.
+ * The regions render before Polarion renders the rest of the source with Velocity 1.4 and wiki markup,
+ * so a region does not see variables which Velocity 1.4 sets.
+ * This accessor wraps the whole Polarion rendering and cannot act between Velocity 1.4 and wiki markup.
+ * So each region becomes a {@link Velocity2WikiOutputs} reference, which Velocity 1.4 replaces with the output,
+ * and wiki markup then applies to the output.
  */
 public class Velocity2WikiRenderingAccessor implements WikiRenderingProvider.IWikiRenderingAccessor {
 
@@ -39,8 +43,17 @@ public class Velocity2WikiRenderingAccessor implements WikiRenderingProvider.IWi
         }
         Velocity2WikiBlocks blocks = Velocity2WikiBlocks.extract(input);
         List<String> htmls = Velocity2WikiScripts.render(blocks.getScripts(), createVariables(document), createLogTag(document));
-        String rendered = delegate.render(document, blocks.getSource(), pdfExportId, isCompare, query, language);
-        return rendered == null ? null : blocks.restore(rendered, htmls);
+
+        Map<String, String> outputs = new HashMap<>();
+        String source = blocks.getSource();
+        for (int i = 0; i < htmls.size(); i++) {
+            String token = blocks.getTokens().get(i);
+            outputs.put(token, htmls.get(i));
+            source = source.replace(token, Velocity2WikiOutputs.reference(token));
+        }
+        String velocitySource = source;
+        return Velocity2WikiOutputs.withOutputs(outputs,
+                () -> delegate.render(document, velocitySource, pdfExportId, isCompare, query, language));
     }
 
     private static @NotNull Map<String, Object> createVariables(@Nullable IModule document) {

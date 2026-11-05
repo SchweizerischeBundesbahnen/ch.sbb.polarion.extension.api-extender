@@ -28,11 +28,12 @@ class Velocity2WikiBlocksTest {
     }
 
     @Test
-    void restoresOutputInPlaceOfTokens() {
+    void tokensStandInPlaceOfRegions() {
         Velocity2WikiBlocks blocks = Velocity2WikiBlocks.extract("<p>{velocityV2}$a{velocityV2}</p><p>{velocityV2}$b{velocityV2}</p>");
-        String rendered = "<div>" + blocks.getSource() + "</div>";
+        List<String> tokens = blocks.getTokens();
 
-        assertEquals("<div><p>A</p><p>B</p></div>", blocks.restore(rendered, List.of("A", "B")));
+        assertEquals(2, tokens.size());
+        assertEquals("<p>" + tokens.get(0) + "</p><p>" + tokens.get(1) + "</p>", blocks.getSource());
     }
 
     @Test
@@ -43,7 +44,11 @@ class Velocity2WikiBlocksTest {
         }
         Velocity2WikiBlocks blocks = Velocity2WikiBlocks.extract(source.toString());
 
-        assertEquals("0;1;2;3;4;5;6;7;8;9;10;11;", blocks.restore(blocks.getSource(), blocks.getScripts()));
+        String restored = blocks.getSource();
+        for (int i = 0; i < blocks.getTokens().size(); i++) {
+            restored = restored.replace(blocks.getTokens().get(i), blocks.getScripts().get(i));
+        }
+        assertEquals("0;1;2;3;4;5;6;7;8;9;10;11;", restored);
     }
 
     @Test

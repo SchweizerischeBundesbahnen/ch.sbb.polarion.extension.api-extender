@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 /**
  * Finds the {@code {velocityV2}...{velocityV2}} regions in a wiki source and replaces each with a token.
  * <p>
- * Velocity 1.4 and the wiki markup renderer leave the tokens unchanged, so {@link #restore(String, List)}
- * can put the Velocity 2 output in their place after Polarion renders the rest of the source.
+ * The tokens are plain lowercase text, which Velocity 1.4 leaves unchanged,
+ * so the Velocity 2 output can go in their place after Velocity 1.4.
  */
 public final class Velocity2WikiBlocks {
 
@@ -73,17 +73,5 @@ public final class Velocity2WikiBlocks {
      */
     public @NotNull List<String> getTokens() {
         return tokens;
-    }
-
-    /**
-     * @param rendered the HTML which Polarion rendered from {@link #getSource()}
-     * @param htmls    the output of each script, in the order of {@link #getScripts()}
-     */
-    public @NotNull String restore(@NotNull String rendered, @NotNull List<String> htmls) {
-        String result = rendered;
-        for (int i = 0; i < tokens.size(); i++) {
-            result = result.replace(tokens.get(i), htmls.get(i));
-        }
-        return result;
     }
 }

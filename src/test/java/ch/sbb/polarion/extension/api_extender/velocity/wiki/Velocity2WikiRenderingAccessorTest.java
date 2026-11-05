@@ -14,6 +14,8 @@ import org.mockito.MockedStatic;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -37,9 +39,26 @@ class Velocity2WikiRenderingAccessorTest {
         platformContext = mockStatic(PlatformContext.class);
         platformContext.when(PlatformContext::getPlatform).thenReturn(platform);
 
-        // The delegate stands in for Velocity 1.4 and wiki markup: it wraps the source in a paragraph.
+        // The delegate stands in for Velocity 1.4 and wiki markup: it resolves the $velocityV2Output references,
+        // then wraps the result in a paragraph.
+        Velocity2WikiOutputs outputs = new Velocity2WikiOutputs();
         when(delegate.render(any(), anyString(), any(), anyBoolean(), any(), any()))
-                .thenAnswer(invocation -> "<p>" + invocation.getArgument(1) + "</p>");
+                .thenAnswer(invocation -> "<p>" + REFERENCE.matcher((String) invocation.getArgument(1))
+                        .replaceAll(match -> Matcher.quoteReplacement(String.valueOf(outputs.get(match.group(1))))) + "</p>");
+    }
+
+    private static final Pattern REFERENCE = Pattern.compile("\\$\\{velocityV2Output\\.get\\('([a-z0-9]+)'\\)}");
+
+    @Test
+    void regionBecomesVelocityReference() {
+        accessor.render(null, "a {velocityV2}x{velocityV2}.txt", null, false, null, null);
+        verify(delegate).render(isNull(), matches("a \\$\\{velocityV2Output\\.get\\('velocitytwo[a-z0-9]+'\\)}\\.txt"), isNull(), eq(false), isNull(), isNull());
+    }
+
+    @Test
+    void outputsAreAvailableOnlyDuringRendering() {
+        accessor.render(null, "{velocityV2}x{velocityV2}", null, false, null, null);
+        assertNull(new Velocity2WikiOutputs().get("anything"));
     }
 
     @AfterEach

@@ -515,7 +515,8 @@ Velocity 1.4 renders this line: #set($sum = 1 + 2)$sum
 {velocityV2}
 ```
 
-The rest of the content stays Velocity 1.4 and wiki markup. The content can contain more than one region.
+The rest of the content stays Velocity 1.4. The content can contain more than one region.
+Wiki markup and wiki macros apply to the output of a region, the same as to Velocity 1.4 output, for example `1 Heading`, `*bold*` or `{workitem:WI-1}`.
 
 The region gets these variables:
 
@@ -530,8 +531,6 @@ All regions of a Classic Wiki Page share one context. An included page has its o
 > [!IMPORTANT]
 > Limitations:
 > - The regions render before Velocity 1.4. A region does not see the variables which Velocity 1.4 sets, and Velocity 1.4 does not see the variables of a region.
-> - In LiveDoc documents, the output of a region is HTML. Polarion does not apply wiki markup to it, for example `1 Heading`, `*bold*` or `{workitem:WI-1}`. Use HTML, for example `<br/>` for a line break.
-> - In Classic Wiki Pages, wiki markup and wiki macros apply to the output of a region, the same as to Velocity 1.4 output.
 > - A region cannot contain a `{velocityV2}` marker, and it ends at the end of the block.
 > - A `#macro` is available only inside the region that defines it.
 > - `#parse`, `#include` and the Polarion global macros are not available.

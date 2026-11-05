@@ -48,6 +48,8 @@
         <item key="collectionsTool" value="instance:ch.sbb.polarion.extension.api_extender.velocity.CollectionsTool"/>
         <item key="regexTool" value="instance:ch.sbb.polarion.extension.api_extender.velocity.RegexTool"/>
         <item key="velocityToolsV3" value="instance:ch.sbb.polarion.extension.api_extender.velocity.tools_v3.VelocityToolsV3"/>
+        <!-- Inserts the output of {velocityV2} regions in LiveDocs, so wiki markup applies to it. -->
+        <item key="velocityV2Output" value="instance:ch.sbb.polarion.extension.api_extender.velocity.wiki.Velocity2WikiOutputs"/>
     </contribution>
 
     <!-- LiveReport Page -->
