@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * The engine belongs to the XWiki instance which the {@code /polarion/wiki} web application keeps in its servlet context.
  * It exists only after the first wiki request, and XWiki replaces it on a cache reset. So a background task checks it periodically.
- * The engine has no API to add a renderer at the start of the chain, so its private fields are replaced by reflection.
+ * The engine has no API to add a renderer at a given position of the chain, so its private fields are replaced by reflection.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Velocity2WikiPageInstaller {
@@ -36,6 +36,8 @@ public final class Velocity2WikiPageInstaller {
     static final String XWIKI_ATTRIBUTE = "xwiki";
     static final String EXTRACT_RENDERER_NAME = "velocity2";
     static final String RESTORE_RENDERER_NAME = "velocity2restore";
+    // The name DefaultXWikiRenderingEngine registers XWikiVelocityRenderer under.
+    static final String VELOCITY_RENDERER_NAME = "velocity";
     private static final Set<String> OWN_RENDERER_CLASSES = Set.of(
             Velocity2WikiPageExtractRenderer.class.getName(), Velocity2WikiPageRestoreRenderer.class.getName());
     private static final long CHECK_INTERVAL_SECONDS = 10;
@@ -95,23 +97,37 @@ public final class Velocity2WikiPageInstaller {
      */
     static synchronized boolean install(@NotNull DefaultXWikiRenderingEngine engine) {
         List<XWikiRenderer> renderers = getRenderers(engine);
-        if (!renderers.isEmpty() && renderers.get(0) instanceof Velocity2WikiPageExtractRenderer
-                && renderers.get(renderers.size() - 1) instanceof Velocity2WikiPageRestoreRenderer) {
+        List<XWikiRenderer> others = renderers.stream().filter(renderer -> !isOwn(renderer)).toList();
+        Map<String, XWikiRenderer> rendererMap = getRendererMap(engine);
+        // The output goes back right after Velocity 1.4, so wiki markup and macros apply to it as to any Velocity output,
+        // but Velocity 1.4 never evaluates it. Without a Velocity renderer, the output goes back right away.
+        int restoreIndex = others.indexOf(rendererMap.get(VELOCITY_RENDERER_NAME)) + 1;
+
+        if (renderers.size() == others.size() + 2 && renderers.get(0) instanceof Velocity2WikiPageExtractRenderer
+                && renderers.get(restoreIndex + 1) instanceof Velocity2WikiPageRestoreRenderer) {
             return false;
         }
+        Velocity2WikiPageExtractRenderer extract = new Velocity2WikiPageExtractRenderer();
+        Velocity2WikiPageRestoreRenderer restore = new Velocity2WikiPageRestoreRenderer();
         List<XWikiRenderer> newRenderers = new ArrayList<>();
-        newRenderers.add(new Velocity2WikiPageExtractRenderer());
-        renderers.stream().filter(renderer -> !isOwn(renderer)).forEach(newRenderers::add);
-        newRenderers.add(new Velocity2WikiPageRestoreRenderer());
+        newRenderers.add(extract);
+        newRenderers.addAll(others.subList(0, restoreIndex));
+        newRenderers.add(restore);
+        newRenderers.addAll(others.subList(restoreIndex, others.size()));
 
         Map<String, XWikiRenderer> newRendererMap = new LinkedHashMap<>();
-        newRendererMap.put(EXTRACT_RENDERER_NAME, newRenderers.get(0));
-        getRendererMap(engine).forEach((name, renderer) -> {
+        newRendererMap.put(EXTRACT_RENDERER_NAME, extract);
+        if (restoreIndex == 0) {
+            newRendererMap.put(RESTORE_RENDERER_NAME, restore);
+        }
+        rendererMap.forEach((name, renderer) -> {
             if (!isOwn(renderer)) {
                 newRendererMap.put(name, renderer);
+                if (VELOCITY_RENDERER_NAME.equals(name) && restoreIndex > 0) {
+                    newRendererMap.put(RESTORE_RENDERER_NAME, restore);
+                }
             }
         });
-        newRendererMap.put(RESTORE_RENDERER_NAME, newRenderers.get(newRenderers.size() - 1));
 
         setRenderers(engine, newRenderers, newRendererMap);
         logger.info("Velocity 2 rendering of Classic Wiki Pages is installed");

@@ -31,16 +31,43 @@ class Velocity2WikiPageInstallerTest {
     }
 
     @Test
-    void installAddsRenderersAtBothEnds() throws ReflectiveOperationException {
+    void installAddsExtractFirstAndRestoreAfterVelocity() throws ReflectiveOperationException {
         assertTrue(Velocity2WikiPageInstaller.install(engine));
 
         List<?> renderers = (List<?>) getField("renderers");
         assertEquals(4, renderers.size());
         assertInstanceOf(Velocity2WikiPageExtractRenderer.class, renderers.get(0));
         assertSame(velocity, renderers.get(1));
+        assertInstanceOf(Velocity2WikiPageRestoreRenderer.class, renderers.get(2));
+        assertSame(wiki, renderers.get(3));
+        assertEquals(List.of("velocity2", "velocity", "velocity2restore", "wiki"), new ArrayList<>(((Map<?, ?>) getField("renderermap")).keySet()));
+    }
+
+    @Test
+    void withoutVelocityRendererRestoreFollowsExtract() throws ReflectiveOperationException {
+        setField("renderers", new ArrayList<>(List.of(wiki)));
+        setField("renderermap", new LinkedHashMap<>(Map.of("wiki", wiki)));
+        assertTrue(Velocity2WikiPageInstaller.install(engine));
+
+        List<?> renderers = (List<?>) getField("renderers");
+        assertInstanceOf(Velocity2WikiPageExtractRenderer.class, renderers.get(0));
+        assertInstanceOf(Velocity2WikiPageRestoreRenderer.class, renderers.get(1));
         assertSame(wiki, renderers.get(2));
-        assertInstanceOf(Velocity2WikiPageRestoreRenderer.class, renderers.get(3));
-        assertEquals(List.of("velocity2", "velocity", "wiki", "velocity2restore"), new ArrayList<>(((Map<?, ?>) getField("renderermap")).keySet()));
+        assertFalse(Velocity2WikiPageInstaller.install(engine));
+    }
+
+    @Test
+    void installMovesRestoreOfOlderVersionAfterVelocity() throws ReflectiveOperationException {
+        // An older version put the restore renderer at the end of the chain.
+        XWikiRenderer extract = new Velocity2WikiPageExtractRenderer();
+        XWikiRenderer restore = new Velocity2WikiPageRestoreRenderer();
+        setField("renderers", new ArrayList<>(List.of(extract, velocity, wiki, restore)));
+        assertTrue(Velocity2WikiPageInstaller.install(engine));
+
+        List<?> renderers = (List<?>) getField("renderers");
+        assertEquals(4, renderers.size());
+        assertInstanceOf(Velocity2WikiPageRestoreRenderer.class, renderers.get(2));
+        assertSame(wiki, renderers.get(3));
     }
 
     @Test

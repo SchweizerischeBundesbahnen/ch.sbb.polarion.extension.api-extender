@@ -16,8 +16,8 @@ import java.util.Map;
 
 /**
  * The first renderer of Classic Wiki Pages. It renders the {@code {velocityV2}} regions with Velocity 2
- * and replaces them with tokens, which Velocity 1.4 and wiki markup leave unchanged.
- * {@link Velocity2WikiPageRestoreRenderer} puts the output in place of the tokens at the end.
+ * and replaces them with tokens, which Velocity 1.4 leaves unchanged.
+ * {@link Velocity2WikiPageRestoreRenderer} puts the output in place of the tokens right after Velocity 1.4.
  */
 public class Velocity2WikiPageExtractRenderer implements XWikiRenderer {
 
