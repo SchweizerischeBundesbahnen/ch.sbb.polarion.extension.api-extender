@@ -151,48 +151,26 @@
     }
 
     /**
-     * The toolbar of a Classic Wiki Page in view mode (#menuView) gets the Velocity 2 label before the Attachments button.
-     */
-    const wikiPageToolbarHint = {
-        apply(doc) {
-            const attachments = doc.querySelector('#menuView div[onclick*="attachmentPanel"]');
-            const cell = attachments && attachments.closest('td');
-            if (!cell || cell.hasAttribute(PROCESSED)) {
-                return;
-            }
-            cell.setAttribute(PROCESSED, 'velocity-v2-hint');
-
-            cell.parentElement.insertBefore(createToolbarLabelCell(doc), cell);
-        }
-    };
-
-    /**
-     * The toolbar of a Classic Wiki Page in edit mode has the same #menuView, but no Attachments button.
-     * The label goes after the full-width spacer cell which follows the Preview button, so it sits at the right edge.
+     * The Wiki Markup editor of a Classic Wiki Page has a formatting toolbar above the textarea, with floated buttons.
+     * The label goes after the last button, with the line height of the buttons.
      */
     const wikiPageEditToolbarHint = {
         apply(doc) {
-            const preview = doc.querySelector('#menuView #formaction_preview');
-            const row = preview && preview.closest('td') && preview.closest('td').parentElement;
-            const spacer = row && Array.from(row.children).find((cell) => cell.getAttribute('width') === '100%');
-            if (!spacer || row.hasAttribute(PROCESSED)) {
+            const toolbar = doc.querySelector('#plain_wiki_editor .rich-toolbar');
+            if (!toolbar || toolbar.hasAttribute(PROCESSED)) {
                 return;
             }
-            row.setAttribute(PROCESSED, 'velocity-v2-hint');
-            spacer.insertAdjacentElement('afterend', createToolbarLabelCell(doc));
+            toolbar.setAttribute(PROCESSED, 'velocity-v2-hint');
+
+            const lastButton = toolbar.querySelector('a:last-of-type');
+            const line = doc.createElement('span');
+            line.style.cssText = `float: left; margin-left: 8px; line-height: ${lastButton ? lastButton.offsetHeight : 32}px;`;
+            line.appendChild(createVelocityV2Label(doc, { scope: 'page', align: 'left', background: '#f5f5f5' }));
+            toolbar.appendChild(line);
         }
     };
 
-    function createToolbarLabelCell(doc) {
-        const menu = doc.getElementById('menuView');
-        const background = doc.defaultView.getComputedStyle(menu).backgroundColor || '#f5f5f5';
-        const labelCell = doc.createElement('td');
-        labelCell.style.cssText = 'white-space: nowrap; vertical-align: middle; padding: 0 10px;';
-        labelCell.appendChild(createVelocityV2Label(doc, { scope: 'page', align: 'right', background }));
-        return labelCell;
-    }
-
-    const features = [wikiContentDialogHint, wikiPageToolbarHint, wikiPageEditToolbarHint];
+    const features = [wikiContentDialogHint, wikiPageEditToolbarHint];
 
     // GWT changes the DOM very often, so the features run at most once per animation frame.
     let scheduled = false;

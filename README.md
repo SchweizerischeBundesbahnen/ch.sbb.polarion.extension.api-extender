@@ -567,8 +567,7 @@ All regions of a Classic Wiki Page share one context. An included page has its o
 These places show "Velocity 2 is available". Hover the text to see an example of a `{velocityV2}` region:
 
 - LiveDoc "Wiki Content" dialog: below the Syntax Help link.
-- Classic Wiki Page in view mode: in the toolbar, before the Attachments button.
-- Classic Wiki Page in edit mode: at the right edge of the toolbar.
+- Classic Wiki Page in edit mode: in the Wiki Markup formatting toolbar, after the last button.
 
 The LiveReport widgets show no hint: their names already say "Velocity V2".
 
