@@ -564,12 +564,13 @@ All regions of a Classic Wiki Page share one context. An included page has its o
 
 ### Hints in the user interface
 
-These places show "Velocity 2 is available". Hover the text to see an example of a `{velocityV2}` region:
+These places show "Velocity v2 is available". Hover the text to see an example of a `{velocityV2}` region:
 
 - LiveDoc "Wiki Content" dialog: below the Syntax Help link.
 - Classic Wiki Page in edit mode: in the Wiki Markup formatting toolbar, after the last button.
+- LiveReport "Script - Block" and "Script - Inline" widgets: in the parameters sidebar, next to the "Script" header.
 
-The LiveReport widgets show no hint: their names already say "Velocity V2".
+The "Script - Block Velocity V2" and "Script - Inline Velocity V2" widgets show no hint: their names already say "Velocity V2".
 
 The extension adds the hints with a script, which Polarion loads into every page through the `com.polarion.portal.tomcat.externalJsFile` extension point.
 No administrator configuration is necessary.

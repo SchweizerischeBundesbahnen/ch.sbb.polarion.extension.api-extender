@@ -29,7 +29,7 @@
     ].join('\n');
 
     /**
-     * Creates the underlined "Velocity 2 is available" label. Hovering it shows a tooltip with an example.
+     * Creates the underlined "Velocity v2 is available" label. Hovering it shows a tooltip with an example.
      * The tooltip lives in the body of the document only while the mouse is over the label,
      * so a dialog which Polarion creates again on each opening leaves nothing behind.
      *
@@ -41,7 +41,7 @@
     function createVelocityV2Label(doc, options) {
         const label = doc.createElement('span');
         label.className = 'api-extender-velocity-v2-label';
-        label.textContent = 'Velocity 2 is available';
+        label.textContent = 'Velocity v2 is available';
         label.style.cssText = 'cursor: help; color: #555; font-size: 12px; border-bottom: 1px dotted #888;';
 
         let tooltip = null;
@@ -170,7 +170,45 @@
         }
     };
 
-    const features = [wikiContentDialogHint, wikiPageEditToolbarHint];
+    /**
+     * The parameters sidebar of the built-in "Script - Block" and "Script - Inline" LiveReport widgets
+     * gets the label next to the "Script" parameter header.
+     * The sidebar title tells these widgets from "Script - Block Velocity V2", where the whole script is Velocity 2.
+     */
+    const scriptWidgetParameterHint = {
+        apply(doc) {
+            doc.querySelectorAll('.polarion-rpe-ParameterEditor-headerPanel').forEach((header) => {
+                const name = header.querySelector('.polarion-rpe-ParameterEditor-parameterLabel');
+                if (!name || name.textContent.trim() !== 'Script' || header.hasAttribute(PROCESSED)) {
+                    return;
+                }
+                const title = findSidebarTitle(header);
+                if (!title || !/^Script - (Block|Inline):/.test(title.textContent.trim())) {
+                    return;
+                }
+                header.setAttribute(PROCESSED, 'velocity-v2-hint');
+
+                name.style.display = 'inline-block';
+                const label = createVelocityV2Label(doc, { scope: 'script', align: 'left', background: '#f5f5f5' });
+                // The grey header strip is 20px high and its bottom edge hides the dotted underline of a baseline-aligned label,
+                // so the label gets a fixed box which sits in the middle of the strip.
+                label.style.cssText += 'display: inline-block; vertical-align: top; line-height: 13px; margin: 1px 0 0 16px; font-size: 11px;';
+                name.insertAdjacentElement('afterend', label);
+            });
+        }
+    };
+
+    function findSidebarTitle(element) {
+        for (let parent = element.parentElement; parent; parent = parent.parentElement) {
+            const title = parent.querySelector('.polarion-SidebarPanel-header-label');
+            if (title) {
+                return title;
+            }
+        }
+        return null;
+    }
+
+    const features = [wikiContentDialogHint, wikiPageEditToolbarHint, scriptWidgetParameterHint];
 
     // GWT changes the DOM very often, so the features run at most once per animation frame.
     let scheduled = false;
