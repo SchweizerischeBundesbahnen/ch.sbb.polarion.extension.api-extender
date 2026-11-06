@@ -51,7 +51,7 @@ class Velocity2WikiPageRenderersTest {
         assertFalse(extracted.contains("velocityV2}"), extracted);
         assertFalse(extracted.contains("$greeting"), extracted);
 
-        // Velocity 1.4 and wiki markup run between the two renderers.
+        // Velocity v1.4 and wiki markup run between the two renderers.
         String rendered = "<p>" + extracted.replace("$x", "X") + "</p>";
         assertEquals("<p>1.4: X Hello 1.5</p>", restore.render(rendered, null, null, context));
     }

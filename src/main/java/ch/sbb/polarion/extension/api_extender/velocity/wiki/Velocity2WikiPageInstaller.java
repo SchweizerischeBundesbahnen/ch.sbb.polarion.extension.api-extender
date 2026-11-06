@@ -99,8 +99,8 @@ public final class Velocity2WikiPageInstaller {
         List<XWikiRenderer> renderers = getRenderers(engine);
         List<XWikiRenderer> others = renderers.stream().filter(renderer -> !isOwn(renderer)).toList();
         Map<String, XWikiRenderer> rendererMap = getRendererMap(engine);
-        // The output goes back right after Velocity 1.4, so wiki markup and macros apply to it as to any Velocity output,
-        // but Velocity 1.4 never evaluates it. Without a Velocity renderer, the output goes back right away.
+        // The output goes back right after Velocity v1.4, so wiki markup and macros apply to it as to any Velocity output,
+        // but Velocity v1.4 never evaluates it. Without a Velocity renderer, the output goes back right away.
         int restoreIndex = others.indexOf(rendererMap.get(VELOCITY_RENDERER_NAME)) + 1;
 
         if (renderers.size() == others.size() + 2 && renderers.get(0) instanceof Velocity2WikiPageExtractRenderer

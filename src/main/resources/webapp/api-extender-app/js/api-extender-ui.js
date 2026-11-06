@@ -34,7 +34,7 @@
      * so a dialog which Polarion creates again on each opening leaves nothing behind.
      *
      * @param doc the document of the label
-     * @param options.scope the word for the part which stays Velocity 1.4, for example "page"
+     * @param options.scope the word for the part which stays Velocity v1.4, for example "page"
      * @param options.align "right" aligns the tooltip with the right edge of the label, "left" with its left edge
      * @param options.background the background of the tooltip
      */
@@ -70,7 +70,7 @@
         tooltip.style.cssText = 'position: absolute; z-index: 2147483000; max-width: 520px; padding: 8px 10px; text-align: left;'
             + ` background: ${options.background}; color: #333; font-size: 12px; line-height: 1.5; border: 1px solid #ccc;`
             + ' border-radius: 3px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);';
-        tooltip.innerHTML = 'You can use <b>Velocity 2.4.1</b> features: wrap the script in '
+        tooltip.innerHTML = 'You can use <b>Velocity v2.4.1</b> features: wrap the script in '
             + '<code style="background: #fff; padding: 0 3px; border-radius: 2px;">{velocityV2}</code> markers, for example:';
 
         const example = doc.createElement('div');
@@ -80,7 +80,7 @@
         tooltip.appendChild(example);
 
         const note = doc.createElement('div');
-        note.innerHTML = `The rest of the ${options.scope} stays Velocity 1.4. Note that the two <b>do not share variables</b>: `
+        note.innerHTML = `The rest of the ${options.scope} stays Velocity v1.4. Note that the two <b>do not share variables</b>: `
             + 'a variable set inside <code style="background: #fff; padding: 0 3px; border-radius: 2px;">{velocityV2}</code> '
             + 'is not visible outside it, and the other way round.';
         tooltip.appendChild(note);

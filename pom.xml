@@ -68,7 +68,7 @@
             <version>${project.parent.version}</version>
         </dependency>
 
-        <!-- Polarion renders scripts with its own Velocity 1.4 and Tools 2.0, so these jars load only through BundleJarsPrioritizingRunnable. -->
+        <!-- Polarion renders scripts with its own Velocity v1.4 and Tools 2.0, so these jars load only through BundleJarsPrioritizingRunnable. -->
         <dependency>
             <groupId>org.apache.velocity.tools</groupId>
             <artifactId>velocity-tools-generic</artifactId>

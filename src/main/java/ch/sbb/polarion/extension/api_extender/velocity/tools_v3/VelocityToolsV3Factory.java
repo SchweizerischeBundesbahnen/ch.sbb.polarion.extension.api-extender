@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 
 /**
  * Creates Velocity Tools 3 instances inside the class loader of {@link BundleJarsPrioritizingRunnable},
- * so they link against the embedded Velocity 2 engine and not against the Velocity 1.4 classes of Polarion.
+ * so they link against the embedded Velocity 2 engine and not against the Velocity v1.4 classes of Polarion.
  */
 public class VelocityToolsV3Factory implements BundleJarsPrioritizingRunnable {
 
@@ -25,7 +25,7 @@ public class VelocityToolsV3Factory implements BundleJarsPrioritizingRunnable {
     public static final String RESULT_TOOL = "tool";
 
     // Keys must match VelocityToolsV3.TOOL_NAMES.
-    // ContextTool needs the running page context, which Velocity 1.4 never gives to a tool.
+    // ContextTool needs the running page context, which Velocity v1.4 never gives to a tool.
     // RenderTool needs a Velocity 2 context, so SandboxedRenderTool replaces it.
     // Tools with free reflection (class, field) or URL loading (import) are left out for security reasons.
     private static final Map<String, Supplier<SafeConfig>> TOOLS = Map.ofEntries(

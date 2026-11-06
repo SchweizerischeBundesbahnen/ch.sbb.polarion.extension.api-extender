@@ -8,7 +8,7 @@ import com.xpn.xwiki.render.XWikiVirtualMacro;
 import java.util.Map;
 
 /**
- * The renderer of Classic Wiki Pages right after Velocity 1.4. It puts the output of the {@code {velocityV2}} regions
+ * The renderer of Classic Wiki Pages right after Velocity v1.4. It puts the output of the {@code {velocityV2}} regions
  * in place of the tokens which {@link Velocity2WikiPageExtractRenderer} wrote, so wiki markup and macros apply to the output.
  */
 public class Velocity2WikiPageRestoreRenderer implements XWikiRenderer {

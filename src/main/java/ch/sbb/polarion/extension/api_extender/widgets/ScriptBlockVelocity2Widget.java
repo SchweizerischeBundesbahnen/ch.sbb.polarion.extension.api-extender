@@ -27,9 +27,9 @@ import java.util.function.UnaryOperator;
 /**
  * The same as the Polarion Script - Block widget, but renders the script with the embedded Velocity 2 engine.
  * <p>
- * The script gets the same variables as in the Polarion widget: Polarion fills a Velocity 1.4 context,
+ * The script gets the same variables as in the Polarion widget: Polarion fills a Velocity v1.4 context,
  * and this widget copies its entries into a Velocity 2 context.
- * This class is loaded by the bundle class loader, which links Velocity types against Polarion's Velocity 1.4.
+ * This class is loaded by the bundle class loader, which links Velocity types against Polarion's Velocity v1.4.
  * So it must not call Velocity methods directly or load {@link Velocity2ScriptRenderer} types.
  */
 public class ScriptBlockVelocity2Widget extends RichPageWidget {
@@ -86,7 +86,7 @@ public class ScriptBlockVelocity2Widget extends RichPageWidget {
 
     /**
      * Tests call this method directly: Mockito cannot mock {@link RichPageRenderingContextImpl},
-     * because it references Velocity 1.4 types, which are not on the test class path.
+     * because it references Velocity v1.4 types, which are not on the test class path.
      */
     static @NotNull String render(@NotNull HtmlFragmentBuilder builder, @NotNull String script, @NotNull String logTag,
                                   @NotNull Map<String, Object> variables, @NotNull UnaryOperator<String> warningRenderer) {

@@ -13,14 +13,14 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 /**
- * Renders the {@code {velocityV2}} regions of a LiveReport script before Polarion renders the script with Velocity 1.4.
+ * Renders the {@code {velocityV2}} regions of a LiveReport script before Polarion renders the script with Velocity v1.4.
  * <p>
  * {@link Velocity2ScriptWeaver} makes {@code AbstractScriptRenderer.render()} pass the renderer and its script through
  * the {@link BiFunction} stored in the system properties under {@link #PROPERTY}. The woven code refers to JDK types only,
  * so a hot redeploy of this bundle swaps the function and does not touch the woven Polarion class.
  * <p>
- * The regions render before Velocity 1.4, so a region does not see variables which Velocity 1.4 sets.
- * Each region becomes a {@link Velocity2WikiOutputs#reference(String)}, which Velocity 1.4 replaces with the output.
+ * The regions render before Velocity v1.4, so a region does not see variables which Velocity v1.4 sets.
+ * Each region becomes a {@link Velocity2WikiOutputs#reference(String)}, which Velocity v1.4 replaces with the output.
  */
 public final class Velocity2ScriptHook implements BiFunction<Object, String, String> {
 
@@ -45,7 +45,7 @@ public final class Velocity2ScriptHook implements BiFunction<Object, String, Str
      *
      * @param renderer the {@code AbstractScriptRenderer} instance
      * @param script   the script of the widget
-     * @return the script for Velocity 1.4
+     * @return the script for Velocity v1.4
      */
     @Override
     public String apply(@NotNull Object renderer, @Nullable String script) {
@@ -55,7 +55,7 @@ public final class Velocity2ScriptHook implements BiFunction<Object, String, Str
         try {
             return preprocess(renderer, script);
         } catch (RuntimeException e) {
-            logger.error("Cannot render the {velocityV2} regions of a LiveReport script, the script goes to Velocity 1.4 unchanged", e);
+            logger.error("Cannot render the {velocityV2} regions of a LiveReport script, the script goes to Velocity v1.4 unchanged", e);
             return script;
         }
     }

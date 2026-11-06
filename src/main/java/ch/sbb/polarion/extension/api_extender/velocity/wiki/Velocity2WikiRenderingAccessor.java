@@ -13,10 +13,10 @@ import java.util.Map;
  * Wraps the accessor which renders the Wiki Content blocks of LiveDocs, and renders the
  * {@code {velocityV2}...{velocityV2}} regions in them with the embedded Velocity 2 engine.
  * <p>
- * The regions render before Polarion renders the rest of the source with Velocity 1.4 and wiki markup,
- * so a region does not see variables which Velocity 1.4 sets.
- * This accessor wraps the whole Polarion rendering and cannot act between Velocity 1.4 and wiki markup.
- * So each region becomes a {@link Velocity2WikiOutputs} reference, which Velocity 1.4 replaces with the output,
+ * The regions render before Polarion renders the rest of the source with Velocity v1.4 and wiki markup,
+ * so a region does not see variables which Velocity v1.4 sets.
+ * This accessor wraps the whole Polarion rendering and cannot act between Velocity v1.4 and wiki markup.
+ * So each region becomes a {@link Velocity2WikiOutputs} reference, which Velocity v1.4 replaces with the output,
  * and wiki markup then applies to the output.
  */
 public class Velocity2WikiRenderingAccessor implements WikiRenderingProvider.IWikiRenderingAccessor {

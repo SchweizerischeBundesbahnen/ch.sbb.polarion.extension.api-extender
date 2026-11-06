@@ -15,8 +15,8 @@ import java.util.Map;
 /**
  * Renders a template string with the embedded Velocity 2 engine.
  * <p>
- * Velocity 1.4 never gives the page context to a tool, so the template sees only the variables given in the call.
- * Velocity 1.4 has no map literals, so variables are given as up to five key-value pairs or as one {@link Map}.
+ * Velocity v1.4 never gives the page context to a tool, so the template sees only the variables given in the call.
+ * Velocity v1.4 has no map literals, so variables are given as up to five key-value pairs or as one {@link Map}.
  * <p>
  * The engine has no file or class path resource loader, so {@code #parse} and {@code #include} cannot read files.
  * {@link SecureUberspector} blocks reflection, class loaders and {@link System}.
@@ -38,7 +38,7 @@ public class SandboxedRenderTool extends SafeConfig {
         return engine;
     }
 
-    // Polarion's Velocity 1.4 does not call varargs methods, so the key-value pairs have fixed overloads.
+    // Polarion's Velocity v1.4 does not call varargs methods, so the key-value pairs have fixed overloads.
 
     public String eval(String template) {
         return render(template, new HashMap<>());

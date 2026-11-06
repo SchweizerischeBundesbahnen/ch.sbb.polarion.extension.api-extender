@@ -10,7 +10,7 @@ import org.objectweb.asm.Opcodes;
 
 /**
  * Rewrites {@code AbstractScriptRenderer.render()} so that the script passes through {@link Velocity2ScriptHook}
- * before Velocity 1.4 parses it. In the Polarion class, {@code render()} reads the {@code script} field once,
+ * before Velocity v1.4 parses it. In the Polarion class, {@code render()} reads the {@code script} field once,
  * as the argument of {@code VelocityEngine.evaluate()}.
  * <p>
  * After each read of the field in {@code render()}, the woven code does the equivalent of

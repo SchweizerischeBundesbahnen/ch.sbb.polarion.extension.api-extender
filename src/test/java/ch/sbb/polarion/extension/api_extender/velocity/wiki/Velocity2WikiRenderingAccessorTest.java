@@ -39,7 +39,7 @@ class Velocity2WikiRenderingAccessorTest {
         platformContext = mockStatic(PlatformContext.class);
         platformContext.when(PlatformContext::getPlatform).thenReturn(platform);
 
-        // The delegate stands in for Velocity 1.4 and wiki markup: it resolves the $velocityV2Output references,
+        // The delegate stands in for Velocity v1.4 and wiki markup: it resolves the $velocityV2Output references,
         // then wraps the result in a paragraph.
         Velocity2WikiOutputs outputs = new Velocity2WikiOutputs();
         when(delegate.render(any(), anyString(), any(), anyBoolean(), any(), any()))

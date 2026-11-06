@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 /**
  * Finds the {@code {velocityV2}...{velocityV2}} regions in a wiki source and replaces each with a token.
  * <p>
- * The tokens are plain lowercase text, which Velocity 1.4 leaves unchanged,
- * so the Velocity 2 output can go in their place after Velocity 1.4.
+ * The tokens are plain lowercase text, which Velocity v1.4 leaves unchanged,
+ * so the Velocity 2 output can go in their place after Velocity v1.4.
  */
 public final class Velocity2WikiBlocks {
 

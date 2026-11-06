@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * The part of the Velocity 1.4 {@code VelocityContext} API which {@link Velocity14Context} uses by reflection.
+ * The part of the Velocity v1.4 {@code VelocityContext} API which {@link Velocity14Context} uses by reflection.
  */
 public class FakeVelocityContext {
 

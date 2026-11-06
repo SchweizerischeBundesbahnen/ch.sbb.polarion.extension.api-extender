@@ -16,8 +16,8 @@ import java.util.Map;
 
 /**
  * The first renderer of Classic Wiki Pages. It renders the {@code {velocityV2}} regions with Velocity 2
- * and replaces them with tokens, which Velocity 1.4 leaves unchanged.
- * {@link Velocity2WikiPageRestoreRenderer} puts the output in place of the tokens right after Velocity 1.4.
+ * and replaces them with tokens, which Velocity v1.4 leaves unchanged.
+ * {@link Velocity2WikiPageRestoreRenderer} puts the output in place of the tokens right after Velocity v1.4.
  */
 public class Velocity2WikiPageExtractRenderer implements XWikiRenderer {
 
@@ -59,7 +59,7 @@ public class Velocity2WikiPageExtractRenderer implements XWikiRenderer {
         return result;
     }
 
-    // The same page objects as Velocity 1.4 gets in XWikiVelocityRenderer.
+    // The same page objects as Velocity v1.4 gets in XWikiVelocityRenderer.
     private static @NotNull Map<String, Object> createVariables(@Nullable XWikiDocument contextdoc, @NotNull XWikiContext context) {
         Map<String, Object> variables = Velocity2WikiScripts.createVariables();
         if (contextdoc != null) {

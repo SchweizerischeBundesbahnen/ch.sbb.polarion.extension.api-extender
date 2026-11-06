@@ -6,7 +6,7 @@ import org.apache.velocity.tools.generic.LogTool;
 /**
  * LogTool writes to SLF4J, which has no provider in the isolated class loader. This tool writes to the Polarion log.
  * <p>
- * Polarion's Velocity 1.4 renders a {@code void} method call as an empty string, so a log call adds nothing to the page.
+ * Polarion's Velocity v1.4 renders a {@code void} method call as an empty string, so a log call adds nothing to the page.
  */
 public class PolarionLogTool extends LogTool {
 

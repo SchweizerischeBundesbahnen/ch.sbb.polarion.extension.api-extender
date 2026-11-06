@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Gives Velocity scripts access to Velocity Tools 3, for example {@code $velocityToolsV3.date.format('yyyy-MM-dd', $date.date)}.
  * <p>
- * The tool objects come from an isolated class loader. Polarion's Velocity 1.4 calls their methods by reflection.
+ * The tool objects come from an isolated class loader. Polarion's Velocity v1.4 calls their methods by reflection.
  * This class is loaded by the bundle class loader, so it must not load {@link VelocityToolsV3Factory}
  * or any Velocity Tools 3 type. The bundle class loader would link them against Polarion's Velocity Tools 2.
  */

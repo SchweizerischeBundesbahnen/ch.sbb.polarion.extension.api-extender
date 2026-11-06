@@ -11,10 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Reads and writes a Polarion Velocity 1.4 context by reflection.
+ * Reads and writes a Polarion Velocity v1.4 context by reflection.
  * <p>
  * This code compiles against Velocity 2, where {@code getKeys()} returns {@code String[]}.
- * Velocity 1.4 returns {@code Object[]}, so a direct call fails with {@link NoSuchMethodError}.
+ * Velocity v1.4 returns {@code Object[]}, so a direct call fails with {@link NoSuchMethodError}.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Velocity14Context {
