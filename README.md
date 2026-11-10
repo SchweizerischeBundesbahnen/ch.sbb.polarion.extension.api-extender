@@ -552,10 +552,20 @@ The region gets these variables:
 All regions of a LiveDoc document share one context, in the order of the blocks.
 All regions of a Classic Wiki Page share one context. An included page has its own context.
 
+Velocity v1.4 gets the output of a region as a value, so the script can use it in a double-quoted string:
+
+```velocity
+#set($label = "{velocityV2}#set($m = {'a': 'x'})$m.a{velocityV2}")
+#if($label == 'x')Velocity v1.4 compares the output of the region.#end
+```
+
+The same applies to the regions in the Polarion Script widgets.
+
 > [!IMPORTANT]
 > Limitations:
 > - The regions render before Velocity v1.4. A region does not see the variables which Velocity v1.4 sets, and Velocity v1.4 does not see the variables of a region.
 > - A region cannot contain a `{velocityV2}` marker, and it ends at the end of the block.
+> - Do not put a region in a single-quoted Velocity v1.4 string. Velocity v1.4 does not insert the output there.
 > - A `#macro` is available only inside the region that defines it.
 > - `#parse`, `#include` and the Polarion global macros are not available.
 > - A script error shows an error message in place of the region. The Polarion log contains the error and the script.

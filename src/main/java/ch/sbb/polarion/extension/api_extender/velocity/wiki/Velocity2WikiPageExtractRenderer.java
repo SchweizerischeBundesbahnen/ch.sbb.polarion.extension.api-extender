@@ -16,28 +16,48 @@ import java.util.Map;
 
 /**
  * The first renderer of Classic Wiki Pages. It renders the {@code {velocityV2}} regions with Velocity 2
- * and replaces them with tokens, which Velocity v1.4 leaves unchanged.
- * {@link Velocity2WikiPageRestoreRenderer} puts the output in place of the tokens right after Velocity v1.4.
+ * and replaces each region with a {@link Velocity2WikiOutputs} reference, so Velocity v1.4 gets the output as a value.
+ * {@link Velocity2WikiPageRestoreRenderer} removes the outputs from the thread right after Velocity v1.4.
  */
 public class Velocity2WikiPageExtractRenderer implements XWikiRenderer {
 
     /**
      * The key of the token-to-HTML map in the {@link XWikiContext} of the request.
-     * Included pages render with the same context, so the map collects the tokens of all of them.
+     * Included pages render with the same context, so the map collects the outputs of all of them.
      */
     static final String OUTPUTS_KEY = "ch.sbb.polarion.extension.api_extender.velocity2.outputs";
+    /**
+     * The key of the number of renderings in the {@link XWikiContext} which wait for their restore rendering.
+     * A page which Velocity v1.4 includes renders inside the Velocity v1.4 rendering of the outer page,
+     * so the restore rendering of the inner page must leave the outputs for the outer page.
+     */
+    static final String DEPTH_KEY = "ch.sbb.polarion.extension.api_extender.velocity2.depth";
     static final String VARIABLE_PAGE = "page";
     static final String VARIABLE_DOC = "doc";
 
     @Override
     public String render(String content, XWikiDocument contentdoc, XWikiDocument contextdoc, XWikiContext context) {
+        // Every rendering counts, also one without regions, so each restore rendering matches its own extract rendering.
+        context.put(DEPTH_KEY, depth(context) + 1);
         if (content == null || !Velocity2WikiBlocks.containsMarker(content)) {
             return content;
         }
         Velocity2WikiBlocks blocks = Velocity2WikiBlocks.extract(content);
         List<String> htmls = Velocity2WikiScripts.render(blocks.getScripts(), createVariables(contextdoc, context), createLogTag(contentdoc));
-        outputs(context).putAll(toMap(blocks.getTokens(), htmls));
-        return blocks.getSource();
+
+        Map<String, String> outputs = outputs(context);
+        String source = blocks.getSource();
+        for (int i = 0; i < htmls.size(); i++) {
+            String token = blocks.getTokens().get(i);
+            outputs.put(token, htmls.get(i));
+            source = source.replace(token, Velocity2WikiOutputs.reference(token));
+        }
+        Velocity2WikiOutputs.setOutputs(outputs);
+        return source;
+    }
+
+    static int depth(@NotNull XWikiContext context) {
+        return context.get(DEPTH_KEY) instanceof Integer depth ? depth : 0;
     }
 
     @SuppressWarnings("unchecked")
@@ -49,14 +69,6 @@ public class Velocity2WikiPageExtractRenderer implements XWikiRenderer {
         Map<String, String> created = new HashMap<>();
         context.put(OUTPUTS_KEY, created);
         return created;
-    }
-
-    private static @NotNull Map<String, String> toMap(@NotNull List<String> tokens, @NotNull List<String> htmls) {
-        Map<String, String> result = new HashMap<>();
-        for (int i = 0; i < tokens.size(); i++) {
-            result.put(tokens.get(i), htmls.get(i));
-        }
-        return result;
     }
 
     // The same page objects as Velocity v1.4 gets in XWikiVelocityRenderer.
