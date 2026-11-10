@@ -70,7 +70,10 @@
         tooltip.style.cssText = 'position: absolute; z-index: 2147483000; max-width: 520px; padding: 8px 10px; text-align: left;'
             + ` background: ${options.background}; color: #333; font-size: 12px; line-height: 1.5; border: 1px solid #ccc;`
             + ' border-radius: 3px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);';
-        tooltip.innerHTML = 'You can use <b>Velocity v2.4.1</b> features: wrap the script in '
+        tooltip.innerHTML = '<div style="margin-bottom: 6px;">'
+            + '<b style="background: #d32f2f; color: #fff; padding: 0 4px; border-radius: 2px;">Experimental</b>'
+            + ' Use this feature at your own risk.</div>'
+            + 'You can use <b>Velocity v2.4.1</b> features: wrap the script in '
             + '<code style="background: #fff; padding: 0 3px; border-radius: 2px;">{velocityV2}</code> markers, for example:';
 
         const example = doc.createElement('div');

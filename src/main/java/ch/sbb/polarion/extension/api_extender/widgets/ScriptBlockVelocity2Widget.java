@@ -52,7 +52,7 @@ public class ScriptBlockVelocity2Widget extends RichPageWidget {
 
     @Override
     public @NotNull String getDetailsHtml(@NotNull RichPageWidgetContext widgetContext) {
-        return "Renders a Velocity script with Velocity Engine 2.4.1. The script gets the same variables as in the Script - Block widget.";
+        return "Renders a Velocity script with Velocity Engine 2.4.1. The script gets the same variables as in the Script - Block widget. Experimental: use this widget at your own risk.";
     }
 
     @Override

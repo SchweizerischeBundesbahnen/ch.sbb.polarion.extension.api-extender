@@ -477,6 +477,9 @@ The ListTool (`$lists`) and IteratorTool (`$mill`) of Live Report Pages do not e
 
 ## Script widgets with Velocity 2
 
+> [!WARNING]
+> Experimental. Use these widgets at your own risk.
+
 The `Script - Block Velocity V2` and `Script - Inline Velocity V2` widgets of Live Report Pages render a Velocity script with Velocity Engine 2.4.1, which is part of this extension.
 They are the same as the Polarion `Script - Block` and `Script - Inline` widgets, but the script can use the [Velocity 2 syntax](https://velocity.apache.org/engine/2.4.1/user-guide.html).
 
@@ -503,6 +506,9 @@ $colors.open $limit
 
 ## Velocity 2 regions in the Polarion Script widgets
 
+> [!WARNING]
+> Experimental. Use the `{velocityV2}` regions at your own risk.
+
 The script of the Polarion `Script - Block` and `Script - Inline` widgets can also contain `{velocityV2}` regions.
 The region renders with Velocity Engine 2.4.1, and the rest of the script stays Velocity v1.4.
 The same applies to every widget with a script parameter, for example `Scripted Chart`.
@@ -526,6 +532,9 @@ The limitations of the Velocity 2 regions in LiveDoc documents apply, except tha
 > The Polarion log then contains `Velocity 2 rendering of {velocityV2} regions in LiveReport scripts is installed`.
 
 ## Velocity 2 in LiveDoc documents and Classic Wiki Pages
+
+> [!WARNING]
+> Experimental. Use the `{velocityV2}` regions at your own risk.
 
 A "Wiki Content" block of a LiveDoc document and the content of a Classic Wiki Page can contain Velocity 2 regions.
 Write the region between two `{velocityV2}` markers:

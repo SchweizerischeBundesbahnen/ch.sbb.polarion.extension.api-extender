@@ -19,7 +19,7 @@ public class ScriptInlineVelocity2Widget extends ScriptBlockVelocity2Widget {
 
     @Override
     public @NotNull String getDetailsHtml(@NotNull RichPageWidgetContext widgetContext) {
-        return "Renders a Velocity script inline with Velocity Engine 2.4.1. The script gets the same variables as in the Script - Inline widget.";
+        return "Renders a Velocity script inline with Velocity Engine 2.4.1. The script gets the same variables as in the Script - Inline widget. Experimental: use this widget at your own risk.";
     }
 
     @Override
