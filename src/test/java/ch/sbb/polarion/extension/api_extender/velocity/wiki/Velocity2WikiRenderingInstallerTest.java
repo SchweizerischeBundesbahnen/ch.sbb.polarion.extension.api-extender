@@ -64,7 +64,9 @@ class Velocity2WikiRenderingInstallerTest {
         WikiRenderingProvider.wikiRenderingAccessor = null;
         Thread installer = new Thread(Velocity2WikiRenderingInstaller::installWhenReady);
         installer.start();
-        Thread.sleep(100);
+        while (installer.getState() != Thread.State.TIMED_WAITING) {
+            Thread.onSpinWait();
+        }
         WikiRenderingProvider.wikiRenderingAccessor = original;
         installer.join(5000);
 
