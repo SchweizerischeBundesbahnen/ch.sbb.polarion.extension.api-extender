@@ -64,6 +64,7 @@ public final class Velocity2WikiRenderingInstaller {
      * After a hot redeploy without {@link #uninstall()}, the installed wrapper comes from the class loader of the previous bundle.
      * It is not an instance of this bundle's class, so it is found by name.
      */
+    @SuppressWarnings("java:S1872") // isAssignableFrom fails across class loaders, see above
     static @Nullable WikiRenderingProvider.IWikiRenderingAccessor unwrap(@Nullable WikiRenderingProvider.IWikiRenderingAccessor accessor) {
         WikiRenderingProvider.IWikiRenderingAccessor current = accessor;
         while (current != null && current.getClass().getName().equals(Velocity2WikiRenderingAccessor.class.getName())) {

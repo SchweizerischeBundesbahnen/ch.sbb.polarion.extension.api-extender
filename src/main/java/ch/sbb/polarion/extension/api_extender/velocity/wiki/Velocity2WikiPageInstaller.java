@@ -172,6 +172,8 @@ public final class Velocity2WikiPageInstaller {
         writeField(engine, "renderers", new ArrayList<>(renderers));
     }
 
+    // DefaultXWikiRenderingEngine has no API to change its renderers, so the private fields are the only way in.
+    @SuppressWarnings("java:S3011")
     private static Object readField(@NotNull Object target, @NotNull String name) {
         try {
             Field field = DefaultXWikiRenderingEngine.class.getDeclaredField(name);
@@ -182,6 +184,8 @@ public final class Velocity2WikiPageInstaller {
         }
     }
 
+    // DefaultXWikiRenderingEngine has no API to change its renderers, so the private fields are the only way in.
+    @SuppressWarnings("java:S3011")
     private static void writeField(@NotNull Object target, @NotNull String name, @NotNull Object value) {
         try {
             Field field = DefaultXWikiRenderingEngine.class.getDeclaredField(name);
