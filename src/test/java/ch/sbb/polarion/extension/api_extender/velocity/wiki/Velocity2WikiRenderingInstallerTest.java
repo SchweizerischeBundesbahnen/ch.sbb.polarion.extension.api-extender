@@ -58,4 +58,37 @@ class Velocity2WikiRenderingInstallerTest {
         Velocity2WikiRenderingInstaller.installWhenReady();
         assertInstanceOf(Velocity2WikiRenderingAccessor.class, WikiRenderingProvider.wikiRenderingAccessor);
     }
+
+    @Test
+    void installWhenReadyWaitsForAccessor() throws InterruptedException {
+        WikiRenderingProvider.wikiRenderingAccessor = null;
+        Thread installer = new Thread(Velocity2WikiRenderingInstaller::installWhenReady);
+        installer.start();
+        Thread.sleep(100);
+        WikiRenderingProvider.wikiRenderingAccessor = original;
+        installer.join(5000);
+
+        assertFalse(installer.isAlive());
+        Velocity2WikiRenderingAccessor installed = assertInstanceOf(Velocity2WikiRenderingAccessor.class, WikiRenderingProvider.wikiRenderingAccessor);
+        assertSame(original, installed.getDelegate());
+    }
+
+    @Test
+    void installWhenReadyStopsOnInterrupt() throws InterruptedException {
+        WikiRenderingProvider.wikiRenderingAccessor = null;
+        Thread installer = new Thread(Velocity2WikiRenderingInstaller::installWhenReady);
+        installer.start();
+        installer.interrupt();
+        installer.join(5000);
+
+        assertFalse(installer.isAlive());
+        assertNull(WikiRenderingProvider.wikiRenderingAccessor);
+    }
+
+    @Test
+    void installWhenReadyGivesUpAfterTimeout() {
+        WikiRenderingProvider.wikiRenderingAccessor = null;
+        Velocity2WikiRenderingInstaller.installWhenReady(0);
+        assertNull(WikiRenderingProvider.wikiRenderingAccessor);
+    }
 }

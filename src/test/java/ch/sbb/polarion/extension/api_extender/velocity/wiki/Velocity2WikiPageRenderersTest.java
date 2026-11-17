@@ -1,6 +1,8 @@
 package ch.sbb.polarion.extension.api_extender.velocity.wiki;
 
 import ch.sbb.polarion.extension.generic.test_extensions.BundleJarsPrioritizingRunnableMockExtension;
+import com.polarion.alm.server.api.transaction.TransactionalExecutorImpl;
+import com.polarion.alm.shared.api.transaction.ReadOnlyTransaction;
 import com.polarion.alm.wiki.IWikiService;
 import com.polarion.platform.core.IPlatform;
 import com.polarion.platform.core.PlatformContext;
@@ -25,11 +27,11 @@ class Velocity2WikiPageRenderersTest {
     private final Velocity2WikiPageExtractRenderer extract = new Velocity2WikiPageExtractRenderer();
     private final Velocity2WikiPageRestoreRenderer restore = new Velocity2WikiPageRestoreRenderer();
     private final XWikiContext context = new XWikiContext();
+    private final IWikiService wikiService = mock(IWikiService.class);
     private MockedStatic<PlatformContext> platformContext;
 
     @BeforeEach
     void setUp() {
-        IWikiService wikiService = mock(IWikiService.class);
         when(wikiService.getWikiRenderingContextMap()).thenReturn(Map.of("greeting", "Hello"));
         IPlatform platform = mock(IPlatform.class);
         when(platform.lookupService(IWikiService.class)).thenReturn(wikiService);
@@ -51,6 +53,13 @@ class Velocity2WikiPageRenderersTest {
     private static String velocity14(String source) {
         Velocity2WikiOutputs outputs = new Velocity2WikiOutputs();
         return REFERENCE.matcher(source).replaceAll(match -> Matcher.quoteReplacement(String.valueOf(outputs.get(match.group(1)))));
+    }
+
+    @Test
+    void nullContentAndRestoreWithoutExtractAreHarmless() {
+        assertEquals("text", restore.render("text", null, null, context));
+        assertNull(extract.render(null, null, null, context));
+        assertEquals(1, Velocity2WikiPageExtractRenderer.depth(context));
     }
 
     @Test
@@ -115,6 +124,39 @@ class Velocity2WikiPageRenderersTest {
     @Test
     void convertMethodsKeepContent() {
         assertEquals("all", extract.convertSingleLine("m", "p", "all", null, context));
+        assertEquals("all", extract.convertMultiLine("m", "p", "d", "all", null, context));
+        assertEquals("all", restore.convertSingleLine("m", "p", "all", null, context));
         assertEquals("all", restore.convertMultiLine("m", "p", "d", "all", null, context));
+        assertDoesNotThrow(() -> {
+            extract.flushCache();
+            restore.flushCache();
+        });
+    }
+
+    @Test
+    void regionsGetCurrentTransaction() {
+        ReadOnlyTransaction transaction = mock(ReadOnlyTransaction.class);
+        when(transaction.toString()).thenReturn("the transaction");
+        try (MockedStatic<TransactionalExecutorImpl> executor = mockStatic(TransactionalExecutorImpl.class)) {
+            executor.when(TransactionalExecutorImpl::currentTransaction).thenReturn(transaction);
+            String extracted = extract.render("{velocityV2}$transaction{velocityV2}", null, null, context);
+            assertEquals("the transaction", velocity14(extracted));
+        }
+    }
+
+    @Test
+    void unreadableVelocity14ContextGivesNoXWikiObjects() {
+        context.put("vcontext", new Object());
+        String extracted = extract.render("{velocityV2}[$!request]{velocityV2}", null, null, context);
+        assertEquals("[]", velocity14(extracted));
+    }
+
+    @Test
+    void innerSourceGivesWayToOuterSource() {
+        String result = Velocity2WikiOutputs.withSource((token, api) -> "outer", () -> {
+            String inner = Velocity2WikiOutputs.withSource((token, api) -> "inner", () -> new Velocity2WikiOutputs().get("t"));
+            return inner + "/" + new Velocity2WikiOutputs().get("t");
+        });
+        assertEquals("inner/outer", result);
     }
 }

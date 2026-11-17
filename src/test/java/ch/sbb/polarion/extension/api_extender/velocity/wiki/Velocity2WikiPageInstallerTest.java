@@ -2,6 +2,7 @@ package ch.sbb.polarion.extension.api_extender.velocity.wiki;
 
 import com.xpn.xwiki.render.DefaultXWikiRenderingEngine;
 import com.xpn.xwiki.render.XWikiRenderer;
+import jakarta.servlet.ServletContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.*;
 
 class Velocity2WikiPageInstallerTest {
 
@@ -62,6 +63,12 @@ class Velocity2WikiPageInstallerTest {
         XWikiRenderer extract = new Velocity2WikiPageExtractRenderer();
         XWikiRenderer restore = new Velocity2WikiPageRestoreRenderer();
         setField("renderers", new ArrayList<>(List.of(extract, velocity, wiki, restore)));
+        Map<String, XWikiRenderer> map = new LinkedHashMap<>();
+        map.put("velocity2", extract);
+        map.put("velocity", velocity);
+        map.put("wiki", wiki);
+        map.put("velocity2restore", restore);
+        setField("renderermap", map);
         assertTrue(Velocity2WikiPageInstaller.install(engine));
 
         List<?> renderers = (List<?>) getField("renderers");
@@ -92,6 +99,40 @@ class Velocity2WikiPageInstallerTest {
 
         assertEquals(List.of(velocity, wiki), getField("renderers"));
         assertEquals(List.of("velocity", "wiki"), new ArrayList<>(((Map<?, ?>) getField("renderermap")).keySet()));
+    }
+
+    @Test
+    void startChecksWikiContextAndStopEndsChecks() {
+        ServletContext context = mock(ServletContext.class);
+        Velocity2WikiPageInstaller.start(context);
+        Velocity2WikiPageInstaller.start(context);
+        verify(context, timeout(5000)).getContext(Velocity2WikiPageInstaller.WIKI_CONTEXT_PATH);
+        Velocity2WikiPageInstaller.stop();
+        Velocity2WikiPageInstaller.stop();
+    }
+
+    @Test
+    void contextWithoutXWikiIsSkipped() {
+        ServletContext wikiContext = mock(ServletContext.class);
+        when(wikiContext.getAttribute(Velocity2WikiPageInstaller.XWIKI_ATTRIBUTE)).thenReturn("not an XWiki");
+        ServletContext context = mock(ServletContext.class);
+        when(context.getContext(Velocity2WikiPageInstaller.WIKI_CONTEXT_PATH)).thenReturn(wikiContext);
+
+        Velocity2WikiPageInstaller.start(context);
+        verify(wikiContext, timeout(5000)).getAttribute(Velocity2WikiPageInstaller.XWIKI_ATTRIBUTE);
+        assertDoesNotThrow(Velocity2WikiPageInstaller::stop);
+    }
+
+    @Test
+    void failingCheckIsLogged() {
+        ServletContext wikiContext = mock(ServletContext.class);
+        when(wikiContext.getAttribute(Velocity2WikiPageInstaller.XWIKI_ATTRIBUTE)).thenThrow(new IllegalStateException("not ready")).thenReturn(null);
+        ServletContext context = mock(ServletContext.class);
+        when(context.getContext(Velocity2WikiPageInstaller.WIKI_CONTEXT_PATH)).thenReturn(wikiContext);
+
+        Velocity2WikiPageInstaller.start(context);
+        verify(wikiContext, timeout(5000)).getAttribute(Velocity2WikiPageInstaller.XWIKI_ATTRIBUTE);
+        assertDoesNotThrow(Velocity2WikiPageInstaller::stop);
     }
 
     private void setField(String name, Object value) throws ReflectiveOperationException {

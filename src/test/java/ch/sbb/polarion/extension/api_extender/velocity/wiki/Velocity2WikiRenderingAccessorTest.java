@@ -101,6 +101,12 @@ class Velocity2WikiRenderingAccessorTest {
     }
 
     @Test
+    void nullSourceGoesToDelegate() {
+        accessor.render(null, null, null, false, null, null);
+        verify(delegate).render(null, null, null, false, null, null);
+    }
+
+    @Test
     void sourceWithoutMarkerGoesToDelegateUnchanged() {
         assertEquals("<p>#set($x = 1)$x</p>", accessor.render(null, "#set($x = 1)$x", null, false, null, null));
         verify(delegate).render(null, "#set($x = 1)$x", null, false, null, null);

@@ -2,6 +2,7 @@ package ch.sbb.polarion.extension.api_extender.velocity.livereport;
 
 import com.polarion.core.util.logging.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.hooks.weaving.WeavingHook;
@@ -32,17 +33,30 @@ public final class Velocity2ScriptWeavingHook implements WeavingHook {
         if (!Velocity2ScriptWeaver.TARGET_CLASS.equals(wovenClass.getClassName())) {
             return;
         }
+        byte[] woven = weave(wovenClass.getBytes());
+        if (woven != null) {
+            wovenClass.setBytes(woven);
+        }
+    }
+
+    /**
+     * Tests call this method directly: Mockito cannot mock {@link WovenClass}, because {@code org.osgi.resource} is not on the test class path.
+     *
+     * @return the woven class, or {@code null} if the class stays unchanged
+     */
+    byte @Nullable [] weave(byte @NotNull [] classBytes) {
         try {
-            byte[] woven = weaver.weave(wovenClass.getBytes());
+            byte[] woven = weaver.weave(classBytes);
             if (woven == null) {
                 logger.warn(Velocity2ScriptWeaver.TARGET_CLASS + ".render() does not read the script field as expected, "
                         + "{velocityV2} regions in the built-in Script widgets are not available");
-                return;
+                return null;
             }
-            wovenClass.setBytes(woven);
             logger.info("Velocity 2 rendering of {velocityV2} regions in LiveReport scripts is installed");
+            return woven;
         } catch (RuntimeException e) {
             logger.error("Cannot weave " + Velocity2ScriptWeaver.TARGET_CLASS + ", {velocityV2} regions in the built-in Script widgets are not available", e);
+            return null;
         }
     }
 }

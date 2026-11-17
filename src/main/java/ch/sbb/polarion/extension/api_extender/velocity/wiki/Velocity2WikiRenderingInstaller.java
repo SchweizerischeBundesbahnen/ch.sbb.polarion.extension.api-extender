@@ -24,11 +24,15 @@ public final class Velocity2WikiRenderingInstaller {
      * Waits until the wiki plugin sets its accessor, then wraps it. Call it from a background thread.
      */
     public static void installWhenReady() {
-        long deadline = System.currentTimeMillis() + WAIT_TIMEOUT_MS;
+        installWhenReady(WAIT_TIMEOUT_MS);
+    }
+
+    static void installWhenReady(long timeoutMs) {
+        long deadline = System.currentTimeMillis() + timeoutMs;
         try {
             while (WikiRenderingProvider.wikiRenderingAccessor == null) {
                 if (System.currentTimeMillis() > deadline) {
-                    logger.warn("Polarion did not set the wiki rendering accessor in " + WAIT_TIMEOUT_MS + " ms. Velocity 2 is not available in LiveDocs.");
+                    logger.warn("Polarion did not set the wiki rendering accessor in " + timeoutMs + " ms. Velocity 2 is not available in LiveDocs.");
                     return;
                 }
                 Thread.sleep(POLL_INTERVAL_MS);
