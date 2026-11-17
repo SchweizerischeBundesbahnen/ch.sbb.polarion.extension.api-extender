@@ -32,6 +32,11 @@ public final class Velocity14Context {
     }
 
     @SneakyThrows
+    public static @Nullable Object get(@NotNull Object velocityContext, @NotNull String key) {
+        return velocityContext.getClass().getMethod("get", String.class).invoke(velocityContext, key);
+    }
+
+    @SneakyThrows
     public static void put(@NotNull Object velocityContext, @NotNull String key, @Nullable Object value) {
         velocityContext.getClass().getMethod("put", String.class, Object.class).invoke(velocityContext, key, value);
     }

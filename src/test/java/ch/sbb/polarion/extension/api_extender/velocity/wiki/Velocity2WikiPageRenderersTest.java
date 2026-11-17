@@ -5,6 +5,7 @@ import com.polarion.alm.wiki.IWikiService;
 import com.polarion.platform.core.IPlatform;
 import com.polarion.platform.core.PlatformContext;
 import com.xpn.xwiki.XWikiContext;
+import org.apache.velocity.VelocityContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,6 +96,18 @@ class Velocity2WikiPageRenderersTest {
         assertEquals("outer|inner", velocity14(outer + "|" + inner));
         restore.render("outer|inner", null, null, context);
         assertEquals("null", velocity14(outer));
+    }
+
+    @Test
+    void regionsGetXWikiVariablesOfVelocity14() {
+        // XWikiVelocityRenderer.prepareContext does not load here without jsoup, so the Velocity v1.4 context exists before.
+        VelocityContext velocity14Context = new VelocityContext();
+        velocity14Context.put("request", "the request");
+        velocity14Context.put("xwiki", "the xwiki");
+        velocity14Context.put("v14only", "hidden");
+        context.put("vcontext", velocity14Context);
+        String extracted = extract.render("{velocityV2}$request|$xwiki|$!v14only{velocityV2}", null, null, context);
+        assertEquals("the request|the xwiki|", velocity14(extracted));
     }
 
     @Test

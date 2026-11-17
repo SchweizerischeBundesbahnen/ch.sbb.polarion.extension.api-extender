@@ -554,7 +554,8 @@ Wiki markup and wiki macros apply to the output of a region, the same as to Velo
 The region gets these variables:
 
 - The objects of the Classic Wiki Page rendering context, for example `$trackerService`, `$projectService`, `$velocityToolsV3` and `$globalRecords`.
-- `$transaction`: the current read-only transaction, if one exists.
+- `$transaction`: the current transaction. Like in Velocity v1.4, a new one is created if none exists.
+- The same XWiki objects as in Velocity v1.4: `$request`, `$response`, `$xwiki`, `$context`, `$pageParameters`, `$esc`, `$msg` and `$localization`.
 - In LiveDoc documents: `$document`, the document as `IModule`.
 - In Classic Wiki Pages: `$page` and `$doc`, the same objects as in Velocity v1.4.
 
@@ -572,7 +573,8 @@ The same applies to the regions in the Polarion Script widgets.
 
 > [!IMPORTANT]
 > Limitations:
-> - The regions render before Velocity v1.4. A region does not see the variables which Velocity v1.4 sets, and Velocity v1.4 does not see the variables of a region.
+> - A region does not see the variables which Velocity v1.4 sets, and Velocity v1.4 does not see the variables of a region.
+> - In a LiveDoc document, all regions render when Velocity v1.4 inserts the first region output. If Velocity v1.4 skips all regions, for example in an `#if` branch, no region renders.
 > - A region cannot contain a `{velocityV2}` marker, and it ends at the end of the block.
 > - Do not put a region in a single-quoted Velocity v1.4 string. Velocity v1.4 does not insert the output there.
 > - A `#macro` is available only inside the region that defines it.

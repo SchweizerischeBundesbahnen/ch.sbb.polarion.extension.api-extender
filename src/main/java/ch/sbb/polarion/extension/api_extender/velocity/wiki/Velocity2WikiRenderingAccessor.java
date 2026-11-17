@@ -2,6 +2,7 @@ package ch.sbb.polarion.extension.api_extender.velocity.wiki;
 
 import com.polarion.alm.tracker.internal.WikiRenderingProvider;
 import com.polarion.alm.tracker.model.IModule;
+import com.xpn.xwiki.XWikiContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,11 +14,13 @@ import java.util.Map;
  * Wraps the accessor which renders the Wiki Content blocks of LiveDocs, and renders the
  * {@code {velocityV2}...{velocityV2}} regions in them with the embedded Velocity 2 engine.
  * <p>
- * The regions render before Polarion renders the rest of the source with Velocity v1.4 and wiki markup,
- * so a region does not see variables which Velocity v1.4 sets.
  * This accessor wraps the whole Polarion rendering and cannot act between Velocity v1.4 and wiki markup.
  * So each region becomes a {@link Velocity2WikiOutputs} reference, which Velocity v1.4 replaces with the output,
  * and wiki markup then applies to the output.
+ * <p>
+ * The XWiki objects of Velocity v1.4, for example {@code $request}, exist only inside the Polarion rendering.
+ * So the first reference which Velocity v1.4 evaluates renders all regions, with the objects from its {@code $context}.
+ * A region does not see variables which Velocity v1.4 sets, and regions render only if Velocity v1.4 evaluates a reference.
  */
 public class Velocity2WikiRenderingAccessor implements WikiRenderingProvider.IWikiRenderingAccessor {
 
@@ -42,18 +45,42 @@ public class Velocity2WikiRenderingAccessor implements WikiRenderingProvider.IWi
             return delegate.render(document, input, pdfExportId, isCompare, query, language);
         }
         Velocity2WikiBlocks blocks = Velocity2WikiBlocks.extract(input);
-        List<String> htmls = Velocity2WikiScripts.render(blocks.getScripts(), createVariables(document), createLogTag(document));
-
-        Map<String, String> outputs = new HashMap<>();
         String source = blocks.getSource();
-        for (int i = 0; i < htmls.size(); i++) {
-            String token = blocks.getTokens().get(i);
-            outputs.put(token, htmls.get(i));
-            source = source.replace(token, Velocity2WikiOutputs.reference(token));
+        for (String token : blocks.getTokens()) {
+            source = source.replace(token, Velocity2WikiOutputs.referenceWithContext(token));
         }
         String velocitySource = source;
-        return Velocity2WikiOutputs.withOutputs(outputs,
+        return Velocity2WikiOutputs.withSource(new LazyRegions(blocks, document),
                 () -> delegate.render(document, velocitySource, pdfExportId, isCompare, query, language));
+    }
+
+    private static final class LazyRegions implements Velocity2WikiOutputs.Source {
+        private final Velocity2WikiBlocks blocks;
+        private final @Nullable IModule document;
+        private @Nullable Map<String, String> outputs;
+
+        private LazyRegions(@NotNull Velocity2WikiBlocks blocks, @Nullable IModule document) {
+            this.blocks = blocks;
+            this.document = document;
+        }
+
+        @Override
+        public @Nullable String get(@Nullable String token, @Nullable Object xwikiContextApi) {
+            if (outputs == null) {
+                Map<String, Object> variables = createVariables(document);
+                XWikiContext context = Velocity2WikiScripts.toXWikiContext(xwikiContextApi);
+                if (context != null) {
+                    Velocity2WikiScripts.copyXWikiVariables(variables, context);
+                }
+                List<String> htmls = Velocity2WikiScripts.render(blocks.getScripts(), variables, createLogTag(document));
+                Map<String, String> rendered = new HashMap<>();
+                for (int i = 0; i < htmls.size(); i++) {
+                    rendered.put(blocks.getTokens().get(i), htmls.get(i));
+                }
+                outputs = rendered;
+            }
+            return outputs.get(token);
+        }
     }
 
     private static @NotNull Map<String, Object> createVariables(@Nullable IModule document) {

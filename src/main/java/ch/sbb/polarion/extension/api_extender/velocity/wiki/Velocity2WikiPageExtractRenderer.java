@@ -74,6 +74,7 @@ public class Velocity2WikiPageExtractRenderer implements XWikiRenderer {
     // The same page objects as Velocity v1.4 gets in XWikiVelocityRenderer.
     private static @NotNull Map<String, Object> createVariables(@Nullable XWikiDocument contextdoc, @NotNull XWikiContext context) {
         Map<String, Object> variables = Velocity2WikiScripts.createVariables();
+        Velocity2WikiScripts.putXWikiVariables(variables, context);
         if (contextdoc != null) {
             try {
                 IWikiService wikiService = PlatformContext.getPlatform().lookupService(IWikiService.class);

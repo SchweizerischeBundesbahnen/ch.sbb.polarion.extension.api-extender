@@ -6,6 +6,9 @@ import com.polarion.alm.tracker.model.IModule;
 import com.polarion.alm.wiki.IWikiService;
 import com.polarion.platform.core.IPlatform;
 import com.polarion.platform.core.PlatformContext;
+import com.xpn.xwiki.XWikiContext;
+import com.xpn.xwiki.api.Context;
+import org.apache.velocity.VelocityContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,11 +31,11 @@ class Velocity2WikiRenderingAccessorTest {
 
     private final WikiRenderingProvider.IWikiRenderingAccessor delegate = mock(WikiRenderingProvider.IWikiRenderingAccessor.class);
     private final Velocity2WikiRenderingAccessor accessor = new Velocity2WikiRenderingAccessor(delegate);
+    private final IWikiService wikiService = mock(IWikiService.class);
     private MockedStatic<PlatformContext> platformContext;
 
     @BeforeEach
     void setUp() {
-        IWikiService wikiService = mock(IWikiService.class);
         when(wikiService.getWikiRenderingContextMap()).thenReturn(Map.of("greeting", "Hello"));
         IPlatform platform = mock(IPlatform.class);
         when(platform.lookupService(IWikiService.class)).thenReturn(wikiService);
@@ -47,12 +50,43 @@ class Velocity2WikiRenderingAccessorTest {
                         .replaceAll(match -> Matcher.quoteReplacement(String.valueOf(outputs.get(match.group(1))))) + "</p>");
     }
 
-    private static final Pattern REFERENCE = Pattern.compile("\\$\\{velocityV2Output\\.get\\('([a-z0-9]+)'\\)}");
+    private static final Pattern REFERENCE = Pattern.compile("\\$\\{velocityV2Output\\.get\\('([a-z0-9]+)', \\$context\\)}");
 
     @Test
     void regionBecomesVelocityReference() {
         accessor.render(null, "a {velocityV2}x{velocityV2}.txt", null, false, null, null);
-        verify(delegate).render(isNull(), matches("a \\$\\{velocityV2Output\\.get\\('velocitytwo[a-z0-9]+'\\)}\\.txt"), isNull(), eq(false), isNull(), isNull());
+        verify(delegate).render(isNull(), matches("a \\$\\{velocityV2Output\\.get\\('velocitytwo[a-z0-9]+', \\$context\\)}\\.txt"), isNull(), eq(false), isNull(), isNull());
+    }
+
+    @Test
+    void regionsGetXWikiVariablesFromVelocity14Context() {
+        VelocityContext velocity14Context = new VelocityContext();
+        velocity14Context.put("request", "the request");
+        velocity14Context.put("pageParameters", "the parameters");
+        velocity14Context.put("v14only", "hidden");
+        XWikiContext xwikiContext = new XWikiContext();
+        xwikiContext.put("vcontext", velocity14Context);
+        Context contextApi = new Context(xwikiContext);
+        Velocity2WikiOutputs outputs = new Velocity2WikiOutputs();
+        when(delegate.render(any(), anyString(), any(), anyBoolean(), any(), any()))
+                .thenAnswer(invocation -> REFERENCE.matcher((String) invocation.getArgument(1))
+                        .replaceAll(match -> Matcher.quoteReplacement(String.valueOf(outputs.get(match.group(1), contextApi)))));
+
+        String html = accessor.render(null, "{velocityV2}$request|$pageParameters|$!v14only{velocityV2}", null, false, null, null);
+        assertEquals("the request|the parameters|", html);
+    }
+
+    @Test
+    void regionsRenderOnceOnFirstReference() {
+        assertEquals("<p>A|B</p>", accessor.render(null, "{velocityV2}A{velocityV2}|{velocityV2}B{velocityV2}", null, false, null, null));
+        verify(wikiService, times(1)).getWikiRenderingContextMap();
+    }
+
+    @Test
+    void regionsDoNotRenderWithoutEvaluatedReference() {
+        when(delegate.render(any(), anyString(), any(), anyBoolean(), any(), any())).thenReturn("skipped");
+        assertEquals("skipped", accessor.render(null, "{velocityV2}A{velocityV2}", null, false, null, null));
+        verify(wikiService, never()).getWikiRenderingContextMap();
     }
 
     @Test
