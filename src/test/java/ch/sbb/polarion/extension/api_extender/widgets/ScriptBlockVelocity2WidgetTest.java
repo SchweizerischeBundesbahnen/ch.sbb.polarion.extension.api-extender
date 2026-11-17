@@ -43,7 +43,7 @@ class ScriptBlockVelocity2WidgetTest {
             output.append((String) invocation.getArgument(0));
             return invocation.getMock();
         }).when(builder).html(anyString());
-        when(builder.toString()).thenAnswer(invocation -> output.toString());
+        when(builder.toString()).thenAnswer(ignored -> output.toString());
 
         return ScriptBlockVelocity2Widget.render(builder, script, "test", variables, message -> "WARNING: " + message);
     }

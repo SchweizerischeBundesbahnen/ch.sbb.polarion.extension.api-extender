@@ -81,17 +81,17 @@ public class Velocity2WikiRenderingAccessor implements WikiRenderingProvider.IWi
             }
             return outputs.get(token);
         }
-    }
 
-    private static @NotNull Map<String, Object> createVariables(@Nullable IModule document) {
-        Map<String, Object> variables = Velocity2WikiScripts.createVariables();
-        if (document != null) {
-            variables.put(VARIABLE_DOCUMENT, document);
+        private static @NotNull Map<String, Object> createVariables(@Nullable IModule document) {
+            Map<String, Object> variables = Velocity2WikiScripts.createVariables();
+            if (document != null) {
+                variables.put(VARIABLE_DOCUMENT, document);
+            }
+            return variables;
         }
-        return variables;
-    }
 
-    private static @NotNull String createLogTag(@Nullable IModule document) {
-        return document != null ? "Velocity 2 wiki block in: " + document.getProject().getId() + "/" + document.getModuleFolder() + "/" + document.getModuleName() : "Velocity 2 wiki block";
+        private static @NotNull String createLogTag(@Nullable IModule document) {
+            return document != null ? "Velocity 2 wiki block in: " + document.getProject().getId() + "/" + document.getModuleFolder() + "/" + document.getModuleName() : "Velocity 2 wiki block";
+        }
     }
 }

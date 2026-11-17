@@ -54,6 +54,12 @@ class Velocity2ScriptRendererTest {
     }
 
     @Test
+    void blocksReflectionAndSystem() {
+        assertEquals("$s.class.forName('java.lang.Runtime')", html("$s.class.forName('java.lang.Runtime')", Map.of("s", "text")));
+        assertEquals("$s.getClass().getClassLoader()", html("$s.getClass().getClassLoader()", Map.of("s", "text")));
+    }
+
+    @Test
     void cannotParseFiles() {
         Map<String, Object> result = render("#parse('META-INF/MANIFEST.MF')", Map.of());
         assertNotNull(result.get(Velocity2ScriptRenderer.RESULT_ERROR));

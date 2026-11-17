@@ -83,11 +83,15 @@ public final class Velocity2WikiScripts {
         if (velocityContext == null) {
             return;
         }
-        for (String name : XWIKI_VARIABLES) {
-            Object value = Velocity14Context.get(velocityContext, name);
-            if (value != null) {
-                variables.put(name, value);
+        try {
+            for (String name : XWIKI_VARIABLES) {
+                Object value = Velocity14Context.get(velocityContext, name);
+                if (value != null) {
+                    variables.put(name, value);
+                }
             }
+        } catch (RuntimeException e) {
+            Logger.getLogger(Velocity2WikiScripts.class).warn("Cannot give the XWiki objects of Velocity v1.4 to Velocity 2 regions", e);
         }
     }
 

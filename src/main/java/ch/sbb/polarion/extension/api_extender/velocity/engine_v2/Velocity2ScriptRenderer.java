@@ -6,6 +6,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.StringResourceLoader;
+import org.apache.velocity.util.introspection.SecureUberspector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,6 +60,8 @@ public class Velocity2ScriptRenderer implements BundleJarsPrioritizingRunnable {
             VelocityEngine engine = new VelocityEngine();
             engine.setProperty(RuntimeConstants.RESOURCE_LOADERS, "string");
             engine.setProperty("resource.loader.string.class", StringResourceLoader.class.getName());
+            // Scripts come from page authors. The default uberspector gives them reflection, class loaders and System.
+            engine.setProperty(RuntimeConstants.UBERSPECT_CLASSNAME, SecureUberspector.class.getName());
             // The engine is shared by all users, and inline macros are global by default.
             engine.setProperty(RuntimeConstants.VM_PERM_INLINE_LOCAL, true);
             engine.init();

@@ -40,10 +40,6 @@ class Velocity2WikiPageRenderersTest {
     @AfterEach
     void tearDown() {
         platformContext.close();
-    }
-
-    @AfterEach
-    void removeOutputs() {
         Velocity2WikiOutputs.setOutputs(null);
     }
 
