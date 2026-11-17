@@ -41,7 +41,7 @@
     "eslint-plugin-jsx-a11y-x": "0.2.0",
     "eslint-plugin-react-hooks": "7.1.1",
     "globals": "17.14.0",
-    "playwright": "1.65.0",
+    "playwright": "1.65.1",
     "prettier": "3.10.1",
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.2",
