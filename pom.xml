@@ -49,6 +49,13 @@
 
         <web.app.name>${maven-jar-plugin.Extension-Context}</web.app.name>
 
+        <!-- com.polarion.alm.wiki gives the wiki rendering context to Velocity 2 blocks in LiveDocs.
+             org.objectweb.asm weaves the LiveReport script renderer, see Velocity2ScriptWeaver. -->
+        <maven-jar-plugin.Require-Bundle>${maven-jar-plugin.Require-Bundle.common},com.polarion.alm.wiki,org.objectweb.asm</maven-jar-plugin.Require-Bundle>
+        <!-- The weaving hook API comes from the Equinox system bundle. -->
+        <maven-jar-plugin.Import-Package>org.osgi.framework,org.osgi.framework.hooks.weaving</maven-jar-plugin.Import-Package>
+        <asm.version>9.9.1</asm.version>
+
         <velocity-tools.version>3.1</velocity-tools.version>
         <velocity-engine.version>2.4.1</velocity-engine.version>
         <commons-lang3.version>3.22.0</commons-lang3.version>
@@ -61,7 +68,7 @@
             <version>${project.parent.version}</version>
         </dependency>
 
-        <!-- Polarion renders scripts with its own Velocity 1.4 and Tools 2.0, so these jars load only through BundleJarsPrioritizingRunnable. -->
+        <!-- Polarion renders scripts with its own Velocity v1.4 and Tools 2.0, so these jars load only through BundleJarsPrioritizingRunnable. -->
         <dependency>
             <groupId>org.apache.velocity.tools</groupId>
             <artifactId>velocity-tools-generic</artifactId>
@@ -87,10 +94,24 @@
             </exclusions>
         </dependency>
         <!-- Velocity Tools 3.1 brings 3.10, engine 2.4.1 is built against 3.17.0. -->
+        <!-- Polarion ships the same version as the bundle org.objectweb.asm. -->
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>${asm.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.polarion.alm.wiki</groupId>
+            <artifactId>sidecar</artifactId>
+            <version>${polarion.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

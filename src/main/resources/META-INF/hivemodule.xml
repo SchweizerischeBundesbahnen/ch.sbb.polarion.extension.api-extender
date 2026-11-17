@@ -48,6 +48,8 @@
         <item key="collectionsTool" value="instance:ch.sbb.polarion.extension.api_extender.velocity.CollectionsTool"/>
         <item key="regexTool" value="instance:ch.sbb.polarion.extension.api_extender.velocity.RegexTool"/>
         <item key="velocityToolsV3" value="instance:ch.sbb.polarion.extension.api_extender.velocity.tools_v3.VelocityToolsV3"/>
+        <!-- Inserts the output of {velocityV2} regions in LiveDocs, so wiki markup applies to it. -->
+        <item key="velocityV2Output" value="instance:ch.sbb.polarion.extension.api_extender.velocity.wiki.Velocity2WikiOutputs"/>
     </contribution>
 
     <!-- LiveReport Page -->
@@ -57,5 +59,10 @@
         <item key="collectionsTool" value="instance:ch.sbb.polarion.extension.api_extender.velocity.CollectionsTool"/>
         <item key="regexTool" value="instance:ch.sbb.polarion.extension.api_extender.velocity.RegexTool"/>
         <item key="velocityToolsV3" value="instance:ch.sbb.polarion.extension.api_extender.velocity.tools_v3.VelocityToolsV3"/>
+    </contribution>
+
+    <contribution configuration-id="com.polarion.alm.richpages.widgets">
+        <widget id="ch.sbb.polarion.extension.api_extender.widgets.scriptBlockVelocity2" instance="instance:ch.sbb.polarion.extension.api_extender.widgets.ScriptBlockVelocity2Widget"/>
+        <widget id="ch.sbb.polarion.extension.api_extender.widgets.scriptInlineVelocity2" instance="instance:ch.sbb.polarion.extension.api_extender.widgets.ScriptInlineVelocity2Widget"/>
     </contribution>
 </module>

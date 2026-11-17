@@ -1,11 +1,13 @@
 package ch.sbb.polarion.extension.api_extender;
 
 import ch.sbb.polarion.extension.generic.GenericUiServlet;
+import jakarta.servlet.ServletContext;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 class ApiExtenderAppServletTest {
 
@@ -21,5 +23,16 @@ class ApiExtenderAppServletTest {
         field.setAccessible(true);
 
         assertEquals("api-extender-app", field.get(servlet));
+    }
+
+    @Test
+    void initStartsAndDestroyStopsWikiPageInstaller() {
+        ApiExtenderAppServlet servlet = spy(new ApiExtenderAppServlet());
+        ServletContext context = mock(ServletContext.class);
+        doReturn(context).when(servlet).getServletContext();
+
+        servlet.init();
+        verify(context, timeout(5000)).getContext("/polarion/wiki");
+        servlet.destroy();
     }
 }
