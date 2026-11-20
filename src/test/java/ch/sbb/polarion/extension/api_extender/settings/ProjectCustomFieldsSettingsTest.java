@@ -27,8 +27,8 @@ class ProjectCustomFieldsSettingsTest {
         try (MockedStatic<ScopeUtils> mockScopeUtils = mockStatic(ScopeUtils.class)) {
             SettingsService mockedSettingsService = mock(SettingsService.class);
             mockScopeUtils.when(() -> ScopeUtils.getFileContent(any())).thenCallRealMethod();
-            ProjectCustomFieldsSettings globalRecordsSettings = new ProjectCustomFieldsSettings(mockedSettingsService);
-            ProjectCustomFieldsSettingsModel projectCustomFieldsSettingsModel = globalRecordsSettings.defaultValues();
+            ProjectCustomFieldsSettings projectCustomFieldsSettings = new ProjectCustomFieldsSettings(mockedSettingsService);
+            ProjectCustomFieldsSettingsModel projectCustomFieldsSettingsModel = projectCustomFieldsSettings.defaultValues();
             assertNotNull(projectCustomFieldsSettingsModel.getProjectRoles());
             assertNotNull(projectCustomFieldsSettingsModel.getGlobalRoles());
             assertNotNull(projectCustomFieldsSettingsModel.getAllRoles());
@@ -41,7 +41,7 @@ class ProjectCustomFieldsSettingsTest {
             SettingsService mockedSettingsService = mock(SettingsService.class);
             mockScopeUtils.when(() -> ScopeUtils.getFileContent(any())).thenCallRealMethod();
 
-            ProjectCustomFieldsSettings globalRecordsSettings = new ProjectCustomFieldsSettings(mockedSettingsService);
+            ProjectCustomFieldsSettings projectCustomFieldsSettings = new ProjectCustomFieldsSettings(mockedSettingsService);
 
             String projectName = "test_project";
 
@@ -57,7 +57,7 @@ class ProjectCustomFieldsSettingsTest {
             mockScopeUtils.when(() -> ScopeUtils.getContextLocation("")).thenReturn(mockDefaultLocation);
 
             SettingId settingId = SettingId.fromId("Any setting name");
-            assertThrows(ObjectNotFoundException.class, () -> globalRecordsSettings.load(projectName, settingId));
+            assertThrows(ObjectNotFoundException.class, () -> projectCustomFieldsSettings.load(projectName, settingId));
         }
     }
 

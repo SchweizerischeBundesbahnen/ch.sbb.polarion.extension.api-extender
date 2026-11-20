@@ -20,10 +20,13 @@ const roles = (projectRoles: string[]): Route => ({
   json: { globalRoles: ['admin', 'user'], projectRoles },
 });
 
-const content = (feature: string): Route => ({
+const content = (feature: string, roleSets: { globalRoles?: string[]; projectRoles?: string[] } = {}): Route => ({
   method: 'GET',
   match: new RegExp(`/settings/${feature}/names/Default/content`),
-  json: { globalRoles: ['admin'], projectRoles: [] },
+  json: {
+    globalRoles: roleSets.globalRoles ?? ['admin'],
+    projectRoles: roleSets.projectRoles ?? [],
+  },
 });
 
 async function snapshot(feature: string, routes: Route[], name: string, controls: number) {

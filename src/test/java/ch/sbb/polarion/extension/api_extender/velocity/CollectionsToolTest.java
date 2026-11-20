@@ -18,11 +18,12 @@ class CollectionsToolTest {
     private final CollectionsTool collectionsTool = new CollectionsTool();
 
     @Test
-    void convertArrayListToWeakPObjectList_testReturnsData() {
+    void convertArrayListToWeakPObjectList_shouldReturnData() {
         IWorkItem workItem1 = mock(IWorkItem.class);
         IWorkItem workItem2 = mock(IWorkItem.class);
 
         IPObjectList<IPObject> objectList = collectionsTool.convertArrayListToWeakPObjectList(List.of(workItem1, workItem2));
+        assertNotNull(objectList);
         assertEquals(workItem1, objectList.get(0));
         assertEquals(workItem2, objectList.get(1));
     }
