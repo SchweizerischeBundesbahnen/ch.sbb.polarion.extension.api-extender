@@ -39,6 +39,18 @@
                   projectScope="false"
                   projectGroupScope="false"
                   repositoryScope="true"/>
+
+        <!-- Single entry point to the documentation site (Quick Start, User Guide, REST API, Velocity
+             Tools, Velocity 2). It lands on Quick Start; the in-page sidebar navigates to the rest, so those
+             articles need no menu entry of their own. -->
+        <extender id="documentation"
+                  name="Documentation"
+                  parentNodeId="api-extender"
+                  iconUrl="/polarion/api-extender-app/ui/images/menu/16x16/documentation.svg"
+                  pageUrl="/polarion/api-extender-app/ui/app/index.html?feature=quick-start&amp;embedded=true&amp;scope=$scope$"
+                  projectScope="true"
+                  projectGroupScope="false"
+                  repositoryScope="true"/>
     </contribution>
 
     <!-- Classic Wiki Page -->
