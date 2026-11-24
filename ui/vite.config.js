@@ -1,5 +1,42 @@
-import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { defineConfig, loadEnv } from 'vite';
+
+// Where the Maven build renders the help articles (markdown2html), next to the app bundle in the webapp.
+const RENDERED_ARTICLES = fileURLToPath(
+  new URL('../src/main/resources/webapp/api-extender-app/html/', import.meta.url),
+);
+
+// `vite dev` counterpart of the webapp's html/: a documentation page fetches `../../html/<id>.html` relative to
+// the app, which under the dev server's root is `/html/<id>.html`. Without this Vite's SPA fallback answers that
+// with index.html and a 200, so the page shows an empty article instead of the article or its "not generated"
+// message. A file the Maven build has not rendered yet answers 404, which is what the page reports as not
+// generated. Only a flat `<name>.html` is served, so a request cannot reach outside the directory.
+function serveRenderedArticles() {
+  return {
+    name: 'serve-rendered-articles',
+    configureServer(server) {
+      server.middlewares.use('/html', (req, res) => {
+        let name = '';
+        try {
+          name = decodeURIComponent((req.url ?? '').split('?')[0]).replace(/^\//, '');
+        } catch {
+          // a malformed escape: no such article
+        }
+        const file = join(RENDERED_ARTICLES, name);
+        if (!/^[\w-]+\.html$/.test(name) || !existsSync(file)) {
+          res.statusCode = 404;
+          res.end();
+          return;
+        }
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        res.end(readFileSync(file));
+      });
+    },
+  };
+}
 
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -15,7 +52,7 @@ export default defineConfig(({ command, mode }) => {
 
   if (command === 'serve') {
     return {
-      plugins: [react()],
+      plugins: [react(), serveRenderedArticles()],
       resolve,
       server: {
         proxy: {

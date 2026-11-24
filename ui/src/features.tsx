@@ -1,11 +1,13 @@
 import { type ComponentType, useMemo } from 'react';
-import { AuthorizationSettings, createAuthorizationService } from '@sbb-polarion/react-sbb-polarion';
+import { AuthorizationSettings, DocPage, createAuthorizationService } from '@sbb-polarion/react-sbb-polarion';
+import { DOC_ORDER } from './docs/manifest';
 import About from './pages/About';
 import useRemote from './services/useRemote';
 
 /**
  * A single navigable page of the app. The `id` is what appears in the URL as `?feature=<id>` and is
- * what `hivemodule.xml` points its extenders at. A URL that matches none of these falls back to the
+ * what `hivemodule.xml` points its extenders at, so the ids here and the `pageUrl`s there must stay identical - a
+ * typo is a blank page in Polarion and no test catches it. A URL that matches none of these falls back to the
  * dev Landing (see App.tsx / findFeature).
  *
  * The two authorization pages are react-sbb-polarion's shared page over two different named settings,
@@ -74,6 +76,23 @@ function GlobalRecords() {
   );
 }
 
+// The documentation-site articles, derived from the shared manifest (docs.config.json) rather than listed by
+// hand: each renders through the single DocPage bound to its manifest entry, in the manifest's reading order.
+// Adding an article is a docs.config.json item (plus its markdown and the pom render) - nothing here changes.
+// They carry no hivemodule.xml menu entry of their own: they are reached from the single `documentation` node
+// and the articles' cross-document links (rewritten to ?feature=<id> by the interceptor in App.tsx); the ids
+// equal the generated html basenames those links point at.
+const DOC_FEATURES: Feature[] = DOC_ORDER.map((doc) => {
+  const Component = () => <DocPage doc={doc} />;
+  Component.displayName = `DocPage(${doc.id})`;
+  return {
+    id: doc.id,
+    label: doc.title,
+    description: `${doc.title}, generated from ${doc.source}.`,
+    component: Component,
+  };
+});
+
 export const FEATURES: Feature[] = [
   {
     id: 'about',
@@ -93,6 +112,8 @@ export const FEATURES: Feature[] = [
     description: 'Configure which global roles may write global records.',
     component: GlobalRecords,
   },
+  // The documentation site, in manifest reading order (Quick Start, User Guide, REST API, ...).
+  ...DOC_FEATURES,
 ];
 
 export function findFeature(id: string | null): Feature | undefined {

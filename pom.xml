@@ -128,11 +128,117 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <!-- Everything markdown2html renders below (the parent only knows about.html);
+                                 the same files .gitignore keeps out of git. -->
+                            <directory>${markdown2html-maven-plugin.extensionContextAdminHtml}</directory>
+                            <includes>
+                                <include>*.html</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
             </plugin>
 
             <plugin>
                 <groupId>ch.sbb.maven.plugins</groupId>
                 <artifactId>markdown2html-maven-plugin</artifactId>
+                <!--
+                    Renders the About page (README.md) and the documentation-site articles of
+                    ui/src/docs/docs.config.json into the app webapp's html/, which the app fetches them from.
+
+                    The plugin-level configuration is shared by every execution: the parent's (failOnError,
+                    generateHeadingIds, openExternalLinksInNewTab, its excludeChapters and removeLinesWithStrings)
+                    plus the two below. An execution only names its input and output, and replaces the parent's
+                    excludeChapters where it lists its own.
+
+                    Every execution runs in generate-sources, one phase before the frontend build in
+                    generate-resources: build-docs-index.mjs (npm `prebuild`) builds the documentation search
+                    index from this very HTML, using the heading ids generateHeadingIds stamps on it, and fails
+                    the build when an article is missing. An article added to the manifest needs an execution here.
+                -->
+                <configuration>
+                    <!-- Keep relative links relative: the app's DocLinkInterceptor turns a link to another
+                         article into in-app navigation, and any other one (docs/openapi.json) into a GitHub link.
+                         combine.self=override is required: an empty element alone does not override the
+                         parent's ${project.scm.url}, Maven keeps the inherited value on an empty merge. -->
+                    <relativeLinkPrefix combine.self="override"/>
+                    <!-- The articles are fetched as single files, so their images travel inside them. -->
+                    <imageProcessingType>EMBED</imageProcessingType>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>readme.md-to-about.html</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>convert</goal>
+                        </goals>
+                    </execution>
+                    <!-- The documentation-site articles, in the reading order of ui/src/docs/docs.config.json. -->
+                    <execution>
+                        <id>quick_start.md-to-quick-start.html</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>convert</goal>
+                        </goals>
+                        <configuration>
+                            <inputFile>${project.basedir}/QUICK_START.md</inputFile>
+                            <outputFile>${markdown2html-maven-plugin.extensionContextAdminHtml}/quick-start.html</outputFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>user_guide.md-to-user-guide.html</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>convert</goal>
+                        </goals>
+                        <configuration>
+                            <inputFile>${project.basedir}/USER_GUIDE.md</inputFile>
+                            <outputFile>${markdown2html-maven-plugin.extensionContextAdminHtml}/user-guide.html</outputFile>
+                            <!-- The markdown keeps a Table of contents for GitHub; the sidebar and "On this page"
+                                 of the documentation site provide that navigation, so drop it here. -->
+                            <excludeChapters>
+                                <excludeChapter>## Table of contents</excludeChapter>
+                            </excludeChapters>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>rest_api.md-to-rest-api.html</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>convert</goal>
+                        </goals>
+                        <configuration>
+                            <inputFile>${project.basedir}/REST_API.md</inputFile>
+                            <outputFile>${markdown2html-maven-plugin.extensionContextAdminHtml}/rest-api.html</outputFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>velocity_tools.md-to-velocity-tools.html</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>convert</goal>
+                        </goals>
+                        <configuration>
+                            <inputFile>${project.basedir}/VELOCITY_TOOLS.md</inputFile>
+                            <outputFile>${markdown2html-maven-plugin.extensionContextAdminHtml}/velocity-tools.html</outputFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>velocity_2.md-to-velocity-2.html</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>convert</goal>
+                        </goals>
+                        <configuration>
+                            <inputFile>${project.basedir}/VELOCITY_2.md</inputFile>
+                            <outputFile>${markdown2html-maven-plugin.extensionContextAdminHtml}/velocity-2.html</outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
