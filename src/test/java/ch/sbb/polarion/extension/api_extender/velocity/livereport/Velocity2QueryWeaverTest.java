@@ -69,6 +69,14 @@ class Velocity2QueryWeaverTest {
     }
 
     @Test
+    void renderImplWithOtherShapeIsNotWoven() throws IOException {
+        Velocity2QueryWeaver weaver = new Velocity2QueryWeaver();
+
+        assertNull(weaver.weave(classBytes(StaticRenderImpl.class.getName())));
+        assertNull(weaver.weave(classBytes(OtherParameterRenderImpl.class.getName())));
+    }
+
+    @Test
     void polarionQueryRendererIsWoven() throws IOException {
         byte[] woven = new Velocity2QueryWeaver().weave(classBytes(Velocity2QueryWeaver.TARGET_CLASS));
 
@@ -124,5 +132,19 @@ class Velocity2QueryWeaverTest {
             }
         }, 0);
         return count[0];
+    }
+
+    @SuppressWarnings("unused")
+    private static final class StaticRenderImpl {
+        private static String renderImpl(String query) {
+            return query;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    private static final class OtherParameterRenderImpl {
+        private String renderImpl(Object query) {
+            return String.valueOf(query);
+        }
     }
 }

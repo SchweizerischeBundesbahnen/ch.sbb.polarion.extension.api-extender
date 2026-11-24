@@ -48,8 +48,6 @@ public final class Velocity2WeavingHook implements WeavingHook {
     }
 
     /**
-     * Tests call this method directly: Mockito cannot mock {@link WovenClass}, because {@code org.osgi.resource} is not on the test class path.
-     *
      * @return the woven class, or {@code null} if the class stays unchanged
      */
     byte @Nullable [] weave(@NotNull String className, byte @NotNull [] classBytes) {

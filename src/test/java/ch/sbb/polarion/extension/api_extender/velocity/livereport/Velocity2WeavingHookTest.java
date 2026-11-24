@@ -6,6 +6,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.hooks.weaving.WeavingHook;
+import org.osgi.framework.hooks.weaving.WovenClass;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +41,28 @@ class Velocity2WeavingHookTest {
 
         assertNotNull(woven);
         assertFalse(Arrays.equals(original, woven));
+    }
+
+    @Test
+    void setsWovenBytesOfTargetClass() throws IOException {
+        WovenClass wovenClass = mock(WovenClass.class);
+        when(wovenClass.getClassName()).thenReturn(Velocity2QueryWeaver.TARGET_CLASS);
+        when(wovenClass.getBytes()).thenReturn(classBytes(Velocity2QueryWeaver.TARGET_CLASS));
+
+        hook.weave(wovenClass);
+
+        verify(wovenClass).setBytes(any(byte[].class));
+    }
+
+    @Test
+    void leavesBytesOfOtherClassUnchanged() throws IOException {
+        WovenClass wovenClass = mock(WovenClass.class);
+        when(wovenClass.getClassName()).thenReturn(String.class.getName());
+        when(wovenClass.getBytes()).thenReturn(classBytes(String.class.getName()));
+
+        hook.weave(wovenClass);
+
+        verify(wovenClass, never()).setBytes(any());
     }
 
     @Test

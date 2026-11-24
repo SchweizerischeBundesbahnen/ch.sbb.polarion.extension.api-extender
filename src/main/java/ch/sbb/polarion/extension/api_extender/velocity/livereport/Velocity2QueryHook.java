@@ -71,6 +71,8 @@ public final class Velocity2QueryHook implements BiFunction<Object, String, Stri
         return source;
     }
 
+    // VelocityQueryRenderer has no getter for its rendering context, so the private field is the only way in.
+    @SuppressWarnings("java:S3011")
     private static @NotNull Map<String, Object> variablesOf(@NotNull Object renderer) {
         try {
             Field field = renderer.getClass().getDeclaredField(RENDERING_CONTEXT_FIELD);
