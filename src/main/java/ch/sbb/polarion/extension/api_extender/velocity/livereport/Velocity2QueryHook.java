@@ -50,7 +50,6 @@ public final class Velocity2QueryHook implements BiFunction<Object, String, Stri
      * @param renderer the {@code VelocityQueryRenderer} instance
      * @param query    the query of the widget parameter
      * @return the query for Velocity v1.4
-     * @throws UserFriendlyRuntimeException if a region or the access to the rendering context fails
      */
     @Override
     public String apply(@NotNull Object renderer, @Nullable String query) {
