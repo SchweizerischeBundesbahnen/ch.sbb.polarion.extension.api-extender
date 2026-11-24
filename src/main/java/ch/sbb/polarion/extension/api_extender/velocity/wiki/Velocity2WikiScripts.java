@@ -108,6 +108,19 @@ public final class Velocity2WikiScripts {
      * @return the HTML of each script, or an error message in its place
      */
     public static @NotNull List<String> render(@NotNull List<String> scripts, @NotNull Map<String, Object> variables, @NotNull String logTag) {
+        List<String> htmls = new ArrayList<>();
+        for (Result result : renderResults(scripts, variables, logTag)) {
+            htmls.add(result.isError() ? renderError(result.error()) : result.output());
+        }
+        return htmls;
+    }
+
+    /**
+     * Renders the scripts in order with one shared context.
+     *
+     * @return the output or the error message of each script, without HTML around an error
+     */
+    public static @NotNull List<Result> renderResults(@NotNull List<String> scripts, @NotNull Map<String, Object> variables, @NotNull String logTag) {
         if (scripts.isEmpty()) {
             return List.of();
         }
@@ -117,18 +130,27 @@ public final class Velocity2WikiScripts {
                 Velocity2ScriptRenderer.PARAM_LOG_TAG, logTag,
                 Velocity2ScriptRenderer.PARAM_VARIABLES, variablesSupplier));
 
-        List<String> htmls = new ArrayList<>();
+        List<Result> results = new ArrayList<>();
         if (result.get(Velocity2ScriptRenderer.RESULT_HTMLS) instanceof List<?> resultHtmls
                 && result.get(Velocity2ScriptRenderer.RESULT_ERRORS) instanceof List<?> resultErrors) {
             for (int i = 0; i < scripts.size(); i++) {
                 Object html = resultHtmls.get(i);
-                htmls.add(html != null ? (String) html : renderError((String) resultErrors.get(i)));
+                results.add(html != null ? new Result((String) html, null) : new Result(null, String.valueOf(resultErrors.get(i))));
             }
         } else {
-            String error = renderError(String.valueOf(result.get(BundleJarsPrioritizingRunnable.ERROR_KEY)));
-            scripts.forEach(script -> htmls.add(error));
+            Result error = new Result(null, String.valueOf(result.get(BundleJarsPrioritizingRunnable.ERROR_KEY)));
+            scripts.forEach(script -> results.add(error));
         }
-        return htmls;
+        return results;
+    }
+
+    /**
+     * The result of one script: either its output or its error message.
+     */
+    public record Result(@Nullable String output, @Nullable String error) {
+        public boolean isError() {
+            return output == null;
+        }
     }
 
     static @NotNull String renderError(@Nullable String message) {

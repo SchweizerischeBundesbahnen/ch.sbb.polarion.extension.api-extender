@@ -28,6 +28,13 @@
         '{velocityV2}'
     ].join('\n');
 
+    const VELOCITY_V2_QUERY_EXAMPLE = [
+        'type:requirement AND {velocityV2}',
+        '#set($statuses = [\'draft\', \'open\'])',
+        'status:(#foreach($s in $statuses)$s#if($foreach.hasNext) #end#end)',
+        '{velocityV2}'
+    ].join('\n');
+
     /**
      * Creates the underlined "Velocity v2 is available" label. Hovering it shows a tooltip with an example.
      * The tooltip lives in the body of the document only while the mouse is over the label,
@@ -37,6 +44,7 @@
      * @param options.scope the word for the part which stays Velocity v1.4, for example "page"
      * @param options.align "right" aligns the tooltip with the right edge of the label, "left" with its left edge
      * @param options.background the background of the tooltip
+     * @param options.example the example in the tooltip, a script by default
      */
     function createVelocityV2Label(doc, options) {
         const label = doc.createElement('span');
@@ -50,7 +58,10 @@
             doc.body.appendChild(tooltip);
             const rect = label.getBoundingClientRect();
             const view = doc.defaultView;
-            const left = options.align === 'right' ? Math.max(4, rect.right - tooltip.offsetWidth) : rect.left;
+            const margin = 4;
+            const preferred = options.align === 'right' ? rect.right - tooltip.offsetWidth : rect.left;
+            const maxLeft = doc.documentElement.clientWidth - tooltip.offsetWidth - margin;
+            const left = Math.max(margin, Math.min(preferred, maxLeft));
             tooltip.style.left = (left + view.scrollX) + 'px';
             tooltip.style.top = (rect.bottom + 6 + view.scrollY) + 'px';
         });
@@ -67,19 +78,19 @@
         const tooltip = doc.createElement('div');
         tooltip.className = 'api-extender-velocity-v2-tooltip';
         // GWT dialogs use high z-index values, and the tooltip must stay above them.
-        tooltip.style.cssText = 'position: absolute; z-index: 2147483000; max-width: 520px; padding: 8px 10px; text-align: left;'
+        tooltip.style.cssText = 'position: absolute; z-index: 2147483000; max-width: min(520px, calc(100vw - 8px)); box-sizing: border-box; padding: 8px 10px; text-align: left;'
             + ` background: ${options.background}; color: #333; font-size: 12px; line-height: 1.5; border: 1px solid #ccc;`
             + ' border-radius: 3px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);';
         tooltip.innerHTML = '<div style="margin-bottom: 6px;">'
             + '<b style="background: #d32f2f; color: #fff; padding: 0 4px; border-radius: 2px;">Experimental</b>'
             + ' Use this feature at your own risk.</div>'
-            + 'You can use <b>Velocity v2.4.1</b> features: wrap the script in '
+            + `You can use <b>Velocity v2.4.1</b> features: wrap a part of the ${options.scope} in `
             + '<code style="background: #fff; padding: 0 3px; border-radius: 2px;">{velocityV2}</code> markers, for example:';
 
         const example = doc.createElement('div');
         example.style.cssText = 'margin: 6px 0; padding: 6px 8px; border: 1px dashed #aaa; background: #fff;'
             + ' font-family: monospace; white-space: pre; overflow-x: auto;';
-        example.textContent = VELOCITY_V2_EXAMPLE;
+        example.textContent = options.example || VELOCITY_V2_EXAMPLE;
         tooltip.appendChild(example);
 
         const note = doc.createElement('div');
@@ -201,6 +212,50 @@
         }
     };
 
+    /**
+     * The Data Set parameter of the built-in widgets shows the label next to the "Query" header
+     * while "Query Type" is "Lucene + Velocity" or "SQL + Velocity".
+     * Polarion keeps the "Query" header and builds the query editor again when the query type changes,
+     * so the label is added and removed on each run, not once.
+     */
+    const widgetQueryParameterHint = {
+        apply(doc) {
+            doc.querySelectorAll('[id="gwt-debug-dataSetQueryType"]').forEach((combo) => {
+                const panel = combo.closest('table.polarion-rpe-ParameterEditor-collapsibleContentPanel');
+                const selected = combo.querySelector('.polarion-Combo-SelectedItemPanel [title]');
+                if (!panel || !selected) {
+                    return;
+                }
+                const existing = panel.querySelector('.api-extender-velocity-v2-label');
+                if (!/Velocity/.test(selected.getAttribute('title'))) {
+                    if (existing) {
+                        existing.remove();
+                    }
+                    return;
+                }
+                const name = findQueryHeader(panel);
+                if (existing || !name) {
+                    return;
+                }
+                name.style.display = 'inline-block';
+                const label = createVelocityV2Label(doc, { scope: 'query', align: 'left', background: '#f5f5f5', example: VELOCITY_V2_QUERY_EXAMPLE });
+                label.style.cssText += 'margin-left: 12px; font-size: 11px; white-space: nowrap;';
+                name.insertAdjacentElement('afterend', label);
+            });
+        }
+    };
+
+    /**
+     * The "Query" header is in the row of the Data Set panel above the row with the Velocity query editor.
+     * `table.rows` leaves out the rows of nested tables, so the lookup stays on the level of the panel.
+     */
+    function findQueryHeader(panel) {
+        const area = panel.querySelector('[id="gwt-debug-dataSetQueryArea"]');
+        const rows = Array.from(panel.rows);
+        const index = area ? rows.findIndex((row) => row.contains(area)) : -1;
+        return index > 0 ? rows[index - 1].querySelector('.polarion-rpe-ParameterEditor-label') : null;
+    }
+
     function findSidebarTitle(element) {
         for (let parent = element.parentElement; parent; parent = parent.parentElement) {
             const title = parent.querySelector('.polarion-SidebarPanel-header-label');
@@ -211,7 +266,7 @@
         return null;
     }
 
-    const features = [wikiContentDialogHint, wikiPageEditToolbarHint, scriptWidgetParameterHint];
+    const features = [wikiContentDialogHint, wikiPageEditToolbarHint, scriptWidgetParameterHint, widgetQueryParameterHint];
 
     // GWT changes the DOM very often, so the features run at most once per animation frame.
     let scheduled = false;
