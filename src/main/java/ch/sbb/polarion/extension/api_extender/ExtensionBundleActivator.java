@@ -1,7 +1,8 @@
 package ch.sbb.polarion.extension.api_extender;
 
+import ch.sbb.polarion.extension.api_extender.velocity.livereport.Velocity2QueryHook;
 import ch.sbb.polarion.extension.api_extender.velocity.livereport.Velocity2ScriptHook;
-import ch.sbb.polarion.extension.api_extender.velocity.livereport.Velocity2ScriptWeavingHook;
+import ch.sbb.polarion.extension.api_extender.velocity.livereport.Velocity2WeavingHook;
 import ch.sbb.polarion.extension.api_extender.velocity.wiki.Velocity2WikiRenderingInstaller;
 import ch.sbb.polarion.extension.generic.GenericBundleActivator;
 import com.polarion.alm.ui.server.forms.extensions.IFormExtension;
@@ -21,13 +22,14 @@ public class ExtensionBundleActivator extends GenericBundleActivator {
     }
 
     /**
-     * The weaving hook must exist before Polarion loads the LiveReport script renderer.
+     * The weaving hook must exist before Polarion loads the LiveReport script and widget query renderers.
      * {@link #onStart(BundleContext)} runs later, after the Guice platform is ready.
      */
     @Override
     public void start(BundleContext context) {
         Velocity2ScriptHook.install();
-        weavingHook = Velocity2ScriptWeavingHook.register(context);
+        Velocity2QueryHook.install();
+        weavingHook = Velocity2WeavingHook.register(context);
         super.start(context);
     }
 
@@ -44,6 +46,7 @@ public class ExtensionBundleActivator extends GenericBundleActivator {
             weavingHook = null;
         }
         Velocity2ScriptHook.uninstall();
+        Velocity2QueryHook.uninstall();
         Velocity2WikiRenderingInstaller.uninstall();
     }
 }
